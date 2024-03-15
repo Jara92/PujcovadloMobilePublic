@@ -87,6 +87,9 @@ class ItemService {
   }
 
   Future<ItemDetailResponse?> getItem(int id) async {
+    // Simulate a delay of 2 seconds (adjust as needed)
+    await Future.delayed(Duration(milliseconds: 1700));
+
     // Fetch item from the server
     return ItemDetailResponse(
       id: id,

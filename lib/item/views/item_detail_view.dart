@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:pujcovadlo_client/common/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/common/widgets/main_bottom_navigation_bar.dart';
 import 'package:pujcovadlo_client/common/widgets/not_found_widget.dart';
+import 'package:pujcovadlo_client/common/widgets/operation_error_widget.dart';
 import 'package:pujcovadlo_client/item/bloc/item_detail/item_detail_bloc.dart';
 import 'package:pujcovadlo_client/item/widgets/item_detail_widget.dart';
 
@@ -32,14 +33,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
             bloc.add(LoadItemDetail(itemId: widget.itemId));
             return bloc;
           },
-          child: BlocConsumer<ItemDetailBloc, ItemDetailState>(
-            listener: (context, state) {
-              // TODO: implement listener
-              if (state is ItemDetailFailed) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.error.toString())));
-              }
-            },
+          child: BlocBuilder<ItemDetailBloc, ItemDetailState>(
             builder: (context, state) {
               // Display item not found message
               if (state is ItemDetailNotFound) {
@@ -51,16 +45,20 @@ class _ItemDetailViewState extends State<ItemDetailView> {
                 return ItemDetailWidget(item: state.item);
               }
 
+              // Display error message
+              if (state is ItemDetailFailed) {
+                return const OperationErrorWidget();
+              }
+
               if (state.isLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              return const Text("Empty");
+              return const Column();
             },
           ),
         ),
       ),
-      //bottomNavigationBar: MainBottomNavigationBar(),
     );
   }
 }

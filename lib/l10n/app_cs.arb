@@ -1,5 +1,9 @@
 {
   "app_title": "Půjčovadlo",
+  "not_found": "Nenalezeno",
+  "not_found_message": "Stránka nebyla nalezena",
+  "error": "Chyba",
+  "error_message": "Něco se pokazilo. Zkuste to prosím znovu.",
   "menu_searching": "Hledat",
   "menu_profile": "Profil",
   "menu_inquiries": "Poptávky",
