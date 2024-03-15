@@ -1,8 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:pujcovadlo_client/common/custom_colors.dart';
 import 'package:pujcovadlo_client/common/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/item/responses/item_detail_response.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ItemDetailWidget extends StatefulWidget {
   final ItemDetailResponse item;
@@ -236,6 +239,42 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
             ),
           ),
           Text(widget.item.description),
+          Container(
+            height: 200,
+            child: FlutterMap(
+              options: MapOptions(
+                //initialCenter: LatLng(widget.item.longitude!, widget.item.latitude!),
+                //initialCenter: LatLng(widget.item.latitude!, widget.item.longitude!),
+                initialCenter: LatLng(widget.item.latitude!, widget.item.longitude!),
+                //initialCenter: LatLng(51.509364, -0.128928),
+                initialZoom: 15,
+               // initialCameraFit: CameraFit.
+              ),
+              children: [
+                TileLayer(
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  userAgentPackageName: 'com.example.app',
+                ),
+                RichAttributionWidget(
+                  attributions: [
+                    TextSourceAttribution(
+                      'OpenStreetMap contributors',
+                      onTap: () => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
+                    ),
+                  ],
+                ),
+                CircleLayer(circles: [
+                  CircleMarker(
+                    point: LatLng(widget.item.latitude!, widget.item.longitude!),
+                    color: Theme.of(context).primaryColor.withOpacity(0.5),
+                    borderColor: Theme.of(context).primaryColor,
+                    borderStrokeWidth: 2,
+                    radius: 50,
+                  ),
+                ]),
+              ],
+            )
+          )
         ],
       ),
     );
