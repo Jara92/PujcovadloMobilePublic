@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pujcovadlo_client/common/bloc/application_bloc.dart';
 import 'package:pujcovadlo_client/constants/routes.dart';
 import 'package:pujcovadlo_client/item/services/item_service.dart';
+import 'package:pujcovadlo_client/item/views/item_detail_view.dart';
 import 'package:pujcovadlo_client/item/views/item_list_view.dart';
 import 'authentication/views/login_view.dart';
 import 'dart:developer' as devtools show log;
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:pujcovadlo_client/common/extensions/buildcontext/loc.dart';
 import 'package:flutter/rendering.dart';
 import 'common/widgets/main_bottom_navigation_bar.dart';
 
@@ -16,52 +16,51 @@ void main() {
   registerDependencies();
   debugPaintSizeEnabled = false;
 
-  runApp(MaterialApp(
-    supportedLocales: AppLocalizations.supportedLocales,
-    localizationsDelegates: AppLocalizations.localizationsDelegates,
-    title: "Půjčovadlo",
-    theme: ThemeData(
-      useMaterial3: true,
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.red,
-        titleTextStyle: TextStyle(
-          color: Colors.white,
-          fontSize: 24,
-        ),
-      ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: Colors.red,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.black54,
-      ),
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.red,
-      ),
-      // Define the default `TextTheme`. Use this to specify the default
-      // text styling for headlines, titles, bodies of text, and more.
-      textTheme: const TextTheme(
-        titleSmall: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.normal,
-        ),
-       /* displayLarge: TextStyle(
+  runApp(BlocProvider(
+      create: (context) => ApplicationBloc(),
+      child: MaterialApp(
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        title: "Půjčovadlo",
+        theme: ThemeData(
+          useMaterial3: true,
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.red,
+            titleTextStyle: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+            ),
+          ),
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            backgroundColor: Colors.red,
+            selectedItemColor: Colors.white,
+            unselectedItemColor: Colors.black54,
+          ),
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.red,
+          ),
+          // Define the default `TextTheme`. Use this to specify the default
+          // text styling for headlines, titles, bodies of text, and more.
+          textTheme: const TextTheme(
+            titleSmall: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.normal,
+            ),
+            /* displayLarge: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.normal,
         ),*/
-      ),
-    ),
-    home: BlocProvider<ApplicationBloc>(
-      create: (context) => ApplicationBloc(),
-      child: const HomePage(),
-    ),
-    routes: {
-      loginRoute: (context) => const LoginView(),
-      itemsListRoute: (context) => ItemListView(),
-    },
-  ));
+          ),
+        ),
+        home: const HomePage(),
+        routes: {
+          loginRoute: (context) => const LoginView(),
+          itemsListRoute: (context) => ItemListView(),
+        },
+      )));
 }
 
-void registerDependencies(){
+void registerDependencies() {
   GetIt locator = GetIt.instance;
   locator.registerSingleton<ItemService>(ItemService());
 }

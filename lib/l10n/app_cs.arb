@@ -5,9 +5,7 @@
   "menu_inquiries": "Poptávky",
   "menu_orders": "Objednávky",
   "menu_messages": "Zprávy",
-
   "what_are_you_looking_for": "Co hledáte?",
-
   "price": "{price}",
   "@price": {
     "placeholders": {
@@ -22,7 +20,26 @@
     }
   },
   "per_day": "za den",
-
+  "item_name": "Název položky",
+  "item_description": "Popis položky",
+  "item_description_short": "Popis",
   "item_refundable_deposit": "Vratná kauce",
-  "item_refundable_deposit_short": "Kauce"
+  "item_refundable_deposit_short": "Kauce",
+  "item_rent_button": "Půjčit",
+  "item_rent_for_button": "Půjčit za {price} na den",
+  "@item_rent_for_button": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "item_buy_for_button": "Koupit za {price}",
+  "@item_buy_for_button": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  }
 }

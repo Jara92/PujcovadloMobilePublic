@@ -1,15 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pujcovadlo_client/common/bloc/application_bloc.dart';
 import 'package:pujcovadlo_client/common/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/common/widgets/main_bottom_navigation_bar.dart';
 import 'package:pujcovadlo_client/item/widgets/item_list_widget.dart';
-import 'package:pujcovadlo_client/item/services/item_service.dart';
-import 'package:get_it/get_it.dart';
 
 import '../bloc/item_list/item_list_bloc.dart';
+import 'item_detail_view.dart';
 
 class ItemListView extends StatefulWidget {
   ItemListView({super.key});
@@ -53,10 +50,18 @@ class _ItemListViewState extends State<ItemListView> {
                       ),
                       state.isLoading
                           ? const Expanded(
-                          child: Center(child: CircularProgressIndicator()))
+                              child: Center(child: CircularProgressIndicator()))
                           : Expanded(
                               child: ItemListWidget(
                                 items: state.items,
+                                onItemTap: (item) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ItemDetailView(
+                                                itemId: item.id,
+                                              )));
+                                },
                               ),
                             ),
                     ],

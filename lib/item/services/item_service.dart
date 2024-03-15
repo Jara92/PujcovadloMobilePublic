@@ -20,15 +20,17 @@ class ItemService {
           pricePerDay: 100.0,
           refundableDeposit: 2000.0,
           sellingPrice: 100.0,
-      mainImage: ImageResponse(
-          id: 1,
-          name: "Item 1",
-          path: "item-1.jpg",
-          url: "https://bilder.obi.cz/7d81d317-d581-42c1-b7fe-896a3b36292a/prZZB/yDrill_aku_sroubovak_bosch.jpg",
-          links: [])),
+          mainImage: ImageResponse(
+              id: 1,
+              name: "Item 1",
+              path: "item-1.jpg",
+              url:
+                  "https://bilder.obi.cz/7d81d317-d581-42c1-b7fe-896a3b36292a/prZZB/yDrill_aku_sroubovak_bosch.jpg",
+              links: [])),
       ItemResponse(
           id: 2,
-          name: "Vrtačka která má hodně dlouhý název který je alespoň na 2 řádky",
+          name:
+              "Vrtačka která má hodně dlouhý název který je alespoň na 2 řádky",
           alias: "item-2",
           status: ItemStatus.public,
           pricePerDay: 200.0,
@@ -84,40 +86,121 @@ class ItemService {
     ];
   }
 
-  Future<ItemDetailResponse> getItem(int id) async {
+  Future<ItemDetailResponse?> getItem(int id) async {
     // Fetch item from the server
     return ItemDetailResponse(
-        id: 1,
-        name: "Item 1",
-        alias: "item-1",
-        status: ItemStatus.public,
-        pricePerDay: 100.0,
-        refundableDeposit: 100.0,
-        sellingPrice: 100.0);
+      id: id,
+      name: "Item ${id}",
+      alias: "item",
+      description:
+          "Description of item ${id}. This item is very good and handy for everyone. You can use it for many purposes. I will borrow it to you for a very good price. You will be happy with it. I promise.",
+      parameters: "",
+      status: ItemStatus.public,
+      pricePerDay: 100.0,
+      refundableDeposit: 100.0,
+      sellingPrice: 2000.0,
+      mainImage: ImageResponse(
+          id: 1,
+          name: "Item 1",
+          path: "item-1.jpg",
+          url:
+              "https://bilder.obi.cz/7d81d317-d581-42c1-b7fe-896a3b36292a/prZZB/yDrill_aku_sroubovak_bosch.jpg",
+          links: []),
+      images: [
+        ImageResponse(
+          id: 1,
+          name: "Item 1",
+          path: "item-1.jpg",
+          url:
+              "https://bilder.obi.cz/7d81d317-d581-42c1-b7fe-896a3b36292a/prZZB/yDrill_aku_sroubovak_bosch.jpg",
+          links: [],
+        ),
+        ImageResponse(
+          id: 2,
+          name: "Item 1",
+          path: "item-1.jpg",
+          url:
+          "https://bilder.obi.cz/7d81d317-d581-42c1-b7fe-896a3b36292a/prZZB/yDrill_aku_sroubovak_bosch.jpg",
+          links: [],
+        ),
+        ImageResponse(
+          id: 3,
+          name: "Item 1",
+          path: "item-1.jpg",
+          url:
+          "https://bilder.obi.cz/7d81d317-d581-42c1-b7fe-896a3b36292a/prZZB/yDrill_aku_sroubovak_bosch.jpg",
+          links: [],
+        ),
+        ImageResponse(
+          id: 4,
+          name: "Item 1",
+          path: "item-1.jpg",
+          url:
+          "https://bilder.obi.cz/7d81d317-d581-42c1-b7fe-896a3b36292a/prZZB/yDrill_aku_sroubovak_bosch.jpg",
+          links: [],
+        ),
+        ImageResponse(
+          id: 5,
+          name: "Item 1",
+          path: "item-1.jpg",
+          url:
+          "https://bilder.obi.cz/7d81d317-d581-42c1-b7fe-896a3b36292a/prZZB/yDrill_aku_sroubovak_bosch.jpg",
+          links: [],
+        ),
+        ImageResponse(
+          id: 6,
+          name: "Item 1",
+          path: "item-1.jpg",
+          url:
+          "https://bilder.obi.cz/7d81d317-d581-42c1-b7fe-896a3b36292a/prZZB/yDrill_aku_sroubovak_bosch.jpg",
+          links: [],
+        ),
+        ImageResponse(
+          id: 7,
+          name: "Item 1",
+          path: "item-1.jpg",
+          // Placeholder 75x75
+          url: "https://via.placeholder.com/75x75.png",
+          links: [],
+        ),
+      ],
+      createdAt: DateTime.now().add(Duration(days: -10)),
+    );
   }
 
   Future<ItemDetailResponse> createItem(ItemRequest request) async {
+    int id = 20;
+
     // Create item on the server
     return ItemDetailResponse(
-        id: 1,
-        name: "Item 1",
-        alias: "item-1",
+        id: id,
+        name: "Item ${id}",
+        alias: "item",
+        description:
+            "Description of item ${id}. This item is very good and handy for everyone. You can use it for many purposes. I will borrow it to you for a very good price. You will be happy with it. I promise.",
+        parameters: "",
         status: ItemStatus.public,
         pricePerDay: 100.0,
         refundableDeposit: 100.0,
-        sellingPrice: 100.0);
+        sellingPrice: 100.0,
+        createdAt: DateTime.now());
   }
 
   Future<ItemDetailResponse> updateItem(ItemRequest item) async {
     // Update item on the server
     return ItemDetailResponse(
-        id: 1,
-        name: "Item 1",
-        alias: "item-1",
-        status: ItemStatus.public,
-        pricePerDay: 100.0,
-        refundableDeposit: 100.0,
-        sellingPrice: 100.0);
+      id: item.id!,
+      name: "Item ${item.id!}",
+      alias: "item",
+      description:
+          "Description of item ${item.id!}. This item is very good and handy for everyone. You can use it for many purposes. I will borrow it to you for a very good price. You will be happy with it. I promise.",
+      parameters: "",
+      status: ItemStatus.public,
+      pricePerDay: 100.0,
+      refundableDeposit: 100.0,
+      sellingPrice: 2000.0,
+      createdAt: DateTime.now().add(Duration(days: -10)),
+    );
   }
 
   Future<void> deleteItem(int id) async {
