@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pujcovadlo_client/common/bloc/application_bloc.dart';
 import 'package:pujcovadlo_client/common/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/common/widgets/main_bottom_navigation_bar.dart';
-import 'package:pujcovadlo_client/item/item_list_widget.dart';
+import 'package:pujcovadlo_client/item/widgets/item_list_widget.dart';
 import 'package:pujcovadlo_client/item/services/item_service.dart';
 import 'package:get_it/get_it.dart';
 
@@ -29,7 +29,7 @@ class _ItemListViewState extends State<ItemListView> {
       },
       child: Scaffold(
         body: Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 5),
             child: SafeArea(
               child: BlocConsumer<ItemListBloc, ItemListState>(
                 listener: (context, state) {},
@@ -37,7 +37,7 @@ class _ItemListViewState extends State<ItemListView> {
                   return Column(
                     children: [
                       Container(
-                        margin: const EdgeInsets.only(bottom: 10),
+                        margin: const EdgeInsets.only(bottom: 5),
                         child: TextField(
                           onChanged: (value) {
                             //print("onChanged");
