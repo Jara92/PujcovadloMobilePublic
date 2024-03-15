@@ -9,17 +9,19 @@ import 'dart:developer' as devtools show log;
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pujcovadlo_client/common/extensions/buildcontext/loc.dart';
-
+import 'package:flutter/rendering.dart';
 import 'common/widgets/main_bottom_navigation_bar.dart';
 
 void main() {
   registerDependencies();
+  debugPaintSizeEnabled = false;
 
   runApp(MaterialApp(
     supportedLocales: AppLocalizations.supportedLocales,
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     title: "Půjčovadlo",
     theme: ThemeData(
+      useMaterial3: true,
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.red,
         titleTextStyle: TextStyle(
@@ -32,31 +34,26 @@ void main() {
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.black54,
       ),
-      useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
         seedColor: Colors.red,
       ),
       // Define the default `TextTheme`. Use this to specify the default
       // text styling for headlines, titles, bodies of text, and more.
       textTheme: const TextTheme(
-        displayLarge: TextStyle(
-          fontSize: 24,
+        titleSmall: TextStyle(
+          fontSize: 12,
           fontWeight: FontWeight.normal,
         ),
+       /* displayLarge: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.normal,
+        ),*/
       ),
     ),
     home: BlocProvider<ApplicationBloc>(
       create: (context) => ApplicationBloc(),
       child: const HomePage(),
     ),
-   /* home: BlocConsumer<ApplicationEvent, ApplicationState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        if(state is SearchApplicationEvent){
-          return const LoginView();
-        }
-      },
-    )*/
     routes: {
       loginRoute: (context) => const LoginView(),
       itemsListRoute: (context) => ItemListView(),
@@ -79,7 +76,8 @@ class HomePage extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
-          body: bottomNavScreen.elementAt(state.index),
+          // Remember status of each tab using Indexed stack
+          body: IndexedStack(index: state.index, children: bottomNavScreen),
         );
       },
     );

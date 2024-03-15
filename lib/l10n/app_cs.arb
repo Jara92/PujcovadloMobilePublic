@@ -6,5 +6,23 @@
   "menu_orders": "Objednávky",
   "menu_messages": "Zprávy",
 
-  "what_are_you_looking_for": "Co hledáte?"
+  "what_are_you_looking_for": "Co hledáte?",
+
+  "price": "{price}",
+  "@price": {
+    "placeholders": {
+      "price": {
+        "type": "double",
+        "format": "currency",
+        "optionalParameters": {
+          "symbol": "Kč",
+          "decimalDigits": 0
+        }
+      }
+    }
+  },
+  "per_day": "za den",
+
+  "item_refundable_deposit": "Vratná kauce",
+  "item_refundable_deposit_short": "Kauce"
 }

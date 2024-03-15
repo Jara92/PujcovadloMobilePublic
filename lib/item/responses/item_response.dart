@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../enums/item_status.dart';
+import 'image_response.dart';
 
 class ItemResponse {
   int id;
@@ -18,7 +19,7 @@ class ItemResponse {
 
   //late UserResponse owner;
 
-  //late ImageResponse? mainImage;
+  ImageResponse? mainImage;
 
   //IList<ImageResponse> images = new List<ImageResponse>();
 
@@ -33,7 +34,7 @@ class ItemResponse {
     this.refundableDeposit,
     this.sellingPrice,
     //required this.owner,
-    //this.mainImage,
+    this.mainImage,
     //this.images,
     //this.links
   });
@@ -47,6 +48,9 @@ class ItemResponse {
       pricePerDay: json['pricePerDay'] as double,
       refundableDeposit: json['refundableDeposit'] as double?,
       sellingPrice: json['sellingPrice'] as double?,
+      mainImage: json['mainImage'] != null
+          ? ImageResponse.fromJson(json['mainImage'] as Map<String, Object>)
+          : null,
     );
   }
 }
