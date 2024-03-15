@@ -40,7 +40,6 @@ class ItemService {
           alias: "item-3",
           status: ItemStatus.public,
           pricePerDay: 300.0,
-          refundableDeposit: 1000.0,
           sellingPrice: 300.0),
       ItemResponse(
           id: 4,
