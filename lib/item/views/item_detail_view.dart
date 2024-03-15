@@ -26,7 +26,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: BlocProvider(
           create: (context) {
             var bloc = ItemDetailBloc();

@@ -17,6 +17,10 @@ class ItemResponse {
 
   double? sellingPrice;
 
+  double? latitude;
+
+  double? longitude;
+
   //late UserResponse owner;
 
   ImageResponse? mainImage;
@@ -33,6 +37,8 @@ class ItemResponse {
     required this.pricePerDay,
     this.refundableDeposit,
     this.sellingPrice,
+    this.latitude,
+    this.longitude,
     //required this.owner,
     this.mainImage,
     //this.images,
@@ -48,6 +54,8 @@ class ItemResponse {
       pricePerDay: json['pricePerDay'] as double,
       refundableDeposit: json['refundableDeposit'] as double?,
       sellingPrice: json['sellingPrice'] as double?,
+      latitude: json['latitude'] as double?,
+      longitude: json['longitude'] as double?,
       mainImage: json['mainImage'] != null
           ? ImageResponse.fromJson(json['mainImage'] as Map<String, Object>)
           : null,

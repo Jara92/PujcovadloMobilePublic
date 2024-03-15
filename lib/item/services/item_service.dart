@@ -102,6 +102,8 @@ class ItemService {
       pricePerDay: 100.0,
       refundableDeposit: 100.0,
       sellingPrice: 2000.0,
+      latitude: 50.10518008471686,
+      longitude: 14.38936269587655,
       mainImage: ImageResponse(
           id: 1,
           name: "Item 1",
