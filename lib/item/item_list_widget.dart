@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:pujcovadlo_client/common/custom_colors.dart';
 import 'package:pujcovadlo_client/common/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/item/responses/item_response.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class ItemListWidget extends StatelessWidget {
   final Iterable<ItemResponse> items;
@@ -18,25 +19,29 @@ class ItemListWidget extends StatelessWidget {
         var item = items.elementAt(index);
         return Container(
           margin: const EdgeInsets.only(bottom: 10),
+          color: const Color.fromARGB(255, 250, 249, 248),
           child: Row(
             children: [
               Expanded(
                 flex: 3,
                 child: Container(
-                  padding: const EdgeInsets.only(right: 0),
-                  child: Image.network(
-                    item.mainImage?.url ?? "https://via.placeholder.com/100",
-                    width: 100,
-                    height: 100,
-                  ),
-                ),
+                    padding: const EdgeInsets.only(right: 0),
+                    child: item.mainImage?.url == null
+                        ? Image.asset("images/item_placeholder.png")
+                        : FadeInImage.memoryNetwork(
+                            placeholder: kTransparentImage,
+                            // TODO: add url of placeholder image??
+                            image: item.mainImage?.url ?? '',
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          )),
               ),
               Expanded(
                 flex: 7,
                 child: Container(
                   padding: const EdgeInsets.all(7),
                   //height: double.infinity,
-                  color: const Color.fromARGB(255, 250, 249, 248),
                   height: 100,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -93,48 +98,56 @@ class ItemListWidget extends StatelessWidget {
                                 children: [
                                   Row(children: [
                                     //Icon(Icons.attach_money),
-                                    Text(
-                                        context.loc
-                                            .price(item.pricePerDay),
+                                    Text(context.loc.price(item.pricePerDay),
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelSmall!
                                             .copyWith(
-                                              color:
-                                                  Theme.of(context).colorScheme.primary,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
                                               fontWeight: FontWeight.bold,
                                             )),
                                     Text(
                                       " ${context.loc.per_day}",
-                                      style: Theme.of(context).textTheme.labelSmall!,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall!,
                                     )
                                   ]),
                                 ],
                               ),
                               Column(
                                 children: [
-                                  item.refundableDeposit == null ? const Column(children: [],) : Column(
-                                    children: [
-                                      Row(children: [
-                                        Text(
-                                          "${context.loc.item_refundable_deposit_short} ",
-                                          style: Theme.of(context).textTheme.labelSmall!,
+                                  item.refundableDeposit == null
+                                      ? const Column(
+                                          children: [],
+                                        )
+                                      : Column(
+                                          children: [
+                                            Row(children: [
+                                              Text(
+                                                "${context.loc.item_refundable_deposit_short} ",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelSmall!,
+                                              ),
+                                              //Icon(Icons.attach_money),
+                                              Text(
+                                                  context.loc.price(
+                                                      item.refundableDeposit!),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .labelSmall!
+                                                      .copyWith(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .secondary,
+                                                        // fontWeight: FontWeight.bold,
+                                                      )),
+                                            ]),
+                                          ],
                                         ),
-                                        //Icon(Icons.attach_money),
-                                        Text(
-                                            context.loc
-                                                .price(item.refundableDeposit!),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .labelSmall!
-                                                .copyWith(
-                                              color:
-                                              Theme.of(context).colorScheme.secondary,
-                                             // fontWeight: FontWeight.bold,
-                                            )),
-                                      ]),
-                                    ],
-                                  ),
                                 ],
                               )
                             ],
