@@ -94,9 +94,6 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
                         return Container(
                           width: MediaQuery.of(context).size.width,
                           margin: EdgeInsets.symmetric(horizontal: 5),
-                          /*decoration: BoxDecoration(
-                                        color: Colors.amber,
-                                      ),*/
                           child: FittedBox(
                             child: Image.network(i.url),
                             fit: BoxFit.fill,
@@ -238,17 +235,26 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
               ],
             ),
           ),
-          Text(widget.item.description),
+          Container(
+              margin: const EdgeInsets.only(bottom: 10),
+              child: Text(widget.item.description)),
+          Container(
+            margin: const EdgeInsets.only(bottom: 5),
+            child: Row(
+              children: [
+                Text(
+                  context.loc.where_can_you_find_it,
+                  style: Theme.of(context).textTheme.titleMedium!,
+                ),
+              ],
+            ),
+          ),
           Container(
             height: 200,
             child: FlutterMap(
               options: MapOptions(
-                //initialCenter: LatLng(widget.item.longitude!, widget.item.latitude!),
-                //initialCenter: LatLng(widget.item.latitude!, widget.item.longitude!),
                 initialCenter: LatLng(widget.item.latitude!, widget.item.longitude!),
-                //initialCenter: LatLng(51.509364, -0.128928),
-                initialZoom: 15,
-               // initialCameraFit: CameraFit.
+                initialZoom: 14.5,
               ),
               children: [
                 TileLayer(
@@ -269,7 +275,8 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
                     color: Theme.of(context).primaryColor.withOpacity(0.5),
                     borderColor: Theme.of(context).primaryColor,
                     borderStrokeWidth: 2,
-                    radius: 50,
+                    radius: 250,
+                    useRadiusInMeter: true,
                   ),
                 ]),
               ],

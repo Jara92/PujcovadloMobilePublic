@@ -5,7 +5,7 @@ import 'package:pujcovadlo_client/constants/routes.dart';
 import 'package:pujcovadlo_client/item/services/item_service.dart';
 import 'package:pujcovadlo_client/item/views/item_detail_view.dart';
 import 'package:pujcovadlo_client/item/views/item_list_view.dart';
-import 'authentication/views/login_view.dart';
+//import 'authentication/views/login_view.dart';
 import 'dart:developer' as devtools show log;
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -54,7 +54,7 @@ void main() {
         ),
         home: const HomePage(),
         routes: {
-          loginRoute: (context) => const LoginView(),
+          //loginRoute: (context) => const LoginView(),
           itemsListRoute: (context) => ItemListView(),
         },
       )));
