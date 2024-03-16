@@ -69,6 +69,7 @@ class ItemListWidget extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                     ),
                                 maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             Row(

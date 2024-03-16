@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:pujcovadlo_client/authentication/responses/user_response.dart';
 import '../enums/item_status.dart';
 import 'image_response.dart';
 
@@ -21,11 +22,9 @@ class ItemResponse {
 
   double? longitude;
 
-  //late UserResponse owner;
+  UserResponse owner;
 
   ImageResponse? mainImage;
-
-  //IList<ImageResponse> images = new List<ImageResponse>();
 
   //IList<LinkResponse> links = new List<LinkResponse>();
 
@@ -39,7 +38,7 @@ class ItemResponse {
     this.sellingPrice,
     this.latitude,
     this.longitude,
-    //required this.owner,
+    required this.owner,
     this.mainImage,
     //this.images,
     //this.links
@@ -54,6 +53,7 @@ class ItemResponse {
       pricePerDay: json['pricePerDay'] as double,
       refundableDeposit: json['refundableDeposit'] as double?,
       sellingPrice: json['sellingPrice'] as double?,
+      owner: UserResponse.fromJson(json['owner'] as Map<String, Object>),
       latitude: json['latitude'] as double?,
       longitude: json['longitude'] as double?,
       mainImage: json['mainImage'] != null

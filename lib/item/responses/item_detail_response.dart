@@ -36,6 +36,7 @@ class ItemDetailResponse extends ItemResponse {
     required super.pricePerDay,
     required super.refundableDeposit,
     required super.sellingPrice,
+    required super.owner,
     super.latitude,
     super.longitude,
     super.mainImage,

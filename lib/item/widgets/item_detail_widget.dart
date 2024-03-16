@@ -1,10 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:pujcovadlo_client/common/custom_colors.dart';
 import 'package:pujcovadlo_client/common/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/item/responses/item_detail_response.dart';
+import 'package:pujcovadlo_client/profiles/widgets/profile_rating_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ItemDetailWidget extends StatefulWidget {
@@ -28,13 +30,16 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
         children: [
           Row(
             children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 5),
-                child: Text(
-                  widget.item.name,
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+              Flexible(
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 5),
+                  child: Text(
+                    widget.item.name,
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                    softWrap: true,
+                  ),
                 ),
               ),
             ],
@@ -43,20 +48,10 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.star,
-                      color: CustomColors.gold,
-                      size: 20,
-                    ),
-                    Text(
-                      "4.4 (12 recenzí)",
-                      style: Theme.of(context).textTheme.labelSmall!,
-                    ),
-                  ]),
+              ProfileRatingWidget(
+                user: widget.item.owner,
+                showReviewsCount: true,
+              ),
               Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -114,12 +109,11 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
                           vertical: 8.0, horizontal: 4.0),
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color:
-                              (Theme.of(context).brightness == Brightness.dark
-                                      ? Colors.white
-                                      : Colors.black)
-                                  .withOpacity(
-                                      _current == entry.key ? 0.9 : 0.4)),
+                          color: (Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.white
+                                  : Colors.black)
+                              .withOpacity(_current == entry.key ? 0.9 : 0.4)),
                     ),
                   );
                 }).toList()),
@@ -141,8 +135,7 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
                                 .textTheme
                                 .titleMedium!
                                 .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.primary,
+                                  color: Theme.of(context).colorScheme.primary,
                                   fontWeight: FontWeight.bold,
                                 )),
                         Text(
@@ -164,13 +157,12 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
                               Row(children: [
                                 Text(
                                   "${context.loc.item_refundable_deposit} ",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium!,
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium!,
                                 ),
                                 Text(
-                                    context.loc.price(
-                                        widget.item.refundableDeposit!),
+                                    context.loc
+                                        .price(widget.item.refundableDeposit!),
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelMedium!
@@ -205,7 +197,7 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
             ),
           ),
           Container(
-            margin: const EdgeInsets.only(bottom: 5),
+            margin: const EdgeInsets.only(bottom: 20),
             child: widget.item.sellingPrice == null
                 ? const Row()
                 : Row(
@@ -215,8 +207,8 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
                         child: OutlinedButton.icon(
                           onPressed: () {},
                           icon: const Icon(Icons.shopping_cart),
-                          label: Text(context.loc
-                              .item_buy_for_button(context.loc.price(
+                          label: Text(
+                              context.loc.item_buy_for_button(context.loc.price(
                             widget.item.sellingPrice!,
                           ))),
                         ),
@@ -236,10 +228,79 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
             ),
           ),
           Container(
-              margin: const EdgeInsets.only(bottom: 10),
+              margin: const EdgeInsets.only(bottom: 20),
               child: Text(widget.item.description)),
+          Divider(),
           Container(
             margin: const EdgeInsets.only(bottom: 5),
+            child: Row(
+              children: [
+                Text(
+                  context.loc.about_item_owner,
+                  style: Theme.of(context).textTheme.titleMedium!,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 20,
+                  //backgroundImage: NetworkImage(widget.item.owner?.profileImage),
+                  backgroundImage: AssetImage("images/user_placeholder.png"),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${widget.item.owner.firstName} ${widget.item.owner.lastName}",
+                        style: Theme.of(context).textTheme.titleMedium!,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        softWrap: true,
+                      ),
+                      ProfileRatingWidget(
+                        user: widget.item.owner,
+                        showReviewsCount: true,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 20),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 2),
+                    child: ElevatedButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.supervised_user_circle),
+                      label: Text(context.loc.show_user_profile_button),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 2),
+                    child: OutlinedButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.message),
+                      label: Text(context.loc.contact_owner_short_button),
+                    ),
+                  ),
+                ]),
+          ),
+          Divider(),
+          Container(
+            margin: const EdgeInsets.only(bottom: 10),
             child: Row(
               children: [
                 Text(
@@ -250,38 +311,59 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
             ),
           ),
           Container(
-            height: 200,
-            child: FlutterMap(
-              options: MapOptions(
-                initialCenter: LatLng(widget.item.latitude!, widget.item.longitude!),
-                initialZoom: 14.5,
-              ),
-              children: [
-                TileLayer(
-                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  userAgentPackageName: 'com.example.app',
+              height: 200,
+              margin: const EdgeInsets.only(bottom: 5),
+              // TODO: Improve location anonymization
+              child: FlutterMap(
+                options: MapOptions(
+                  initialCenter:
+                      LatLng(widget.item.latitude!, widget.item.longitude!),
+                  initialZoom: 14.5,
                 ),
-                RichAttributionWidget(
-                  attributions: [
-                    TextSourceAttribution(
-                      'OpenStreetMap contributors',
-                      onTap: () => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
-                    ),
-                  ],
-                ),
-                CircleLayer(circles: [
-                  CircleMarker(
-                    point: LatLng(widget.item.latitude!, widget.item.longitude!),
-                    color: Theme.of(context).primaryColor.withOpacity(0.5),
-                    borderColor: Theme.of(context).primaryColor,
-                    borderStrokeWidth: 2,
-                    radius: 250,
-                    useRadiusInMeter: true,
+                children: [
+                  TileLayer(
+                    urlTemplate:
+                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    userAgentPackageName: 'com.example.app',
                   ),
-                ]),
-              ],
-            )
-          )
+                  RichAttributionWidget(
+                    attributions: [
+                      TextSourceAttribution(
+                        'OpenStreetMap contributors',
+                        onTap: () => launchUrl(
+                            Uri.parse('https://openstreetmap.org/copyright')),
+                      ),
+                    ],
+                  ),
+                  CircleLayer(circles: [
+                    CircleMarker(
+                      point:
+                          LatLng(widget.item.latitude!, widget.item.longitude!),
+                      color: Theme.of(context).primaryColor.withOpacity(0.5),
+                      borderColor: Theme.of(context).primaryColor,
+                      borderStrokeWidth: 2,
+                      radius: 250,
+                      useRadiusInMeter: true,
+                    ),
+                  ]),
+                ],
+              )),
+          Row(
+            children: [
+              Icon(
+                Icons.info_outline,
+                color: Theme.of(context).primaryColor,
+                size: 20,
+              ),
+              const SizedBox(width: 5),
+              Expanded(
+                child: Text(
+                  context.loc.owner_will_tell_you_exact_location,
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );

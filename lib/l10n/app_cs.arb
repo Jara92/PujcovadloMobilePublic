@@ -5,6 +5,22 @@
   "error": "Chyba",
   "error_message": "Něco se pokazilo. Zkuste to prosím znovu.",
   "where_can_you_find_it": "Kde to najdete?",
+  "owner_will_tell_you_exact_location": "Přesnou polohu vám sdělí majitel až po potvrzení objednávky.",
+  "profile_average_rating_with_reviews_count": "{rating} ({reviewsCount} recenzí)",
+  "@profile_average_rating_with_reviews_count": {
+    "placeholders": {
+      "rating": {
+        "type": "double",
+        "format": "decimalPattern"
+      },
+      "reviewsCount": {
+        "type": "int"
+      }
+    }
+  },
+  "about_item_owner": "O majiteli",
+  "contact_owner_short_button": "Kontaktovat",
+  "show_user_profile_button": "Zobrazit profil",
   "menu_searching": "Hledat",
   "menu_profile": "Profil",
   "menu_inquiries": "Poptávky",
@@ -44,6 +60,15 @@
     "placeholders": {
       "price": {
         "type": "String"
+      }
+    }
+  },
+  "decimal": "{number}",
+  "@decimal": {
+    "placeholders": {
+      "number": {
+        "type": "double",
+        "format": "decimalPattern"
       }
     }
   }
