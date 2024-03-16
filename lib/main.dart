@@ -29,10 +29,10 @@ void main() {
               fontSize: 24,
             ),
           ),
-          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-            backgroundColor: Colors.red,
-            selectedItemColor: Colors.white,
-            unselectedItemColor: Colors.black,
+          navigationBarTheme: const NavigationBarThemeData(
+            //backgroundColor: Colors.red,
+            indicatorColor: Colors.red,
+            // labelTextStyle: Colors.black,
           ),
           colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.red,
@@ -73,10 +73,7 @@ class HomePage extends StatelessWidget {
     return BlocConsumer<ApplicationBloc, ApplicationState>(
       listener: (context, state) {},
       builder: (context, state) {
-        return Scaffold(
-          // Remember status of each tab using Indexed stack
-          body: IndexedStack(index: state.index, children: bottomNavScreen),
-        );
+        return IndexedStack(index: state.index, children: bottomNavScreen);
       },
     );
   }
