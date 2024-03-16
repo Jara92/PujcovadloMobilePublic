@@ -10,8 +10,8 @@ class MyProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //title: const Text('My profile'),
-      ),
+          //title: const Text('My profile'),
+          ),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: SingleChildScrollView(
