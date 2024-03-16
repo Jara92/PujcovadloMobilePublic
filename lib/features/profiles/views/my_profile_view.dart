@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
-import 'package:pujcovadlo_client/features/profiles/widgets/simple_profile_widget.dart';
+import 'package:pujcovadlo_client/features/item/views/my_item_list.dart';
 
 class MyProfileView extends StatelessWidget {
   const MyProfileView({super.key});
@@ -25,8 +23,8 @@ class MyProfileView extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 10),
                 child: Text(context.loc.my_profile,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    )),
+                          fontWeight: FontWeight.bold,
+                        )),
               ),
               Row(
                 children: [
@@ -40,11 +38,11 @@ class MyProfileView extends StatelessWidget {
                 ],
               ),
               Container(
-                margin: const EdgeInsets.only(bottom: 10, top:20),
+                margin: const EdgeInsets.only(bottom: 10, top: 20),
                 child: Text(context.loc.i_borrow_items,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    )),
+                          fontWeight: FontWeight.bold,
+                        )),
               ),
               Row(
                 children: [
@@ -69,11 +67,11 @@ class MyProfileView extends StatelessWidget {
                 ],
               ),
               Container(
-                margin: const EdgeInsets.only(bottom: 10, top:20),
+                margin: const EdgeInsets.only(bottom: 10, top: 20),
                 child: Text(context.loc.i_lend_items,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    )),
+                          fontWeight: FontWeight.bold,
+                        )),
               ),
               Row(
                 children: [
@@ -90,19 +88,27 @@ class MyProfileView extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ElevatedButton.icon(
-                      onPressed: () {}, // TODO
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MyItemList(),
+                            ));
+                      }, // TODO
                       icon: const Icon(Icons.inventory),
                       label: Text(context.loc.manage_my_items_button),
                     ),
                   ),
                 ],
-              ),            Row(
+              ),
+              Row(
                 children: [
                   Expanded(
                     child: ElevatedButton.icon(
                       onPressed: () {}, // TODO
                       icon: const Icon(Icons.monetization_on),
-                      label: Text(context.loc.inquiries_and_reservations_button),
+                      label:
+                          Text(context.loc.inquiries_and_reservations_button),
                     ),
                   ),
                 ],

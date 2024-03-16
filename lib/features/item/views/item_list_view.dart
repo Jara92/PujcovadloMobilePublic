@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
+import 'package:pujcovadlo_client/features/item/widgets/item_list_tile_widget.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_list_widget.dart';
 
 import '../bloc/item_list/item_list_bloc.dart';
@@ -55,6 +55,8 @@ class _ItemListViewState extends State<ItemListView> {
                           : Expanded(
                               child: ItemListWidget(
                                 items: state.items,
+                                itemBuilder: (context, item) =>
+                                    ItemListTileWidget(item: item),
                                 onItemTap: (ItemResponse item) {
                                   Navigator.push(
                                       context,
