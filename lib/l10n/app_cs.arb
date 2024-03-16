@@ -6,6 +6,15 @@
   "error_message": "Něco se pokazilo. Zkuste to prosím znovu.",
   "where_can_you_find_it": "Kde to najdete?",
   "owner_will_tell_you_exact_location": "Přesnou polohu vám sdělí majitel až po potvrzení objednávky.",
+  "my_profile": "Můj profil",
+  "show_my_profile_button": "Zobrazit můj profil",
+  "i_borrow_items": "Půjčuji si",
+  "borrowed_items_button": "Vypůjčené položky",
+  "favorite_items_button": "Oblíbené položky",
+  "i_lend_items": "Já půjčuji",
+  "add_new_item_button": "Přidat položku",
+  "manage_my_items_button": "Správa mých položek",
+  "inquiries_and_reservations_button": "Poptávky a rezervace",
   "profile_average_rating_with_reviews_count": "{rating} ({reviewsCount} recenzí)",
   "@profile_average_rating_with_reviews_count": {
     "placeholders": {

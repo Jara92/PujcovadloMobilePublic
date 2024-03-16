@@ -10,6 +10,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pujcovadlo_client/features/item/services/item_service.dart';
 import 'package:pujcovadlo_client/features/item/views/item_list_view.dart';
+import 'package:pujcovadlo_client/features/profiles/views/my_profile_view.dart';
 
 void main() {
   registerDependencies();
@@ -92,5 +93,5 @@ List<Widget> bottomNavScreen = <Widget>[
   ),
   ItemListView(),
   Text('Messages'),
-  Text('Profile'),
+  MyProfileView(),
 ];
