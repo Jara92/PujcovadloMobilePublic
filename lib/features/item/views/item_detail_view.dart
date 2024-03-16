@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pujcovadlo_client/core/widgets/not_found_widget.dart';
@@ -22,7 +21,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
       appBar: AppBar(),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
           child: BlocProvider(
             create: (context) {
               var bloc = ItemDetailBloc();

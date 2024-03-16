@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pujcovadlo_client/core/bloc/application_bloc.dart';
 import 'package:pujcovadlo_client/core/constants/routes.dart';
+import 'package:pujcovadlo_client/core/custom_colors.dart';
 import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
 import 'package:pujcovadlo_client/features/item/services/item_service.dart';
 import 'package:pujcovadlo_client/features/item/views/item_list_view.dart';
@@ -23,19 +24,32 @@ void main() {
         theme: ThemeData(
           useMaterial3: true,
           appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.red,
+            //backgroundColor: Colors.red,
             titleTextStyle: TextStyle(
               color: Colors.white,
               fontSize: 24,
             ),
           ),
-          navigationBarTheme: const NavigationBarThemeData(
-            //backgroundColor: Colors.red,
-            indicatorColor: Colors.red,
-            // labelTextStyle: Colors.black,
-          ),
+          navigationBarTheme: NavigationBarThemeData(
+              indicatorColor: CustomColors.lightPrimary,
+              iconTheme: MaterialStateProperty.resolveWith((states) {
+                return const IconThemeData(
+                  //color: Colors.black87,
+                  color: CustomColors.primary,
+                  size: 24,
+                );
+              }),
+              labelTextStyle: MaterialStateProperty.resolveWith(
+                (states) {
+                  return const TextStyle(
+                    color: Colors.black87,
+                    //fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  );
+                },
+              )),
           colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.red,
+            seedColor: CustomColors.primary,
             secondary: Colors.black,
           ),
           // Define the default `TextTheme`. Use this to specify the default
@@ -45,15 +59,10 @@ void main() {
               fontSize: 12,
               fontWeight: FontWeight.normal,
             ),
-            /* displayLarge: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.normal,
-        ),*/
           ),
         ),
         home: const HomePage(),
         routes: {
-          //loginRoute: (context) => const LoginView(),
           itemsListRoute: (context) => ItemListView(),
         },
       )));
