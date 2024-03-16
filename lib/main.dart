@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pujcovadlo_client/common/bloc/application_bloc.dart';
-import 'package:pujcovadlo_client/constants/routes.dart';
-import 'package:pujcovadlo_client/item/services/item_service.dart';
-import 'package:pujcovadlo_client/item/views/item_detail_view.dart';
-import 'package:pujcovadlo_client/item/views/item_list_view.dart';
+import 'package:pujcovadlo_client/core/constants/routes.dart';
+import 'package:pujcovadlo_client/core/bloc/application_bloc.dart';
+import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
 //import 'authentication/views/login_view.dart';
 import 'dart:developer' as devtools show log;
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/rendering.dart';
-import 'common/widgets/main_bottom_navigation_bar.dart';
+import 'package:pujcovadlo_client/features/item/services/item_service.dart';
+import 'package:pujcovadlo_client/features/item/views/item_list_view.dart';
 
 void main() {
   registerDependencies();

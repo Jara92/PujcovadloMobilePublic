@@ -1,7 +1,6 @@
 import 'dart:core';
-
-import 'package:pujcovadlo_client/item/responses/image_response.dart';
-import 'package:pujcovadlo_client/item/responses/item_response.dart';
+import 'package:pujcovadlo_client/core/responses/image_response.dart';
+import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
 
 class ItemDetailResponse extends ItemResponse {
   String description;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pujcovadlo_client/common/extensions/buildcontext/loc.dart';
+import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 
 import '../bloc/application_bloc.dart';
 

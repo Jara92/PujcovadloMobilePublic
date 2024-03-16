@@ -1,10 +1,7 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
-import 'package:pujcovadlo_client/item/responses/item_detail_response.dart';
-
+import 'package:pujcovadlo_client/features/item/responses/item_detail_response.dart';
 import '../../services/item_service.dart';
 
 part 'item_detail_event.dart';

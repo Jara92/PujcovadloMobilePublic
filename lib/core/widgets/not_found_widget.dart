@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:pujcovadlo_client/common/extensions/buildcontext/loc.dart';
+import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 
-class OperationErrorWidget extends StatelessWidget {
+class NotFoundWidget extends StatelessWidget {
   final String? title;
   final String? message;
 
-  const OperationErrorWidget({this.title, this.message, super.key});
+  const NotFoundWidget({this.title, this.message, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +16,13 @@ class OperationErrorWidget extends StatelessWidget {
         children: [
           Container(
               margin: const EdgeInsets.only(bottom: 5),
-              child: Image.asset("images/icons/error.png")),
-          Text(title ?? context.loc.error,
+              child: Image.asset("images/icons/not_found.png")),
+          Text(title ?? context.loc.not_found,
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     fontWeight: FontWeight.bold,
                   )),
           Text(
-            message ?? context.loc.error_message,
+            message ?? context.loc.not_found_message,
             style: Theme.of(context).textTheme.labelMedium!,
           )
         ],

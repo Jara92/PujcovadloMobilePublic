@@ -1,10 +1,9 @@
-import 'package:pujcovadlo_client/authentication/responses/user_response.dart';
-import 'package:pujcovadlo_client/profiles/responses/profile_aggregations.dart';
-import 'package:pujcovadlo_client/profiles/responses/profile_response.dart';
-
+import 'package:pujcovadlo_client/features/authentication/responses/user_response.dart';
+import 'package:pujcovadlo_client/features/profiles/responses/profile_aggregations.dart';
+import 'package:pujcovadlo_client/features/profiles/responses/profile_response.dart';
 import '../enums/item_status.dart';
 import '../requests/item_request.dart';
-import '../responses/image_response.dart';
+import '../../../core/responses/image_response.dart';
 import '../responses/item_response.dart';
 import '../responses/item_detail_response.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'package:pujcovadlo_client/authentication/responses/user_response.dart';
+import 'package:pujcovadlo_client/features/authentication/responses/user_response.dart';
 import '../enums/item_status.dart';
-import 'image_response.dart';
+import '../../../core/responses/image_response.dart';
 
 class ItemResponse {
   int id;

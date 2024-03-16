@@ -1,6 +1,6 @@
-import 'package:pujcovadlo_client/item/responses/image_response.dart';
-import 'package:pujcovadlo_client/item/responses/link_response.dart';
-import 'package:pujcovadlo_client/profiles/responses/profile_aggregations.dart';
+import 'package:pujcovadlo_client/core/responses/image_response.dart';
+import 'package:pujcovadlo_client/core/responses/link_response.dart';
+import 'package:pujcovadlo_client/features/profiles/responses/profile_aggregations.dart';
 
 class ProfileResponse {
   int id;

@@ -1,15 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:pujcovadlo_client/common/extensions/buildcontext/loc.dart';
-import 'package:pujcovadlo_client/common/widgets/main_bottom_navigation_bar.dart';
-import 'package:pujcovadlo_client/common/widgets/not_found_widget.dart';
-import 'package:pujcovadlo_client/common/widgets/operation_error_widget.dart';
-import 'package:pujcovadlo_client/item/bloc/item_detail/item_detail_bloc.dart';
-import 'package:pujcovadlo_client/item/widgets/item_detail_widget.dart';
-
-import '../../common/custom_colors.dart';
+import 'package:pujcovadlo_client/core/widgets/not_found_widget.dart';
+import 'package:pujcovadlo_client/core/widgets/operation_error_widget.dart';
+import 'package:pujcovadlo_client/features/item/bloc/item_detail/item_detail_bloc.dart';
+import 'package:pujcovadlo_client/features/item/widgets/item_detail_widget.dart';
 
 class ItemDetailView extends StatefulWidget {
   final int itemId;

@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pujcovadlo_client/common/extensions/buildcontext/loc.dart';
-import 'package:pujcovadlo_client/common/widgets/main_bottom_navigation_bar.dart';
-import 'package:pujcovadlo_client/item/widgets/item_list_widget.dart';
+import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
+import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
+import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
+import 'package:pujcovadlo_client/features/item/widgets/item_list_widget.dart';
 
 import '../bloc/item_list/item_list_bloc.dart';
 import 'item_detail_view.dart';
@@ -54,7 +55,7 @@ class _ItemListViewState extends State<ItemListView> {
                           : Expanded(
                               child: ItemListWidget(
                                 items: state.items,
-                                onItemTap: (item) {
+                                onItemTap: (ItemResponse item) {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(

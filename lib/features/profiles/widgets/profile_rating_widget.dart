@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pujcovadlo_client/authentication/responses/user_response.dart';
-import 'package:pujcovadlo_client/common/custom_colors.dart';
-import 'package:pujcovadlo_client/common/extensions/buildcontext/loc.dart';
+import 'package:pujcovadlo_client/core/custom_colors.dart';
+import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
+import 'package:pujcovadlo_client/features/authentication/responses/user_response.dart';
 
 class ProfileRatingWidget extends StatelessWidget {
   final UserResponse user;

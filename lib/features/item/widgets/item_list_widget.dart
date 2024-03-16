@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pujcovadlo_client/common/custom_colors.dart';
-import 'package:pujcovadlo_client/common/extensions/buildcontext/loc.dart';
-import 'package:pujcovadlo_client/item/responses/item_response.dart';
+import 'package:pujcovadlo_client/core/custom_colors.dart';
+import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
+import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 typedef ItemCallback = void Function(ItemResponse item);

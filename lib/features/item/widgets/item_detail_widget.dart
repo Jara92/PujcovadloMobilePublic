@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:pujcovadlo_client/common/extensions/buildcontext/loc.dart';
-import 'package:pujcovadlo_client/item/responses/item_detail_response.dart';
-import 'package:pujcovadlo_client/profiles/widgets/profile_rating_widget.dart';
+import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
+import 'package:pujcovadlo_client/features/item/responses/item_detail_response.dart';
+import 'package:pujcovadlo_client/features/profiles/widgets/profile_rating_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ItemDetailWidget extends StatefulWidget {
