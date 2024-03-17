@@ -26,8 +26,7 @@ void main() {
           appBarTheme: const AppBarTheme(
             //backgroundColor: Colors.red,
             titleTextStyle: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
+              color: Colors.black,
             ),
           ),
           navigationBarTheme: NavigationBarThemeData(
