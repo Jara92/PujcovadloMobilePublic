@@ -35,18 +35,33 @@ class _ItemListViewState extends State<ItemListView> {
                   return Column(
                     children: [
                       Container(
-                        margin: const EdgeInsets.only(bottom: 5),
-                        child: TextField(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: SearchBar(
+                          leading: const Icon(Icons.search),
+                          trailing: <Widget>[
+                            Tooltip(
+                              message: 'Advanced search',
+                              child: IconButton(
+                                isSelected: false,
+                                onPressed: () {
+                                  setState(() {
+                                    //isDark = !isDark;
+                                  });
+                                },
+                                icon: const Icon(Icons.manage_search),
+                                selectedIcon: const Icon(Icons.manage_search),
+                              ),
+                            )
+                          ],
+                          padding: const MaterialStatePropertyAll<EdgeInsets>(
+                              EdgeInsets.symmetric(horizontal: 16.0)),
                           onChanged: (value) {
                             //print("onChanged");
                             BlocProvider.of<ItemListBloc>(context)
                                 .add(SearchTextUpdated(searchText: value));
                           },
-                          decoration: InputDecoration(
-                            //border: OutlineInputBorder(),
-                            icon: const Icon(Icons.search),
-                            hintText: context.loc.what_are_you_looking_for,
-                          ),
+                          hintText: context.loc.what_are_you_looking_for,
                         ),
                       ),
                       state.isLoading
