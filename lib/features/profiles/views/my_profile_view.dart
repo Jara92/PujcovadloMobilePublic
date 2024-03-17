@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
+import 'package:pujcovadlo_client/features/item/views/item_create_view.dart';
 import 'package:pujcovadlo_client/features/item/views/my_item_list.dart';
 
 class MyProfileView extends StatelessWidget {
@@ -77,7 +78,12 @@ class MyProfileView extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ElevatedButton.icon(
-                      onPressed: () {}, // TODO
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ItemCreateView()));
+                      },
                       icon: const Icon(Icons.add),
                       label: Text(context.loc.add_new_item_button),
                     ),

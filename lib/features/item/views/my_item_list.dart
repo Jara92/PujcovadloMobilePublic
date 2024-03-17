@@ -4,6 +4,7 @@ import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
 import 'package:pujcovadlo_client/features/item/bloc/my_item_list/my_item_list_bloc.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
+import 'package:pujcovadlo_client/features/item/views/item_create_view.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_list_widget.dart';
 import 'package:pujcovadlo_client/features/item/widgets/my_item_list_tile_widget.dart';
 
@@ -47,6 +48,7 @@ class _MyItemListState extends State<MyItemList> {
                             ),
                           ),
                         ),
+                        // TODO: ADD SCREEN FOR NO ITEMS
                         state.isLoading
                             ? const Expanded(
                                 child:
@@ -68,7 +70,12 @@ class _MyItemListState extends State<MyItemList> {
               )),
           bottomNavigationBar: const MainBottomNavigationBar(),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {}, // TODO
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ItemCreateView()));
+            },
             child: const Icon(Icons.add),
           )),
     );
