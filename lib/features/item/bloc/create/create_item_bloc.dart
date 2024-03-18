@@ -25,8 +25,6 @@ class CreateItemBloc extends Bloc<CreateItemEvent, CreateItemState> {
       description: ItemDescription.pure(item.description ?? ''),
       isValid: false,
     ));
-
-    print(ItemName.pure(item.name ?? '').isValid);
   }
 
   void _onItemNameChanged(

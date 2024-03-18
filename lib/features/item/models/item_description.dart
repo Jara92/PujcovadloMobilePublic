@@ -22,8 +22,6 @@ class ItemDescription
 
   @override
   ItemDescriptionValidationError? validator(String value) {
-    print(value);
-
     // No value entered
     if (value.isEmpty) {
       return ItemDescriptionValidationError.required;
