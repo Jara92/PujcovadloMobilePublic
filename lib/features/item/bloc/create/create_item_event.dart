@@ -13,22 +13,8 @@ class Step1SubmitEvent extends CreateItemEvent {
   const Step1SubmitEvent();
 }
 
-class ItemNameChanged extends CreateItemEvent {
-  final String name;
+class MoveToStepEvent extends CreateItemEvent {
+  final int step;
 
-  const ItemNameChanged(this.name);
+  const MoveToStepEvent(this.step);
 }
-
-class ItemDescriptionChanged extends CreateItemEvent {
-  final String description;
-
-  const ItemDescriptionChanged(this.description);
-}
-
-/*class NextStepEvent extends CreateItemEvent {
-  const NextStepEvent();
-}
-
-class PreviousStepEvent extends CreateItemEvent {
-  const PreviousStepEvent();
-}*/

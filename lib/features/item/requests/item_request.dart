@@ -5,5 +5,7 @@ class ItemRequest{
 
   ItemRequest({
     this.id,
+    this.name,
+    this.description,
   });
 }
