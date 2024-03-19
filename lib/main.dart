@@ -7,6 +7,7 @@ import 'package:pujcovadlo_client/core/bloc/application_bloc.dart';
 import 'package:pujcovadlo_client/core/constants/routes.dart';
 import 'package:pujcovadlo_client/core/custom_colors.dart';
 import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
+import 'package:pujcovadlo_client/features/item/services/item_category_service.dart';
 import 'package:pujcovadlo_client/features/item/services/item_service.dart';
 import 'package:pujcovadlo_client/features/item/views/item_list_view.dart';
 import 'package:pujcovadlo_client/features/profiles/views/my_profile_view.dart';
@@ -70,6 +71,7 @@ void main() {
 void registerDependencies() {
   GetIt locator = GetIt.instance;
   locator.registerSingleton<ItemService>(ItemService());
+  locator.registerSingleton<ItemCategoryService>(ItemCategoryService());
 }
 
 class HomePage extends StatelessWidget {
