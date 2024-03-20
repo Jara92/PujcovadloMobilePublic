@@ -50,5 +50,9 @@
         <string>cs</string>
         <string>en</string>
     </array>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>App needs access to the photo library</string>
+    <key>NSCameraUsageDescription</key>
+    <string>App needs access to the camera</string>
 </dict>
 </plist>
