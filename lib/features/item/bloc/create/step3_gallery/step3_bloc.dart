@@ -55,9 +55,6 @@ class Step3Bloc extends Bloc<Step3Event, Step3State> {
     images.add(newImage);
     emit(state.copyWith(images: images));
 
-    images.add(ItemImage.dirty(event.imageFile));
-    emit(state.copyWith(images: images));
-
     // If the main image is not set, set the added image as the main image
     if (state.mainImageIndex == null) {
       emit(state.copyWith(mainImage: state.images.length - 1));
