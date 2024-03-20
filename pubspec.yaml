@@ -49,6 +49,7 @@ dependencies:
   multi_dropdown: ^2.1.3 # Attention: 2.1.4 wont work here. Make sure new versions work.
   equatable: ^2.0.3
   image_picker: ^1.0.7
+  #flutter_draggable_gridview: ^0.0.11 # Would be cool to have this, but it's not working now.
 
 dev_dependencies:
   flutter_test:

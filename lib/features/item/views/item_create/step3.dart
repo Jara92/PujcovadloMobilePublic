@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pujcovadlo_client/core/custom_colors.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/step3_gallery/step3_bloc.dart';
@@ -16,48 +17,42 @@ class Step3 extends StatefulWidget {
 }
 
 class _Step3State extends State<Step3> {
-  final ImagePicker _picker = ImagePicker();
-  XFile? _image;
-  List<XFile> _images = [];
+  late final ImagePicker _picker;
 
-  Future<void> _addImageFromGallery() async {
+  Future<void> _addImageFromGallery(Function(File file) callback) async {
     try {
-      //final img = await _picker.pickImage(source: ImageSource.gallery);
+      // pickup multiple images
       final img = await _picker.pickMultiImage();
 
-      setState(() {
-        //_image = img;
-        if (img.isNotEmpty) {
-          //_images.add(img);
-          //_images.addAll(img);
-          for (var element in img) {
-            _images.add(element);
-          }
+      // If the user picked images
+      if (img.isNotEmpty) {
+        // for each image call the callback
+        for (var element in img) {
+          callback(File(element.path));
         }
-      });
+      }
     } catch (e) {
       // TODO: show error message
       print(e);
     }
   }
 
-  Future<void> _addImageFromCamera() async {
+  Future<void> _addImageFromCamera(Function(File file) callback) async {
     try {
+      // pickup image from camera
       final img = await _picker.pickImage(source: ImageSource.camera);
 
-      setState(() {
-        _image = img;
-        if (img != null) {
-          _images.add(img);
-        }
-      });
+      // Call the callback if the image is not null
+      if (img != null) {
+        callback(File(img.path));
+      }
     } catch (e) {
       // TODO: show error message
       print(e);
     }
   }
 
-  Future showOptions() async {
+  Future _pickupImageDialog(Function(File file) callback) async {
     showCupertinoModalPopup(
       context: context,
       builder: (context) => CupertinoActionSheet(
@@ -67,8 +62,11 @@ class _Step3State extends State<Step3> {
             onPressed: () {
               // close the options modal
               Navigator.of(context).pop();
+
               // get image from gallery
-              _addImageFromGallery();
+              _addImageFromGallery(callback);
+
+              print(context);
             },
           ),
           CupertinoActionSheetAction(
@@ -76,8 +74,9 @@ class _Step3State extends State<Step3> {
             onPressed: () {
               // close the options modal
               Navigator.of(context).pop();
+
               // get image from camera
-              _addImageFromCamera();
+              _addImageFromCamera(callback);
             },
           ),
         ],
@@ -88,6 +87,7 @@ class _Step3State extends State<Step3> {
   @override
   void initState() {
     super.initState();
+    _picker = ImagePicker();
   }
 
   @override
@@ -122,6 +122,7 @@ class _Step3State extends State<Step3> {
                   child: Column(
                     children: [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Icon(Icons.info_outline,
                               color: Theme.of(context).primaryColor),
@@ -137,6 +138,16 @@ class _Step3State extends State<Step3> {
                                   ),
                             ),
                           ),
+                          ElevatedButton.icon(
+                              icon: const Icon(Icons.add_a_photo),
+                              onPressed: state.maximumImagesExceeded
+                                  ? null
+                                  : () async {
+                                      _pickupImageDialog((file) => context
+                                          .read<Step3Bloc>()
+                                          .add(AddImage(file)));
+                                    },
+                              label: Text(context.loc.add_photo))
                         ],
                       ),
                       const SizedBox(height: 5),
@@ -151,26 +162,82 @@ class _Step3State extends State<Step3> {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      ElevatedButton(
-                          onPressed: () async {
-                            showOptions();
-                          },
-                          child: Text(context.loc.add_photo)),
-                      const SizedBox(height: 20),
-                      if (_images.isNotEmpty)
+                      if (state.images.isNotEmpty)
                         GridView.count(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 10,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: _images
-                                .map((img) => Image.file(
-                                      File(img.path),
-                                      fit: BoxFit.cover,
-                                    ))
-                                .toList()),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: state.images.asMap().entries.map((entry) {
+                            final index = entry.key;
+                            final img = entry.value;
+
+                            return Stack(children: <Widget>[
+                              Positioned.fill(
+                                child: Image.file(
+                                  img.value!,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Align(
+                                  alignment: Alignment.topRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: IconButton(
+                                      icon: const Icon(Icons.delete),
+                                      color: Colors.white,
+                                      onPressed: () => {
+                                        context
+                                            .read<Step3Bloc>()
+                                            .add(RemoveImage(index))
+                                      },
+                                    ),
+                                  )),
+                              Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: IconButton(
+                                      icon: Icon(
+                                          // Display full star if the image is the main image
+                                          index == state.mainImageIndex
+                                              ? Icons.star
+                                              : Icons.star_border_sharp),
+                                      color: CustomColors.gold,
+                                      onPressed: () => {
+                                        context
+                                            .read<Step3Bloc>()
+                                            .add(SetMainImage(index))
+                                      },
+                                    ),
+                                  )),
+                              /* Display the Align only for the main image */
+                              if (index == state.mainImageIndex)
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Container(
+                                    width: double.infinity,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primaryContainer,
+                                    child: Text(
+                                      context.loc.item_main_image,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                            ]);
+                          }).toList(),
+                        ),
                     ],
                   ),
                 ),

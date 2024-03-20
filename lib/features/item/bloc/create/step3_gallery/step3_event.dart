@@ -9,16 +9,22 @@ class Step3InitialEvent extends Step3Event {
   const Step3InitialEvent();
 }
 
-class ItemNameChanged extends Step3Event {
-  final String name;
+class AddImage extends Step3Event {
+  final File imageFile;
 
-  const ItemNameChanged(this.name) : super();
+  const AddImage(this.imageFile) : super();
 }
 
-class ItemDescriptionChanged extends Step3Event {
-  final String description;
+class RemoveImage extends Step3Event {
+  final int index;
 
-  const ItemDescriptionChanged(this.description);
+  const RemoveImage(this.index) : super();
+}
+
+class SetMainImage extends Step3Event {
+  final int mainImageIndex;
+
+  const SetMainImage(this.mainImageIndex) : super();
 }
 
 class NextStepEvent extends Step3Event {
