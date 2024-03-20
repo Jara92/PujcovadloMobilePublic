@@ -55,8 +55,8 @@ class Step1Bloc extends Bloc<Step1Event, Step1State> {
 
   void _onNextStep(NextStepEvent event, Emitter<Step1State> emit) {
     if (state.name.isValid && state.description.isValid) {
-      this._item.name = state.name.value;
-      this._item.description = state.description.value;
+      _item.name = state.name.value;
+      _item.description = state.description.value;
 
       _createItemBloc.add(const MoveToStepEvent(step2_category_and_tags));
     }
