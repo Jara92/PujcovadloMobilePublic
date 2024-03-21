@@ -9,6 +9,7 @@ import 'package:pujcovadlo_client/core/custom_colors.dart';
 import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
 import 'package:pujcovadlo_client/features/item/services/item_category_service.dart';
 import 'package:pujcovadlo_client/features/item/services/item_service.dart';
+import 'package:pujcovadlo_client/features/item/services/item_tag_service.dart';
 import 'package:pujcovadlo_client/features/item/views/item_list_view.dart';
 import 'package:pujcovadlo_client/features/profiles/views/my_profile_view.dart';
 
@@ -72,6 +73,7 @@ void registerDependencies() {
   GetIt locator = GetIt.instance;
   locator.registerSingleton<ItemService>(ItemService());
   locator.registerSingleton<ItemCategoryService>(ItemCategoryService());
+  locator.registerSingleton<ItemTagService>(ItemTagService());
 }
 
 class HomePage extends StatelessWidget {

@@ -9,10 +9,32 @@ class Step2InitialEvent extends Step2Event {
   const Step2InitialEvent();
 }
 
-class ItemNameChanged extends Step2Event {
-  final String name;
+class SearchTagChanged extends Step2Event {
+  final String tag;
 
-  const ItemNameChanged(this.name) : super();
+  const SearchTagChanged(this.tag) : super();
+}
+
+class AddTag extends Step2Event {
+  final String tag;
+
+  const AddTag(this.tag) : super();
+}
+
+class RemoveTag extends Step2Event {
+  final String tag;
+
+  const RemoveTag(this.tag) : super();
+}
+
+class SelectSuggestion extends Step2Event {
+  final String tag;
+
+  const SelectSuggestion(this.tag) : super();
+}
+
+class ClearSuggestions extends Step2Event {
+  const ClearSuggestions();
 }
 
 class ItemDescriptionChanged extends Step2Event {
