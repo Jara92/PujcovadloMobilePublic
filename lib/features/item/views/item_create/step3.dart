@@ -105,6 +105,7 @@ class _Step3State extends State<Step3> {
                           //helperText: context.loc.item_tags_helper_text,
                           helperMaxLines: 2,
                           border: OutlineInputBorder(),
+                          contentPadding: const EdgeInsets.all(10),
                         ),
                         strutStyle: const StrutStyle(fontSize: 15),
                         onChanged: (List<String> tags) => context

@@ -107,19 +107,29 @@ class ChipsInputState<T> extends State<ChipsInput<T>> {
   Widget build(BuildContext context) {
     controller.updateValues(<T>[...widget.values]);
 
-    return TextField(
-      minLines: 1,
-      maxLines: 7,
-      textInputAction: TextInputAction.continueAction,
-      decoration: widget.decoration,
-      style: widget.style,
-      strutStyle: widget.strutStyle,
-      controller: controller,
-      onChanged: (String value) =>
-          widget.onTextChanged?.call(controller.textWithoutReplacements),
-      onSubmitted: (String value) =>
-          widget.onSubmitted?.call(controller.textWithoutReplacements),
-      onTapOutside: widget.onTapOutside,
+    return Column(
+      children: [
+        TextField(
+          minLines: 1,
+          maxLines: 4,
+          textInputAction: TextInputAction.continueAction,
+          decoration: widget.decoration,
+          style: widget.style,
+          strutStyle: widget.strutStyle,
+          controller: controller,
+          onChanged: (String value) =>
+              widget.onTextChanged?.call(controller.textWithoutReplacements),
+          onSubmitted: (String value) =>
+              widget.onSubmitted?.call(controller.textWithoutReplacements),
+          onTapOutside: widget.onTapOutside,
+        ),
+        /* Align(
+          alignment: Alignment.topLeft,
+          child: Wrap(
+            children: widget.values.map((T v) => widget.chipBuilder(context, v)).toList(),
+          ),
+        )*/
+      ],
     );
   }
 }
