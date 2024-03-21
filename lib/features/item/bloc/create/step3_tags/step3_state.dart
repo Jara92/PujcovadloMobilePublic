@@ -41,15 +41,3 @@ class InitialState extends Step3State {
           isSuggesting: false,
         );
 }
-
-/*class NextStepState extends Step3State {
-  final int nextStep;
-
-  const NextStepState({required this.nextStep}) : super();
-}
-
-class PreviousStepState extends Step3State {
-  final int previousStep;
-
-  const PreviousStepState({required this.previousStep}) : super();
-}*/

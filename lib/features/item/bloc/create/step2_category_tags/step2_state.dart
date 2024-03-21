@@ -37,17 +37,3 @@ class InitialState extends Step2State {
           selectedCategories: const [],
         );
 }
-
-/*
-class NextStepState extends Step2State {
-  final int nextStep;
-
-  const NextStepState({required this.nextStep}) : super();
-}
-
-class PreviousStepState extends Step2State {
-  final int previousStep;
-
-  const PreviousStepState({required this.previousStep}) : super();
-}
-*/

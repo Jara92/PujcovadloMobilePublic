@@ -24,7 +24,7 @@ class Step4State {
   }) {
     return Step4State(
       images: images ?? this.images,
-      mainImageIndex: mainImage ?? this.mainImageIndex,
+      mainImageIndex: mainImage ?? mainImageIndex,
     );
   }
 }
@@ -32,17 +32,3 @@ class Step4State {
 class InitialState extends Step4State {
   const InitialState() : super(images: const []);
 }
-
-/*
-class NextStepState extends Step4State {
-  final int nextStep;
-
-  const NextStepState({required this.nextStep}) : super();
-}
-
-class PreviousStepState extends Step4State {
-  final int previousStep;
-
-  const PreviousStepState({required this.previousStep}) : super();
-}
-*/

@@ -19,8 +19,7 @@ class ItemTagService {
       ItemTagResponse(id: 12, name: "Pneumatická pistole"),
       ItemTagResponse(id: 13, name: "Pneumatický šroubovák"),
     ]
-        .where((element) =>
-            element.name.toLowerCase().contains(search!.toLowerCase()))
+        .where((tag) => tag.name.toLowerCase().contains(search!.toLowerCase()))
         .toList();
   }
 }
