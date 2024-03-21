@@ -2,31 +2,30 @@ part of 'step3_bloc.dart';
 
 @immutable
 class Step3State {
-  final List<String> selectedTags;
+  final ItemTags selectedTags;
+  final ItemTag currentTag;
   final List<String> suggestedTags;
   final bool isSuggesting;
 
-/*  List<ItemCategoryResponse> get gcategories {
-    print("get ${categories.length} categories");
-    return categories;
-  }*/
-
-  bool get isValid => selectedTags.isNotEmpty;
+  bool get isValid => selectedTags.isValid;
 
   const Step3State({
-    this.selectedTags = const [],
+    this.selectedTags = const ItemTags.pure(),
+    this.currentTag = const ItemTag.pure(),
     this.suggestedTags = const [],
     this.isSuggesting = false,
   });
 
   Step3State copyWith({
     bool? isValid,
-    List<String>? selectedTags,
+    ItemTags? selectedTags,
+    ItemTag? currentTag,
     List<String>? suggestedTags,
     bool? isSuggesting,
   }) {
     return Step3State(
       selectedTags: selectedTags ?? this.selectedTags,
+      currentTag: currentTag ?? this.currentTag,
       suggestedTags: suggestedTags ?? this.suggestedTags,
       isSuggesting: isSuggesting ?? this.isSuggesting,
     );
@@ -36,7 +35,8 @@ class Step3State {
 class InitialState extends Step3State {
   const InitialState()
       : super(
-          selectedTags: const [],
+          selectedTags: const ItemTags.pure(),
+          currentTag: const ItemTag.pure(),
           suggestedTags: const [],
           isSuggesting: false,
         );

@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
+import 'package:pujcovadlo_client/features/item/models/models.dart';
 import 'package:pujcovadlo_client/features/item/requests/item_request.dart';
 import 'package:pujcovadlo_client/features/item/services/item_tag_service.dart';
 
@@ -34,9 +36,19 @@ class Step3Bloc extends Bloc<Step3Event, Step3State> {
   /// ATTENTION: Make sure that you pass the Future<List<String>> to the SearchTagChanged event so the Bloc state can be handled properly.
   /// This is because Autocomplete widget's options cannot be updated manually.
   Future<List<String>> suggestTags(String tag) async {
+    // Do nothing if the tag is empty
     if (tag.isEmpty) return [];
 
-    return (await _itemTagService.getTags(tag)).map((e) => e.name).toList();
+    // Do nothing if the input is too short
+    // TODO
+    //if (tag.length < 3) return [];
+
+    return (await _itemTagService.getTags(tag))
+        // Get only tag names
+        .map((e) => e.name)
+        // Filter out already selected tags
+        .where((tag) => !state.selectedTags.value.contains(tag))
+        .toList();
   }
 
   Future<void> _onInitialEvent(
@@ -44,6 +56,9 @@ class Step3Bloc extends Bloc<Step3Event, Step3State> {
 
   Future<void> _onSearchTagChanged(
       SearchTagChanged event, Emitter<Step3State> emit) async {
+    final search = ItemTag.dirty(event.tag);
+    emit(state.copyWith(currentTag: search));
+
     // Set the state to suggest tags
     emit(state.copyWith(isSuggesting: true));
 
@@ -61,38 +76,58 @@ class Step3Bloc extends Bloc<Step3Event, Step3State> {
     }
 
     // Do nothing if the tag is already selected
-    if (state.selectedTags.contains(event.tag)) {
+    if (state.selectedTags.value.contains(event.tag)) {
+      return;
+    }
+
+    final search = ItemTag.dirty(event.tag);
+    emit(state.copyWith(currentTag: search));
+
+    // Dont continue if the tag is not valid
+    if (Formz.validate([search]) == false) {
       return;
     }
 
     emit(state.copyWith(
-      selectedTags: [...state.selectedTags, event.tag],
-      //suggestedTags: [],
+      selectedTags: ItemTags.dirty([...state.selectedTags.value, event.tag]),
+      currentTag: const ItemTag.pure(),
     ));
   }
 
   void _onRemoveTag(RemoveTag event, Emitter<Step3State> emit) {
+    // Do nothing if the tag is not selected
+    if (!state.selectedTags.value.contains(event.tag)) {
+      return;
+    }
+
     emit(state.copyWith(
-      // Remove the selected tag from the selected tags
-      selectedTags:
-          state.selectedTags.where((tag) => tag != event.tag).toList(),
-    ));
+        // Remove the selected tag from the selected tags
+        selectedTags: ItemTags.dirty(state.selectedTags.value
+            .where((tag) => tag != event.tag)
+            .toList())));
   }
 
   void _onSelectSuggestion(SelectSuggestion event, Emitter<Step3State> emit) {
+    // Do nothing if the tag is already selected
+    if (state.selectedTags.value.contains(event.tag)) {
+      return;
+    }
+
     emit(
       state.copyWith(
-          // Remove the selected tag from the suggested tags
-          //suggestedTags: state.suggestedTags.where((tag) => tag != event.tag).toList(),
-          suggestedTags: [],
-          // Add the selected tag to the selected tags
-          selectedTags: [...state.selectedTags, event.tag]),
+        // Remove the selected tag from the suggested tags
+        //suggestedTags: state.suggestedTags.where((tag) => tag != event.tag).toList(),
+        suggestedTags: [],
+        // Add the selected tag to the selected tags
+        selectedTags: ItemTags.dirty([...state.selectedTags.value, event.tag]),
+        currentTag: const ItemTag.pure(),
+      ),
     );
   }
 
   void _onSelectedTagsChanged(
       SelectedTagsChanged event, Emitter<Step3State> emit) {
-    emit(state.copyWith(selectedTags: event.tags));
+    emit(state.copyWith(selectedTags: ItemTags.dirty(event.tags)));
   }
 
   void _onClearSuggestions(ClearSuggestions event, Emitter<Step3State> emit) {

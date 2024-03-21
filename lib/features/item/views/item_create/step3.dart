@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/step3_tags/step3_bloc.dart';
+import 'package:pujcovadlo_client/features/item/models/models.dart';
 
 class Step3 extends StatefulWidget {
   const Step3({super.key});
@@ -12,16 +13,52 @@ class Step3 extends StatefulWidget {
 }
 
 class _Step3State extends State<Step3> {
-  TextEditingController? _textEditingController = TextEditingController();
+  late final TextEditingController _textEditingController;
 
   @override
   void initState() {
     super.initState();
+    _textEditingController = TextEditingController();
   }
 
   @override
   void dispose() {
     super.dispose();
+    _textEditingController.dispose();
+  }
+
+  String? _localizeTagError(BuildContext context, ItemTag tag) {
+    if (tag.isPure || tag.isValid) {
+      return null;
+    }
+
+    switch (tag.error) {
+      case ItemTagValidationError.invalid:
+        return context.loc.item_tags_verror_tag_format_is_invalid;
+      case ItemTagValidationError.tooShort:
+        return context.loc.item_tags_verror_tag_is_too_short;
+      case ItemTagValidationError.tooLong:
+        return context.loc.item_tags_verror_tag_is_too_long;
+      case null:
+        return null;
+    }
+  }
+
+  String? _localizeTagsError(BuildContext context, ItemTags tags) {
+    if (tags.isPure || tags.isValid) {
+      return null;
+    }
+
+    switch (tags.error) {
+      case ItemTagsValidationError.invalid:
+        return context.loc.item_tags_verror_tag_format_is_invalid;
+      case ItemTagsValidationError.tooManyTags:
+        return context.loc.item_tags_verror_too_many_tags;
+      case ItemTagsValidationError.notEnoughTags:
+        return context.loc.item_tags_verror_not_enough_tags;
+      case null:
+        return null;
+    }
   }
 
   @override
@@ -45,142 +82,175 @@ class _Step3State extends State<Step3> {
           ),
         ),
         body: BlocConsumer<Step3Bloc, Step3State>(
-          listener: (context, state) {},
+          listener: (context, state) {
+            _textEditingController.text = state.currentTag.value;
+          },
           builder: (context, state) {
-            return SafeArea(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.info_outline,
-                              color: Theme.of(context).primaryColor),
-                          const SizedBox(width: 5),
-                          Expanded(
-                            child: Text(
-                              context.loc.item_tags_page_title,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+            return PopScope(
+              canPop: false,
+              child: SafeArea(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.info_outline,
+                                color: Theme.of(context).primaryColor),
+                            const SizedBox(width: 5),
+                            Expanded(
+                              child: Text(
+                                context.loc.item_tags_page_title,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              context.loc.item_tags_page_description,
-                              style: Theme.of(context).textTheme.labelSmall!,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              context.loc.item_tags_page_description_2,
-                              style: Theme.of(context).textTheme.labelSmall!,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Autocomplete<String>(
-                        optionsBuilder:
-                            (TextEditingValue textEditingValue) async {
-                          // Begin the searching task
-                          final task = context
-                              .read<Step3Bloc>()
-                              .suggestTags(textEditingValue.text);
-
-                          // Create searching event so the bloc can handle the state
-                          context.read<Step3Bloc>().add(SearchTagChanged(task));
-
-                          // Wait for the result
-                          final suggestedtags = await task;
-
-                          // Return the result
-                          return suggestedtags;
-                        },
-                        onSelected: (String selection) {
-                          context.read<Step3Bloc>().add(AddTag(selection));
-                          _textEditingController?.clear();
-                        },
-                        fieldViewBuilder: (BuildContext context,
-                            TextEditingController textEditingController,
-                            FocusNode focusNode,
-                            VoidCallback onFieldSubmitted) {
-                          //_textEditingController = textEditingController;
-
-                          return TextField(
-                            controller: _textEditingController,
-                            //controller: textEditingController,
-                            focusNode: focusNode,
-                            decoration: InputDecoration(
-                              labelText: context.loc.item_tags_title,
-                              hintText: context.loc.item_tags_search_text,
-                              //helperText: context.loc.item_tags_helper_text,
-                              helperMaxLines: 2,
-                              border: OutlineInputBorder(),
-                              contentPadding: const EdgeInsets.all(10),
-                              suffixIcon: state.isSuggesting
-                                  ? IconButton(
-                                      icon: SizedBox(
-                                        height: 12,
-                                        width: 12,
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                      onPressed: null,
-                                    )
-                                  : null,
-                            ),
-                            /*maxLines: 4,*/
-                            textInputAction: TextInputAction.continueAction,
-                            //onSubmitted: (String value) => onFieldSubmitted(),
-                            onSubmitted: (String value) {
-                              context.read<Step3Bloc>().add(AddTag(value));
-                              _textEditingController?.clear();
-                            },
-                            onChanged: (String value) {
-                              textEditingController.text = value;
-                            },
-                            /*  onChanged: (String value) => context
-                                .read<Step3Bloc>()
-                                .add(SearchTagChanged(value)),*/
-                          );
-                        },
-                      ),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Wrap(
-                          spacing: 5,
-                          children: state.selectedTags
-                              .map((v) => Chip(
-                                    label: Text(v),
-                                    onDeleted: () => context
-                                        .read<Step3Bloc>()
-                                        .add(RemoveTag(v)),
-                                  ))
-                              // Sort the items based on their length
-                              .toList()
-                            ..sort((a, b) => b.label
-                                .toString()
-                                .length
-                                .compareTo(a.label.toString().length)),
+                          ],
                         ),
-                      )
-                    ],
+                        const SizedBox(height: 5),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                context.loc.item_tags_page_description,
+                                style: Theme.of(context).textTheme.labelSmall!,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                context.loc.item_tags_page_description_2,
+                                style: Theme.of(context).textTheme.labelSmall!,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        if (state.currentTag.error != null)
+                          Row(children: [
+                            Text(
+                                _localizeTagError(context, state.currentTag) ??
+                                    "",
+                                textAlign: TextAlign.left,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelSmall!
+                                    .copyWith(
+                                      color:
+                                          Theme.of(context).colorScheme.error,
+                                    ))
+                          ]),
+                        if (state.selectedTags.error != null)
+                          Row(
+                            children: [
+                              Text(
+                                  _localizeTagsError(
+                                          context, state.selectedTags) ??
+                                      "",
+                                  textAlign: TextAlign.left,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall!
+                                      .copyWith(
+                                        color:
+                                            Theme.of(context).colorScheme.error,
+                                      )),
+                            ],
+                          ),
+                        const SizedBox(height: 10),
+                        Autocomplete<String>(
+                          optionsBuilder:
+                              (TextEditingValue textEditingValue) async {
+                            // Begin the searching task
+                            final task = context
+                                .read<Step3Bloc>()
+                                .suggestTags(textEditingValue.text);
+
+                            // Create searching event so the bloc can handle the state
+                            context.read<Step3Bloc>().add(
+                                SearchTagChanged(textEditingValue.text, task));
+
+                            // Wait for the result
+                            final suggestedtags = await task;
+
+                            // Return the result
+                            return suggestedtags;
+                          },
+                          onSelected: (String selection) {
+                            context
+                                .read<Step3Bloc>()
+                                .add(SelectSuggestion(selection));
+                            _textEditingController.clear();
+                          },
+                          fieldViewBuilder: (BuildContext context,
+                              TextEditingController textEditingController,
+                              FocusNode focusNode,
+                              VoidCallback onFieldSubmitted) {
+                            return TextField(
+                              controller: _textEditingController,
+                              //controller: textEditingController,
+                              focusNode: focusNode,
+                              decoration: InputDecoration(
+                                labelText: context.loc.item_tags_title,
+                                hintText: context.loc.item_tags_search_text,
+                                //helperText: context.loc.item_tags_helper_text,
+                                //errorText: _localizeTagsError(context, state.selectedTags),
+                                helperMaxLines: 2,
+                                border: const OutlineInputBorder(),
+                                contentPadding: const EdgeInsets.all(10),
+                                suffixIcon: state.isSuggesting
+                                    ? const IconButton(
+                                        icon: SizedBox(
+                                          height: 12,
+                                          width: 12,
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                        onPressed: null,
+                                      )
+                                    : null,
+                              ),
+                              textInputAction: TextInputAction.continueAction,
+                              onSubmitted: (String value) {
+                                context.read<Step3Bloc>().add(AddTag(value));
+                                _textEditingController.clear();
+                              },
+                              onChanged: (String value) {
+                                textEditingController.text = value;
+                              },
+                              /*onEditingComplete: (){
+                                textEditingController.text = _textEditingController.text;
+                              },*/
+                            );
+                          },
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Wrap(
+                            spacing: 5,
+                            children: state.selectedTags.value
+                                .map((v) => Chip(
+                                      label: Text(v),
+                                      onDeleted: () => context
+                                          .read<Step3Bloc>()
+                                          .add(RemoveTag(v)),
+                                    ))
+                                // Sort the items based on their length
+                                .toList(),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),

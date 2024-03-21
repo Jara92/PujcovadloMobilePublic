@@ -10,9 +10,10 @@ class Step3InitialEvent extends Step3Event {
 }
 
 class SearchTagChanged extends Step3Event {
+  final String tag;
   final Future<List<String>> task;
 
-  const SearchTagChanged(this.task) : super();
+  const SearchTagChanged(this.tag, this.task) : super();
 }
 
 class AddTag extends Step3Event {
