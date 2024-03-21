@@ -191,7 +191,6 @@ class _Step3State extends State<Step3> {
                             context
                                 .read<Step3Bloc>()
                                 .add(SelectSuggestion(selection));
-                            _textEditingController.clear();
                           },
                           fieldViewBuilder: (BuildContext context,
                               TextEditingController textEditingController,
@@ -228,11 +227,11 @@ class _Step3State extends State<Step3> {
                               onChanged: (String value) {
                                 textEditingController.text = value;
                               },
-                              /*onEditingComplete: (){
-                                textEditingController.text = _textEditingController.text;
-                              },*/
                             );
                           },
+                        ),
+                        const SizedBox(
+                          height: 10,
                         ),
                         Align(
                           alignment: Alignment.topLeft,
@@ -240,12 +239,17 @@ class _Step3State extends State<Step3> {
                             spacing: 5,
                             children: state.selectedTags.value
                                 .map((v) => Chip(
-                                      label: Text(v),
+                                      padding: const EdgeInsets.all(2),
+                                      label: Text(
+                                        v,
+                                        style: const TextStyle(
+                                          fontSize: 11,
+                                        ),
+                                      ),
                                       onDeleted: () => context
                                           .read<Step3Bloc>()
                                           .add(RemoveTag(v)),
                                     ))
-                                // Sort the items based on their length
                                 .toList(),
                           ),
                         )

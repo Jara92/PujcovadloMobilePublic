@@ -7,6 +7,7 @@ class ItemRequest{
 
   List<ImageRequest> images;
   ImageRequest? mainImage;
+  List<String> tags;
 
   ItemRequest({
     this.id,
@@ -14,5 +15,6 @@ class ItemRequest{
     this.description,
     this.images = const [],
     this.mainImage,
+    this.tags = const [],
   });
 }
