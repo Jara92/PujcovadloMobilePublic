@@ -30,26 +30,28 @@ class Step3Bloc extends Bloc<Step3Event, Step3State> {
     on<PreviousStepEvent>(_onPreviousStep);
   }
 
+  /// Suggest tags based on the given input.
+  /// ATTENTION: Make sure that you pass the Future<List<String>> to the SearchTagChanged event so the Bloc state can be handled properly.
+  /// This is because Autocomplete widget's options cannot be updated manually.
+  Future<List<String>> suggestTags(String tag) async {
+    if (tag.isEmpty) return [];
+
+    return (await _itemTagService.getTags(tag)).map((e) => e.name).toList();
+  }
+
   Future<void> _onInitialEvent(
       Step3InitialEvent event, Emitter<Step3State> emit) async {}
 
   Future<void> _onSearchTagChanged(
       SearchTagChanged event, Emitter<Step3State> emit) async {
-    // No suggestions for empty stirng
-    if (event.tag.isEmpty) {
-      emit(state.copyWith(suggestedTags: []));
-      return;
-    }
+    // Set the state to suggest tags
+    emit(state.copyWith(isSuggesting: true));
 
-    // Get tags suggestions
-    final tags = (await _itemTagService.getTags(event.tag))
-        // Map responses to List of strings
-        .map((e) => e.name)
-        // Filter out already selected tags
-        .where((element) => !state.selectedTags.contains(element))
-        .toList();
+    // Wait for the tags to be suggested
+    final tags = await event.task;
 
-    emit(state.copyWith(suggestedTags: tags));
+    // Update the status
+    emit(state.copyWith(suggestedTags: tags, isSuggesting: false));
   }
 
   Future<void> _onAddTag(AddTag event, Emitter<Step3State> emit) async {
@@ -63,9 +65,10 @@ class Step3Bloc extends Bloc<Step3Event, Step3State> {
       return;
     }
 
-    //  final newTag = event.tag.fi
-
-    emit(state.copyWith(selectedTags: [...state.selectedTags, event.tag]));
+    emit(state.copyWith(
+      selectedTags: [...state.selectedTags, event.tag],
+      //suggestedTags: [],
+    ));
   }
 
   void _onRemoveTag(RemoveTag event, Emitter<Step3State> emit) {

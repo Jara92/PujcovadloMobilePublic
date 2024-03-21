@@ -4,6 +4,7 @@ part of 'step3_bloc.dart';
 class Step3State {
   final List<String> selectedTags;
   final List<String> suggestedTags;
+  final bool isSuggesting;
 
 /*  List<ItemCategoryResponse> get gcategories {
     print("get ${categories.length} categories");
@@ -15,16 +16,19 @@ class Step3State {
   const Step3State({
     this.selectedTags = const [],
     this.suggestedTags = const [],
+    this.isSuggesting = false,
   });
 
   Step3State copyWith({
     bool? isValid,
     List<String>? selectedTags,
     List<String>? suggestedTags,
+    bool? isSuggesting,
   }) {
     return Step3State(
       selectedTags: selectedTags ?? this.selectedTags,
       suggestedTags: suggestedTags ?? this.suggestedTags,
+      isSuggesting: isSuggesting ?? this.isSuggesting,
     );
   }
 }
@@ -34,6 +38,7 @@ class InitialState extends Step3State {
       : super(
           selectedTags: const [],
           suggestedTags: const [],
+          isSuggesting: false,
         );
 }
 

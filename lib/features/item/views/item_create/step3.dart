@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
-import 'package:pujcovadlo_client/core/widgets/chips_input.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/step3_tags/step3_bloc.dart';
 
@@ -13,6 +12,7 @@ class Step3 extends StatefulWidget {
 }
 
 class _Step3State extends State<Step3> {
+  TextEditingController? _textEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -96,56 +96,90 @@ class _Step3State extends State<Step3> {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      ChipsInput<String>(
-                        values: state.selectedTags,
-                        decoration: InputDecoration(
-                          /*prefixIcon: Icon(Icons.local_pizza_rounded),*/
-                          labelText: context.loc.item_tags_title,
-                          hintText: context.loc.item_tags_search_text,
-                          //helperText: context.loc.item_tags_helper_text,
-                          helperMaxLines: 2,
-                          border: OutlineInputBorder(),
-                          contentPadding: const EdgeInsets.all(10),
-                        ),
-                        strutStyle: const StrutStyle(fontSize: 15),
-                        onChanged: (List<String> tags) => context
-                            .read<Step3Bloc>()
-                            .add(SelectedTagsChanged(tags)),
-                        onSubmitted: (String tag) =>
-                            context.read<Step3Bloc>().add(AddTag(tag)),
-                        /*onTapOutside: (event) =>
-                            context.read<Step3Bloc>().add(const ClearSuggestions()),*/
-                        chipBuilder: _chipBuilder,
-                        onTextChanged: (String value) => context
-                            .read<Step3Bloc>()
-                            .add(SearchTagChanged(value)),
+                      Autocomplete<String>(
+                        optionsBuilder:
+                            (TextEditingValue textEditingValue) async {
+                          // Begin the searching task
+                          final task = context
+                              .read<Step3Bloc>()
+                              .suggestTags(textEditingValue.text);
+
+                          // Create searching event so the bloc can handle the state
+                          context.read<Step3Bloc>().add(SearchTagChanged(task));
+
+                          // Wait for the result
+                          final suggestedtags = await task;
+
+                          // Return the result
+                          return suggestedtags;
+                        },
+                        onSelected: (String selection) {
+                          context.read<Step3Bloc>().add(AddTag(selection));
+                          _textEditingController?.clear();
+                        },
+                        fieldViewBuilder: (BuildContext context,
+                            TextEditingController textEditingController,
+                            FocusNode focusNode,
+                            VoidCallback onFieldSubmitted) {
+                          //_textEditingController = textEditingController;
+
+                          return TextField(
+                            controller: _textEditingController,
+                            //controller: textEditingController,
+                            focusNode: focusNode,
+                            decoration: InputDecoration(
+                              labelText: context.loc.item_tags_title,
+                              hintText: context.loc.item_tags_search_text,
+                              //helperText: context.loc.item_tags_helper_text,
+                              helperMaxLines: 2,
+                              border: OutlineInputBorder(),
+                              contentPadding: const EdgeInsets.all(10),
+                              suffixIcon: state.isSuggesting
+                                  ? IconButton(
+                                      icon: SizedBox(
+                                        height: 12,
+                                        width: 12,
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                      onPressed: null,
+                                    )
+                                  : null,
+                            ),
+                            /*maxLines: 4,*/
+                            textInputAction: TextInputAction.continueAction,
+                            //onSubmitted: (String value) => onFieldSubmitted(),
+                            onSubmitted: (String value) {
+                              context.read<Step3Bloc>().add(AddTag(value));
+                              _textEditingController?.clear();
+                            },
+                            onChanged: (String value) {
+                              textEditingController.text = value;
+                            },
+                            /*  onChanged: (String value) => context
+                                .read<Step3Bloc>()
+                                .add(SearchTagChanged(value)),*/
+                          );
+                        },
                       ),
-                      if (state.suggestedTags.isNotEmpty)
-                        Material(
-                          color: Colors.white,
-                          elevation: 4,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(0),
-                            ),
-                          ),
-                          shadowColor: Colors.black,
-                          child: Container(
-                            height: 300,
-                            color: Colors.white,
-                            child: ListView.builder(
-                              itemCount: state.suggestedTags.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return ChipsSuggestion(
-                                    state.suggestedTags[index],
-                                    onTap: (String tag) => context
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Wrap(
+                          spacing: 5,
+                          children: state.selectedTags
+                              .map((v) => Chip(
+                                    label: Text(v),
+                                    onDeleted: () => context
                                         .read<Step3Bloc>()
-                                        .add(SelectSuggestion(tag)));
-                              },
-                            ),
-                          ),
+                                        .add(RemoveTag(v)),
+                                  ))
+                              // Sort the items based on their length
+                              .toList()
+                            ..sort((a, b) => b.label
+                                .toString()
+                                .length
+                                .compareTo(a.label.toString().length)),
                         ),
-                      // tags
+                      )
                     ],
                   ),
                 ),
@@ -180,14 +214,6 @@ class _Step3State extends State<Step3> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _chipBuilder(BuildContext context, String tag) {
-    return InputChipTile(
-      value: tag,
-      onDeleted: (String tag) => context.read<Step3Bloc>().add(RemoveTag(tag)),
-      onSelected: (String tag) {},
     );
   }
 }
