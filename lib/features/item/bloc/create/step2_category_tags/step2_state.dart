@@ -3,31 +3,29 @@ part of 'step2_bloc.dart';
 @immutable
 class Step2State {
   final List<ItemCategoryResponse> categories;
-  final List<String> selectedTags;
-  final List<String> suggestedTags;
+  final List<int> selectedCategories;
 
 /*  List<ItemCategoryResponse> get gcategories {
     print("get ${categories.length} categories");
     return categories;
   }*/
 
-  bool get isValid => false;
+  // todo: fix this
+  bool get isValid => true;
 
   const Step2State({
     this.categories = const [],
-    this.selectedTags = const [],
-    this.suggestedTags = const [],
+    this.selectedCategories = const [],
   });
 
-  Step2State copyWith(
-      {bool? isValid,
-      List<ItemCategoryResponse>? categories,
-      List<String>? selectedTags,
-      List<String>? suggestedTags}) {
+  Step2State copyWith({
+    bool? isValid,
+    List<ItemCategoryResponse>? categories,
+    List<int>? selectedCategories,
+  }) {
     return Step2State(
       categories: categories ?? this.categories,
-      selectedTags: selectedTags ?? this.selectedTags,
-      suggestedTags: suggestedTags ?? this.suggestedTags,
+      selectedCategories: selectedCategories ?? this.selectedCategories,
     );
   }
 }
@@ -35,11 +33,12 @@ class Step2State {
 class InitialState extends Step2State {
   const InitialState()
       : super(
-            categories: const [],
-            selectedTags: const [],
-            suggestedTags: const []);
+          categories: const [],
+          selectedCategories: const [],
+        );
 }
 
+/*
 class NextStepState extends Step2State {
   final int nextStep;
 
@@ -51,3 +50,4 @@ class PreviousStepState extends Step2State {
 
   const PreviousStepState({required this.previousStep}) : super();
 }
+*/

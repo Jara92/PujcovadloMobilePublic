@@ -31,14 +31,14 @@ class InitialState extends Step1State {
   });
 }
 
-class NextStepState extends Step1State {
+/*class NextStepState extends Step1State {
   final int nextStep;
 
   const NextStepState({required this.nextStep})
       : super(
             name: const ItemName.pure(),
             description: const ItemDescription.pure());
-}
+}*/
 
 /*class PreviousStepState extends Step1State {
   const PreviousStepState() : super(name: const ItemName.pure(), description: const ItemDescription.pure());

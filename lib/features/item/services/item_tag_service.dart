@@ -2,7 +2,7 @@ import 'package:pujcovadlo_client/features/item/responses/item_tag_response.dart
 
 class ItemTagService {
   Future<List<ItemTagResponse>> getTags(String? search) async {
-    Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(milliseconds: 500));
 
     return [
       ItemTagResponse(id: 1, name: "Elektrická vrtačka"),

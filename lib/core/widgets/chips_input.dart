@@ -1,6 +1,6 @@
 /*
-* https://api.flutter.dev/flutter/material/InputChip-class.html#material.InputChip.2
-* */
+* Inpired by documentation: https://api.flutter.dev/flutter/material/InputChip-class.html#material.InputChip.2
+*/
 
 import 'package:flutter/material.dart';
 
@@ -178,10 +178,10 @@ class ChipsInputEditingController<T> extends TextEditingController {
   }
 }
 
-class ToppingSuggestion extends StatelessWidget {
-  const ToppingSuggestion(this.topping, {super.key, this.onTap});
+class ChipsSuggestion extends StatelessWidget {
+  const ChipsSuggestion(this.value, {super.key, this.onTap});
 
-  final String topping;
+  final String value;
   final ValueChanged<String>? onTap;
 
   @override
@@ -189,49 +189,49 @@ class ToppingSuggestion extends StatelessWidget {
     return Container(
       /*color: Colors.white,*/
       child: ListTile(
-        key: ObjectKey(topping),
+        key: ObjectKey(value),
         /*      leading: CircleAvatar(
           child: Text(
-            topping[0].toUpperCase(),
+            value[0].toUpperCase(),
           ),
         ),*/
-        title: Text(topping),
-        onTap: () => onTap?.call(topping),
+        title: Text(value),
+        onTap: () => onTap?.call(value),
       ),
     );
   }
 }
 
-class ToppingInputChip extends StatelessWidget {
-  const ToppingInputChip({
+class InputChipTile extends StatelessWidget {
+  const InputChipTile({
     super.key,
-    required this.topping,
+    required this.value,
     required this.onDeleted,
     required this.onSelected,
   });
 
-  final String topping;
+  final String value;
   final ValueChanged<String> onDeleted;
   final ValueChanged<String> onSelected;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      /*height: 32,*/
       margin: const EdgeInsets.only(top: 4, right: 4),
       child: InputChip(
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        key: ObjectKey(topping),
+        // backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
+        key: ObjectKey(value),
         // iconTheme: const IconThemeData(color: Colors.white),
         label: Text(
-          topping,
+          value,
           style: TextStyle(color: Theme.of(context).colorScheme.primary),
         ),
 /*        avatar: CircleAvatar(
-          child: Text(topping[0].toUpperCase()),
+          child: Text(value[0].toUpperCase()),
         ),*/
-        onDeleted: () => onDeleted(topping),
-        onSelected: (bool value) => onSelected(topping),
+        onDeleted: () => onDeleted(value),
+        onSelected: (bool isSelected) => onSelected(value),
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         padding: const EdgeInsets.all(2),
       ),

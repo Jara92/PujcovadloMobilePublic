@@ -1,13 +1,9 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:pujcovadlo_client/core/custom_colors.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
+import 'package:pujcovadlo_client/core/widgets/chips_input.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
-import 'package:pujcovadlo_client/features/item/bloc/create/step3_gallery/step3_bloc.dart';
+import 'package:pujcovadlo_client/features/item/bloc/create/step3_tags/step3_bloc.dart';
 
 class Step3 extends StatefulWidget {
   const Step3({super.key});
@@ -17,77 +13,10 @@ class Step3 extends StatefulWidget {
 }
 
 class _Step3State extends State<Step3> {
-  late final ImagePicker _picker;
-
-  Future<void> _addImageFromGallery(Function(File file) callback) async {
-    try {
-      // pickup multiple images
-      final img = await _picker.pickMultiImage();
-
-      // If the user picked images
-      if (img.isNotEmpty) {
-        // for each image call the callback
-        for (var element in img) {
-          callback(File(element.path));
-        }
-      }
-    } catch (e) {
-      // TODO: show error message
-      print(e);
-    }
-  }
-
-  Future<void> _addImageFromCamera(Function(File file) callback) async {
-    try {
-      // pickup image from camera
-      final img = await _picker.pickImage(source: ImageSource.camera);
-
-      // Call the callback if the image is not null
-      if (img != null) {
-        callback(File(img.path));
-      }
-    } catch (e) {
-      // TODO: show error message
-      print(e);
-    }
-  }
-
-  Future _pickupImageDialog(Function(File file) callback) async {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (context) => CupertinoActionSheet(
-        actions: [
-          CupertinoActionSheetAction(
-            child: Text(context.loc.pick_from_gallery),
-            onPressed: () {
-              // close the options modal
-              Navigator.of(context).pop();
-
-              // get image from gallery
-              _addImageFromGallery(callback);
-
-              print(context);
-            },
-          ),
-          CupertinoActionSheetAction(
-            child: Text(context.loc.take_photo),
-            onPressed: () {
-              // close the options modal
-              Navigator.of(context).pop();
-
-              // get image from camera
-              _addImageFromCamera(callback);
-            },
-          ),
-        ],
-      ),
-    );
-  }
 
   @override
   void initState() {
     super.initState();
-    _picker = ImagePicker();
   }
 
   @override
@@ -101,6 +30,9 @@ class _Step3State extends State<Step3> {
       create: (context) {
         final bloc = Step3Bloc(context.read<CreateItemBloc>());
         bloc.add(const Step3InitialEvent());
+
+        // TODO: debug only
+        /*bloc.add(const NextStepEvent());*/
         return bloc;
       },
       child: Scaffold(
@@ -122,14 +54,13 @@ class _Step3State extends State<Step3> {
                   child: Column(
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Icon(Icons.info_outline,
                               color: Theme.of(context).primaryColor),
                           const SizedBox(width: 5),
                           Expanded(
                             child: Text(
-                              context.loc.item_photo_gallery_title,
+                              context.loc.item_tags_page_title,
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium!
@@ -138,16 +69,6 @@ class _Step3State extends State<Step3> {
                                   ),
                             ),
                           ),
-                          ElevatedButton.icon(
-                              icon: const Icon(Icons.add_a_photo),
-                              onPressed: state.maximumImagesExceeded
-                                  ? null
-                                  : () async {
-                                      _pickupImageDialog((file) => context
-                                          .read<Step3Bloc>()
-                                          .add(AddImage(file)));
-                                    },
-                              label: Text(context.loc.add_photo))
                         ],
                       ),
                       const SizedBox(height: 5),
@@ -155,89 +76,75 @@ class _Step3State extends State<Step3> {
                         children: [
                           Expanded(
                             child: Text(
-                              context.loc.item_photo_gallery_description,
+                              context.loc.item_tags_page_description,
+                              style: Theme.of(context).textTheme.labelSmall!,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              context.loc.item_tags_page_description_2,
                               style: Theme.of(context).textTheme.labelSmall!,
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 20),
-                      if (state.images.isNotEmpty)
-                        GridView.count(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 10,
-                          physics: const NeverScrollableScrollPhysics(),
-                          children: state.images.asMap().entries.map((entry) {
-                            final index = entry.key;
-                            final img = entry.value;
-
-                            return Stack(children: <Widget>[
-                              Positioned.fill(
-                                child: Image.file(
-                                  img.value!,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Align(
-                                  alignment: Alignment.topRight,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: IconButton(
-                                      icon: const Icon(Icons.delete),
-                                      color: Colors.white,
-                                      onPressed: () => {
-                                        context
-                                            .read<Step3Bloc>()
-                                            .add(RemoveImage(index))
-                                      },
-                                    ),
-                                  )),
-                              Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: IconButton(
-                                      icon: Icon(
-                                          // Display full star if the image is the main image
-                                          index == state.mainImageIndex
-                                              ? Icons.star
-                                              : Icons.star_border_sharp),
-                                      color: CustomColors.gold,
-                                      onPressed: () => {
-                                        context
-                                            .read<Step3Bloc>()
-                                            .add(SetMainImage(index))
-                                      },
-                                    ),
-                                  )),
-                              /* Display the Align only for the main image */
-                              if (index == state.mainImageIndex)
-                                Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Container(
-                                    width: double.infinity,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primaryContainer,
-                                    child: Text(
-                                      context.loc.item_main_image,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                            ]);
-                          }).toList(),
+                      ChipsInput<String>(
+                        values: state.selectedTags,
+                        decoration: InputDecoration(
+                          /*prefixIcon: Icon(Icons.local_pizza_rounded),*/
+                          labelText: context.loc.item_tags_title,
+                          hintText: context.loc.item_tags_search_text,
+                          //helperText: context.loc.item_tags_helper_text,
+                          helperMaxLines: 2,
+                          border: OutlineInputBorder(),
                         ),
+                        strutStyle: const StrutStyle(fontSize: 15),
+                        onChanged: (List<String> tags) => context
+                            .read<Step3Bloc>()
+                            .add(SelectedTagsChanged(tags)),
+                        onSubmitted: (String tag) =>
+                            context.read<Step3Bloc>().add(AddTag(tag)),
+                        /*onTapOutside: (event) =>
+                            context.read<Step3Bloc>().add(const ClearSuggestions()),*/
+                        chipBuilder: _chipBuilder,
+                        onTextChanged: (String value) => context
+                            .read<Step3Bloc>()
+                            .add(SearchTagChanged(value)),
+                      ),
+                      if (state.suggestedTags.isNotEmpty)
+                        Material(
+                          color: Colors.white,
+                          elevation: 4,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(0),
+                            ),
+                          ),
+                          shadowColor: Colors.black,
+                          child: Container(
+                            height: 300,
+                            color: Colors.white,
+                            child: ListView.builder(
+                              itemCount: state.suggestedTags.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ChipsSuggestion(
+                                    state.suggestedTags[index],
+                                    onTap: (String tag) => context
+                                        .read<Step3Bloc>()
+                                        .add(SelectSuggestion(tag)));
+                              },
+                            ),
+                          ),
+                        ),
+                      // tags
                     ],
                   ),
                 ),
@@ -272,6 +179,14 @@ class _Step3State extends State<Step3> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _chipBuilder(BuildContext context, String tag) {
+    return InputChipTile(
+      value: tag,
+      onDeleted: (String tag) => context.read<Step3Bloc>().add(RemoveTag(tag)),
+      onSelected: (String tag) {},
     );
   }
 }

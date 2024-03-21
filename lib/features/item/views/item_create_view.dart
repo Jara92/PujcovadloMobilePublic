@@ -4,6 +4,7 @@ import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dar
 import 'package:pujcovadlo_client/features/item/views/item_create/step1.dart';
 import 'package:pujcovadlo_client/features/item/views/item_create/step2.dart';
 import 'package:pujcovadlo_client/features/item/views/item_create/step3.dart';
+import 'package:pujcovadlo_client/features/item/views/item_create/step4.dart';
 
 class ItemCreateView extends StatelessWidget {
   const ItemCreateView({super.key});
@@ -29,4 +30,5 @@ List<Widget> steps = <Widget>[
   Step1(),
   Step2(),
   Step3(),
+  Step4(),
 ];

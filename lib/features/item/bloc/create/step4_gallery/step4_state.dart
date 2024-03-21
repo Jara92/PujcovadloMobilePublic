@@ -1,7 +1,7 @@
-part of 'step3_bloc.dart';
+part of 'step4_bloc.dart';
 
 @immutable
-class Step3State {
+class Step4State {
   final List<ItemImage> images;
 
   bool get maximumImagesExceeded => images.length >= ItemImage.maximumImages;
@@ -12,35 +12,37 @@ class Step3State {
   /* Always true because we dont require images */
   bool get isValid => true;
 
-  const Step3State({
+  const Step4State({
     this.images = const [],
     this.mainImageIndex,
   });
 
-  Step3State copyWith({
+  Step4State copyWith({
     bool? isValid,
     List<ItemImage>? images,
     int? mainImage,
   }) {
-    return Step3State(
+    return Step4State(
       images: images ?? this.images,
       mainImageIndex: mainImage ?? this.mainImageIndex,
     );
   }
 }
 
-class InitialState extends Step3State {
+class InitialState extends Step4State {
   const InitialState() : super(images: const []);
 }
 
-class NextStepState extends Step3State {
+/*
+class NextStepState extends Step4State {
   final int nextStep;
 
   const NextStepState({required this.nextStep}) : super();
 }
 
-class PreviousStepState extends Step3State {
+class PreviousStepState extends Step4State {
   final int previousStep;
 
   const PreviousStepState({required this.previousStep}) : super();
 }
+*/

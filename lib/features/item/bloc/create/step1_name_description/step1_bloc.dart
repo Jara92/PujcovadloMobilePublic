@@ -58,7 +58,7 @@ class Step1Bloc extends Bloc<Step1Event, Step1State> {
       _item.name = state.name.value;
       _item.description = state.description.value;
 
-      _createItemBloc.add(const MoveToStepEvent(step2_category_and_tags));
+      _createItemBloc.add(const MoveToStepEvent(step2_categories));
     }
   }
 }

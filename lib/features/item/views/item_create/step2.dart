@@ -13,12 +13,12 @@ class Step2 extends StatefulWidget {
 }
 
 class _Step2State extends State<Step2> {
-  late final MultiSelectController _categoriesController =
-      MultiSelectController();
+  late final MultiSelectController _categoriesController;
 
   @override
   void initState() {
     super.initState();
+    _categoriesController = MultiSelectController();
   }
 
   @override
@@ -60,7 +60,7 @@ class _Step2State extends State<Step2> {
                           const SizedBox(width: 5),
                           Expanded(
                             child: Text(
-                              context.loc.item_categories_and_tags,
+                              context.loc.item_categories_page_title,
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium!
@@ -76,7 +76,7 @@ class _Step2State extends State<Step2> {
                         children: [
                           Expanded(
                             child: Text(
-                              context.loc.item_categories_and_tags_description,
+                              context.loc.item_categories_page_description,
                               style: Theme.of(context).textTheme.labelSmall!,
                             ),
                           ),
@@ -84,21 +84,60 @@ class _Step2State extends State<Step2> {
                       ),
                       const SizedBox(height: 20),
                       //SizedBox(height: 20),
-                      MultiSelectDropDown(
-                        controller: _categoriesController,
-                        dropdownHeight: 200,
-                        clearIcon: const Icon(Icons.clear),
-                        onOptionSelected: (options) {},
-                        options: state.categories
-                            .map((e) => ValueItem(label: e.name, value: e.id))
-                            .toList(),
-                        maxItems: 2,
-                        searchEnabled: true,
-                        selectionType: SelectionType.multi,
-                        chipConfig: const ChipConfig(wrapType: WrapType.wrap),
-                        //dropdownHeight: 300,
-                        optionTextStyle: const TextStyle(fontSize: 16),
-                        selectedOptionIcon: const Icon(Icons.check_circle),
+                      Wrap(
+                        direction: Axis.horizontal,
+                        children: [
+                          MultiSelectDropDown(
+                            controller: _categoriesController,
+                            searchLabel:
+                                context.loc.item_categories_search_text,
+                            hint: context.loc.item_categories_hint_text,
+                            hintColor: Colors.black,
+                            inputDecoration: BoxDecoration(
+                              border: Border.all(color: Colors.black54),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            //dropdownHeight: 300,
+                            clearIcon: const Icon(Icons.close),
+                            selectedOptionIcon: const Icon(Icons.check_circle),
+                            onOptionSelected: (options) => context
+                                .read<Step2Bloc>()
+                                .add(SelectedOptionsChanged(options
+                                    .map((e) => e.value as int)
+                                    .toList())),
+                            options: state.categories
+                                .map((e) =>
+                                    ValueItem(label: e.name, value: e.id))
+                                .toList(),
+                            maxItems: 10,
+                            // TODO
+                            searchEnabled: true,
+                            selectionType: SelectionType.multi,
+                            searchBackgroundColor: Colors.white,
+                            dropdownBackgroundColor: Colors.white,
+                            chipConfig: ChipConfig(
+                              spacing: 10,
+                              runSpacing: 0,
+                              autoScroll: true,
+                              //separator: Text("|"),
+                              wrapType: WrapType.wrap,
+                              backgroundColor: Theme.of(context)
+                                  .colorScheme
+                                  .onInverseSurface,
+                              deleteIcon: const Icon(
+                                Icons.close,
+                                size: 19,
+                              ),
+                              deleteIconColor: Colors.black87,
+                              radius: 8,
+                              labelStyle: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 11),
+                            ),
+                            //dropdownHeight: 300,
+                            optionTextStyle: const TextStyle(fontSize: 12),
+                          ),
+                        ],
                       ),
                     ],
                   ),
