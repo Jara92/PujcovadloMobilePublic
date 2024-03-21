@@ -47,99 +47,104 @@ class _Step2State extends State<Step2> {
         body: BlocConsumer<Step2Bloc, Step2State>(
           listener: (context, state) {},
           builder: (context, state) {
-            return SafeArea(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.info_outline,
-                              color: Theme.of(context).primaryColor),
-                          const SizedBox(width: 5),
-                          Expanded(
-                            child: Text(
-                              context.loc.item_categories_page_title,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              context.loc.item_categories_page_description,
-                              style: Theme.of(context).textTheme.labelSmall!,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      //SizedBox(height: 20),
-                      Wrap(
-                        direction: Axis.horizontal,
-                        children: [
-                          MultiSelectDropDown(
-                            controller: _categoriesController,
-                            searchLabel:
-                                context.loc.item_categories_search_text,
-                            hint: context.loc.item_categories_hint_text,
-                            hintColor: Colors.black,
-                            inputDecoration: BoxDecoration(
-                              border: Border.all(color: Colors.black54),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            //dropdownHeight: 300,
-                            clearIcon: const Icon(Icons.close),
-                            selectedOptionIcon: const Icon(Icons.check_circle),
-                            onOptionSelected: (options) => context
-                                .read<Step2Bloc>()
-                                .add(SelectedOptionsChanged(options
-                                    .map((e) => e.value as int)
-                                    .toList())),
-                            options: state.categories
-                                .map((e) =>
-                                    ValueItem(label: e.name, value: e.id))
-                                .toList(),
-                            maxItems: 10,
-                            // TODO
-                            searchEnabled: true,
-                            selectionType: SelectionType.multi,
-                            searchBackgroundColor: Colors.white,
-                            dropdownBackgroundColor: Colors.white,
-                            chipConfig: ChipConfig(
-                              spacing: 10,
-                              runSpacing: 0,
-                              autoScroll: true,
-                              //separator: Text("|"),
-                              wrapType: WrapType.wrap,
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .onInverseSurface,
-                              deleteIcon: const Icon(
-                                Icons.close,
-                                size: 19,
+            return PopScope(
+              canPop: false,
+              child: SafeArea(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.info_outline,
+                                color: Theme.of(context).primaryColor),
+                            const SizedBox(width: 5),
+                            Expanded(
+                              child: Text(
+                                context.loc.item_categories_page_title,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                               ),
-                              deleteIconColor: Colors.black87,
-                              radius: 8,
-                              labelStyle: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontSize: 11),
                             ),
-                            //dropdownHeight: 300,
-                            optionTextStyle: const TextStyle(fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                        const SizedBox(height: 5),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                context.loc.item_categories_page_description,
+                                style: Theme.of(context).textTheme.labelSmall!,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        //SizedBox(height: 20),
+                        Wrap(
+                          direction: Axis.horizontal,
+                          children: [
+                            MultiSelectDropDown(
+                              controller: _categoriesController,
+                              searchLabel:
+                                  context.loc.item_categories_search_text,
+                              hint: context.loc.item_categories_hint_text,
+                              hintColor: Colors.black,
+                              inputDecoration: BoxDecoration(
+                                border: Border.all(color: Colors.black54),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              //dropdownHeight: 300,
+                              clearIcon: const Icon(Icons.close),
+                              selectedOptionIcon:
+                                  const Icon(Icons.check_circle),
+                              onOptionSelected: (options) => context
+                                  .read<Step2Bloc>()
+                                  .add(SelectedOptionsChanged(options
+                                      .map((e) => e.value as int)
+                                      .toList())),
+                              options: state.categories
+                                  .map((e) =>
+                                      ValueItem(label: e.name, value: e.id))
+                                  .toList(),
+                              maxItems: 10,
+                              // TODO
+                              searchEnabled: true,
+                              selectionType: SelectionType.multi,
+                              searchBackgroundColor: Colors.white,
+                              dropdownBackgroundColor: Colors.white,
+                              chipConfig: ChipConfig(
+                                spacing: 10,
+                                runSpacing: 0,
+                                autoScroll: true,
+                                //separator: Text("|"),
+                                wrapType: WrapType.wrap,
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .onInverseSurface,
+                                deleteIcon: const Icon(
+                                  Icons.close,
+                                  size: 19,
+                                ),
+                                deleteIconColor: Colors.black87,
+                                radius: 8,
+                                labelStyle: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    fontSize: 11),
+                              ),
+                              //dropdownHeight: 300,
+                              optionTextStyle: const TextStyle(fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

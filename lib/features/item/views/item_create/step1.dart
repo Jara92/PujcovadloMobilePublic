@@ -79,105 +79,109 @@ class _Step1State extends State<Step1> {
             _controllerDescription.text = state.description.value;
           },
           builder: (BuildContext context, Step1State state) {
-            return SafeArea(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.info_outline,
-                              color: Theme.of(context).primaryColor),
-                          const SizedBox(width: 5),
-                          Expanded(
-                            child: Text(
-                              context.loc.item_name_and_description_title,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              context.loc.item_name_and_description_description,
-                              style: Theme.of(context).textTheme.labelSmall!,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              onChanged: (String value) {
-                                BlocProvider.of<Step1Bloc>(context)
-                                    .add(ItemNameChanged(value));
-                              },
-                              // initialValue: state.name.value,
-                              controller: _controllerName,
-                              maxLength: 30,
-                              maxLengthEnforcement:
-                                  MaxLengthEnforcement.enforced,
-                              decoration: InputDecoration(
-                                labelText: context.loc.item_name_title,
-                                hintText: context.loc.item_name_hint_text,
-                                helperText: context.loc.item_name_helper_text,
-                                // error because we dont know that the state is Step1_NameAndDescription
-                                errorText:
-                                    _localizeItemNameError(context, state.name),
-                                border: OutlineInputBorder(),
-                                //border: InputBorder.none
+            return PopScope(
+              canPop: false,
+              child: SafeArea(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.info_outline,
+                                color: Theme.of(context).primaryColor),
+                            const SizedBox(width: 5),
+                            Expanded(
+                              child: Text(
+                                context.loc.item_name_and_description_title,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              // initialValue: state.description.value,
-                              controller: _controllerDescription,
-                              onChanged: (String value) {
-                                BlocProvider.of<Step1Bloc>(context)
-                                    .add(ItemDescriptionChanged(value));
-                              },
-                              maxLength: 500,
-                              maxLengthEnforcement:
-                                  MaxLengthEnforcement.enforced,
-                              keyboardType: TextInputType.multiline,
-                              minLines: 3,
-                              // Set this
-                              maxLines: 7,
-                              //
-                              decoration: InputDecoration(
-                                labelText: context.loc.item_description_title,
-                                hintText:
-                                    context.loc.item_description_hint_text,
-                                helperText:
-                                    context.loc.item_description_helper_text,
-                                helperMaxLines: 3,
-                                errorText: _localizeItemDescriptionError(
-                                    context, state.description),
-                                border: OutlineInputBorder(),
-                                //border: InputBorder.none
+                          ],
+                        ),
+                        const SizedBox(height: 5),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                context
+                                    .loc.item_name_and_description_description,
+                                style: Theme.of(context).textTheme.labelSmall!,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                onChanged: (String value) {
+                                  BlocProvider.of<Step1Bloc>(context)
+                                      .add(ItemNameChanged(value));
+                                },
+                                // initialValue: state.name.value,
+                                controller: _controllerName,
+                                maxLength: 30,
+                                maxLengthEnforcement:
+                                    MaxLengthEnforcement.enforced,
+                                decoration: InputDecoration(
+                                  labelText: context.loc.item_name_title,
+                                  hintText: context.loc.item_name_hint_text,
+                                  helperText: context.loc.item_name_helper_text,
+                                  // error because we dont know that the state is Step1_NameAndDescription
+                                  errorText: _localizeItemNameError(
+                                      context, state.name),
+                                  border: OutlineInputBorder(),
+                                  //border: InputBorder.none
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                // initialValue: state.description.value,
+                                controller: _controllerDescription,
+                                onChanged: (String value) {
+                                  BlocProvider.of<Step1Bloc>(context)
+                                      .add(ItemDescriptionChanged(value));
+                                },
+                                maxLength: 500,
+                                maxLengthEnforcement:
+                                    MaxLengthEnforcement.enforced,
+                                keyboardType: TextInputType.multiline,
+                                minLines: 3,
+                                // Set this
+                                maxLines: 7,
+                                //
+                                decoration: InputDecoration(
+                                  labelText: context.loc.item_description_title,
+                                  hintText:
+                                      context.loc.item_description_hint_text,
+                                  helperText:
+                                      context.loc.item_description_helper_text,
+                                  helperMaxLines: 3,
+                                  errorText: _localizeItemDescriptionError(
+                                      context, state.description),
+                                  border: OutlineInputBorder(),
+                                  //border: InputBorder.none
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
