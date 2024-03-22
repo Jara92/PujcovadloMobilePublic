@@ -5,6 +5,7 @@ import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/step5_prices/step5_bloc.dart';
 import 'package:pujcovadlo_client/features/item/models/models.dart';
+import 'package:pujcovadlo_client/features/item/widgets/item_create/form_container.dart';
 
 class Step5 extends StatefulWidget {
   const Step5({super.key});
@@ -110,161 +111,142 @@ class _Step5State extends State<Step5> {
             _controllerSellingPrice.text = state.sellingPrice.value?.round().toString() ?? "";*/
           },
           builder: (context, state) {
-            return PopScope(
-              canPop: false,
-              child: SafeArea(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(Icons.info_outline,
-                                color: Theme.of(context).primaryColor),
-                            const SizedBox(width: 5),
-                            Expanded(
-                              child: Text(
-                                context.loc.item_prices_page_title,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ),
-                          ],
+            return FormContainer(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(Icons.info_outline,
+                          color: Theme.of(context).primaryColor),
+                      const SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          context.loc.item_prices_page_title,
+                          style:
+                              Theme.of(context).textTheme.titleMedium!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
-                        const SizedBox(height: 5),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                context.loc.item_prices_page_description,
-                                style: Theme.of(context).textTheme.labelSmall!,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                controller: _controllerPricePerDay,
-                                keyboardType:
-                                    const TextInputType.numberWithOptions(
-                                  decimal: false,
-                                  signed: false,
-                                ),
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  //FilteringTextInputFormatter.allow(RegExp(r"[0-9.,]")), //
-                                ],
-                                // Only numbers can be entered
-                                onChanged: (String value) {
-                                  BlocProvider.of<Step5Bloc>(context).add(
-                                      PricePerDayChanged(
-                                          double.tryParse(value)));
-                                },
-                                decoration: InputDecoration(
-                                  labelText:
-                                      context.loc.item_price_per_day_title,
-                                  hintText:
-                                      context.loc.item_price_per_day_hint_text,
-                                  helperText: context
-                                      .loc.item_price_per_day_helper_text,
-                                  errorText: _localizePricePerDayError(
-                                      context, state.pricePerDay),
-                                  errorMaxLines: 2,
-                                  border: const OutlineInputBorder(),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                controller: _controllerRefundableDeposit,
-                                keyboardType:
-                                    const TextInputType.numberWithOptions(
-                                  decimal: false,
-                                  signed: false,
-                                ),
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  //FilteringTextInputFormatter.allow(RegExp(r"[0-9.,]")), //
-                                ],
-                                // Only numbers can be entered
-                                onChanged: (String value) {
-                                  BlocProvider.of<Step5Bloc>(context).add(
-                                      RefundableDepositChanged(
-                                          double.tryParse(value)));
-                                },
-                                decoration: InputDecoration(
-                                  labelText:
-                                      context.loc.item_refundable_deposit_title,
-                                  hintText: context
-                                      .loc.item_refundable_deposit_hint_text,
-                                  helperText: context
-                                      .loc.item_refundable_deposit_helper_text,
-                                  helperMaxLines: 3,
-                                  errorText: _localizeRefundableDepositError(
-                                      context, state.refundableDeposit),
-                                  errorMaxLines: 2,
-                                  border: const OutlineInputBorder(),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                controller: _controllerSellingPrice,
-                                keyboardType:
-                                    const TextInputType.numberWithOptions(
-                                  decimal: false,
-                                  signed: false,
-                                ),
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  //FilteringTextInputFormatter.allow(RegExp(r"[0-9.,]")), //
-                                ],
-                                // Only numbers can be entered
-                                onChanged: (String value) {
-                                  BlocProvider.of<Step5Bloc>(context).add(
-                                      SellingPriceChanged(
-                                          double.tryParse(value)));
-                                },
-                                decoration: InputDecoration(
-                                  labelText:
-                                      context.loc.item_selling_price_title,
-                                  hintText:
-                                      context.loc.item_selling_price_hint_text,
-                                  helperText: context
-                                      .loc.item_selling_price_helper_text,
-                                  helperMaxLines: 3,
-                                  errorText: _localizeSellingPriceError(
-                                      context, state.sellingPrice),
-                                  errorMaxLines: 2,
-                                  border: const OutlineInputBorder(),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ),
+                  const SizedBox(height: 5),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          context.loc.item_prices_page_description,
+                          style: Theme.of(context).textTheme.labelSmall!,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _controllerPricePerDay,
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: false,
+                            signed: false,
+                          ),
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly,
+                            //FilteringTextInputFormatter.allow(RegExp(r"[0-9.,]")), //
+                          ],
+                          // Only numbers can be entered
+                          onChanged: (String value) {
+                            BlocProvider.of<Step5Bloc>(context).add(
+                                PricePerDayChanged(double.tryParse(value)));
+                          },
+                          decoration: InputDecoration(
+                            labelText: context.loc.item_price_per_day_title,
+                            hintText: context.loc.item_price_per_day_hint_text,
+                            helperText:
+                                context.loc.item_price_per_day_helper_text,
+                            errorText: _localizePricePerDayError(
+                                context, state.pricePerDay),
+                            errorMaxLines: 2,
+                            border: const OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _controllerRefundableDeposit,
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: false,
+                            signed: false,
+                          ),
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly,
+                            //FilteringTextInputFormatter.allow(RegExp(r"[0-9.,]")), //
+                          ],
+                          // Only numbers can be entered
+                          onChanged: (String value) {
+                            BlocProvider.of<Step5Bloc>(context).add(
+                                RefundableDepositChanged(
+                                    double.tryParse(value)));
+                          },
+                          decoration: InputDecoration(
+                            labelText:
+                                context.loc.item_refundable_deposit_title,
+                            hintText:
+                                context.loc.item_refundable_deposit_hint_text,
+                            helperText:
+                                context.loc.item_refundable_deposit_helper_text,
+                            helperMaxLines: 3,
+                            errorText: _localizeRefundableDepositError(
+                                context, state.refundableDeposit),
+                            errorMaxLines: 2,
+                            border: const OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _controllerSellingPrice,
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: false,
+                            signed: false,
+                          ),
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly,
+                            //FilteringTextInputFormatter.allow(RegExp(r"[0-9.,]")), //
+                          ],
+                          // Only numbers can be entered
+                          onChanged: (String value) {
+                            BlocProvider.of<Step5Bloc>(context).add(
+                                SellingPriceChanged(double.tryParse(value)));
+                          },
+                          decoration: InputDecoration(
+                            labelText: context.loc.item_selling_price_title,
+                            hintText: context.loc.item_selling_price_hint_text,
+                            helperText:
+                                context.loc.item_selling_price_helper_text,
+                            helperMaxLines: 3,
+                            errorText: _localizeSellingPriceError(
+                                context, state.sellingPrice),
+                            errorMaxLines: 2,
+                            border: const OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             );
           },

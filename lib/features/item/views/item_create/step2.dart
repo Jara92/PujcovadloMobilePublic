@@ -6,6 +6,7 @@ import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dar
 import 'package:pujcovadlo_client/features/item/bloc/create/step2_category_tags/step2_bloc.dart';
 import 'package:pujcovadlo_client/features/item/models/item_categories.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_category_response.dart';
+import 'package:pujcovadlo_client/features/item/widgets/item_create/form_container.dart';
 
 class Step2 extends StatefulWidget {
   const Step2({super.key});
@@ -68,152 +69,134 @@ class _Step2State extends State<Step2> {
         body: BlocConsumer<Step2Bloc, Step2State>(
           listener: (context, state) {},
           builder: (context, state) {
-            return PopScope(
-              canPop: false,
-              child: SafeArea(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Icon(Icons.info_outline,
-                                color: Theme.of(context).primaryColor),
-                            const SizedBox(width: 5),
-                            Expanded(
-                              child: Text(
-                                context.loc.item_categories_page_title,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 5),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                context.loc.item_categories_page_description,
-                                style: Theme.of(context).textTheme.labelSmall!,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Text(
-                              _localizeCategoriesError(
-                                      context, state.selectedCategories) ??
-                                  '',
-                              textAlign: TextAlign.left,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelSmall!
-                                  .copyWith(
-                                    color: Theme.of(context).colorScheme.error,
+            return FormContainer(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.info_outline,
+                          color: Theme.of(context).primaryColor),
+                      const SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          context.loc.item_categories_page_title,
+                          style:
+                              Theme.of(context).textTheme.titleMedium!.copyWith(
+                                    fontWeight: FontWeight.bold,
                                   ),
-                            )
-                          ],
                         ),
-                        const SizedBox(height: 10),
-                        SearchBar(
-                          controller: _searchController,
-                          leading: const Icon(Icons.search),
-                          trailing: <Widget>[
-                            Tooltip(
-                              message:
-                                  context.loc.item_categories_search_tooltip,
-                              child: IconButton(
-                                isSelected: false,
-                                onPressed: () {
-                                  _searchController.clear();
-                                  context
-                                      .read<Step2Bloc>()
-                                      .add(const SearchTextUpdated(""));
-                                },
-                                icon: const Icon(Icons.clear),
-                                selectedIcon: const Icon(Icons.manage_search),
-                              ),
-                            )
-                          ],
-                          padding: const MaterialStatePropertyAll<EdgeInsets>(
-                              EdgeInsets.symmetric(horizontal: 16.0)),
-                          onChanged: (String value) {
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          context.loc.item_categories_page_description,
+                          style: Theme.of(context).textTheme.labelSmall!,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Text(
+                        _localizeCategoriesError(
+                                context, state.selectedCategories) ??
+                            '',
+                        textAlign: TextAlign.left,
+                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  SearchBar(
+                    controller: _searchController,
+                    leading: const Icon(Icons.search),
+                    trailing: <Widget>[
+                      Tooltip(
+                        message: context.loc.item_categories_search_tooltip,
+                        child: IconButton(
+                          isSelected: false,
+                          onPressed: () {
+                            _searchController.clear();
                             context
                                 .read<Step2Bloc>()
-                                .add(SearchTextUpdated(value));
+                                .add(const SearchTextUpdated(""));
                           },
-                          hintText: context.loc.item_searching_in_categories,
+                          icon: const Icon(Icons.clear),
+                          selectedIcon: const Icon(Icons.manage_search),
                         ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Text(
-                              textAlign: TextAlign.left,
-                              context.loc.item_selected_categories_count(
-                                  state.selectedCategories.value.length,
-                                  ItemCategories.maxCategoriesCount),
-                              style: Theme.of(context).textTheme.labelSmall,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 15),
-                        (state.categories.isEmpty)
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                      height: 250,
-                                      width: 250,
-                                      child: Center(
-                                          child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.search,
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            size: 100,
-                                          ),
-                                          Text(
-                                            context.loc
-                                                .item_categories_no_seach_results,
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ],
-                                      ))),
-                                ],
-                              )
-                            : Align(
-                                alignment: Alignment.topLeft,
-                                child: Wrap(
-                                  spacing: 5.0,
-                                  children: state.categories
-                                      .map((ItemCategoryResponse exercise) {
-                                    return FilterChip(
-                                      label: Text(exercise.name),
-                                      selected: state.selectedCategories.value
-                                          .contains(exercise.id),
-                                      onSelected: (bool selected) => context
-                                          .read<Step2Bloc>()
-                                          .add(CategoryOptionSelected(
-                                              exercise.id, selected)),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                      ],
-                    ),
+                      )
+                    ],
+                    padding: const MaterialStatePropertyAll<EdgeInsets>(
+                        EdgeInsets.symmetric(horizontal: 16.0)),
+                    onChanged: (String value) {
+                      context.read<Step2Bloc>().add(SearchTextUpdated(value));
+                    },
+                    hintText: context.loc.item_searching_in_categories,
                   ),
-                ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Text(
+                        textAlign: TextAlign.left,
+                        context.loc.item_selected_categories_count(
+                            state.selectedCategories.value.length,
+                            ItemCategories.maxCategoriesCount),
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 15),
+                  (state.categories.isEmpty)
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                                height: 250,
+                                width: 250,
+                                child: Center(
+                                    child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.search,
+                                      color: Theme.of(context).primaryColor,
+                                      size: 100,
+                                    ),
+                                    Text(
+                                      context
+                                          .loc.item_categories_no_seach_results,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ))),
+                          ],
+                        )
+                      : Align(
+                          alignment: Alignment.topLeft,
+                          child: Wrap(
+                            spacing: 5.0,
+                            children: state.categories
+                                .map((ItemCategoryResponse exercise) {
+                              return FilterChip(
+                                label: Text(exercise.name),
+                                selected: state.selectedCategories.value
+                                    .contains(exercise.id),
+                                onSelected: (bool selected) => context
+                                    .read<Step2Bloc>()
+                                    .add(CategoryOptionSelected(
+                                        exercise.id, selected)),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                ],
               ),
             );
           },
