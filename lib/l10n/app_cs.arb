@@ -36,10 +36,13 @@
   "item_categories_page_title": "Kategorie",
   "item_categories_page_description": "Vyberte alespoň jednu kategorii, do které patří Vaše položka. Správným výběrem kategorií zvýšíte šanci, že Vaši položku najdou ostatní uživatelé.",
   "item_searching_in_categories": "Hledání v kategoriích",
-  "item_selected_categories_count": "Vybráno {count} kategorií",
+  "item_selected_categories_count": "Vybráno {selectedCount} kategorií z {maxCount}.",
   "@item_selected_categories_count": {
     "placeholders": {
-      "count": {
+      "selectedCount": {
+        "type": "int"
+      },
+      "maxCount": {
         "type": "int"
       }
     }

@@ -13,16 +13,16 @@ class ItemCategories
 
   const ItemCategories.dirty([super.value = const []]) : super.dirty();
 
-  static const _minCategoriesCount = 1;
-  static const _maxCategoriesCount = 5;
+  static const minCategoriesCount = 1;
+  static const maxCategoriesCount = 5;
 
   @override
   ItemCategoriesValidationError? validator(List<int> value) {
     // Check minimum and maximum tags count
-    if (value.length > _maxCategoriesCount) {
+    if (value.length > maxCategoriesCount) {
       return ItemCategoriesValidationError.tooManyCategories;
     }
-    if (value.length < _minCategoriesCount) {
+    if (value.length < minCategoriesCount) {
       return ItemCategoriesValidationError.notEnoughtCategories;
     }
 

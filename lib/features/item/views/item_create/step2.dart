@@ -106,6 +106,23 @@ class _Step2State extends State<Step2> {
                           ],
                         ),
                         const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Text(
+                              _localizeCategoriesError(
+                                      context, state.selectedCategories) ??
+                                  '',
+                              textAlign: TextAlign.left,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall!
+                                  .copyWith(
+                                    color: Theme.of(context).colorScheme.error,
+                                  ),
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 10),
                         SearchBar(
                           controller: _searchController,
                           leading: const Icon(Icons.search),
@@ -138,28 +155,13 @@ class _Step2State extends State<Step2> {
                         const SizedBox(height: 10),
                         Row(
                           children: [
-                            if (state.selectedCategories.isValid ||
-                                state.selectedCategories.isPure)
-                              Text(
-                                textAlign: TextAlign.left,
-                                context.loc.item_selected_categories_count(
-                                    state.selectedCategories.value.length),
-                                style: Theme.of(context).textTheme.labelSmall,
-                              ),
-                            if (state.selectedCategories.isNotValid &&
-                                !state.selectedCategories.isPure)
-                              Text(
-                                _localizeCategoriesError(
-                                    context, state.selectedCategories)!,
-                                textAlign: TextAlign.left,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall!
-                                    .copyWith(
-                                      color:
-                                          Theme.of(context).colorScheme.error,
-                                    ),
-                              ),
+                            Text(
+                              textAlign: TextAlign.left,
+                              context.loc.item_selected_categories_count(
+                                  state.selectedCategories.value.length,
+                                  ItemCategories.maxCategoriesCount),
+                              style: Theme.of(context).textTheme.labelSmall,
+                            ),
                           ],
                         ),
                         const SizedBox(height: 15),
