@@ -21,11 +21,15 @@ class ItemTag extends FormzInput<String, ItemTagValidationError> {
 
   @override
   ItemTagValidationError? validator(String value) {
+    if (value.isEmpty) return null;
+
     // Check tag length
     if (value.length < _minTagLength) return ItemTagValidationError.tooShort;
     if (value.length > _maxTagLength) return ItemTagValidationError.tooLong;
 
     // Check tag format
     if (!_tagNameRegex.hasMatch(value)) return ItemTagValidationError.invalid;
+
+    return null;
   }
 }

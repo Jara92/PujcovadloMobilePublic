@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
@@ -79,17 +78,13 @@ class Step3Bloc extends Bloc<Step3Event, Step3State> {
     }
 
     // Do nothing if the tag is already selected
-    if (state.selectedTags.value.contains(event.tag)) {
-      return;
-    }
+    if (state.selectedTags.value.contains(event.tag)) return;
 
     final search = ItemTag.dirty(event.tag);
     emit(state.copyWith(currentTag: search));
 
     // Dont continue if the tag is not valid
-    if (Formz.validate([search]) == false) {
-      return;
-    }
+    if (search.isNotValid) return;
 
     emit(state.copyWith(
       selectedTags: ItemTags.dirty([...state.selectedTags.value, event.tag]),

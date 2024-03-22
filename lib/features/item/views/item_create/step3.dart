@@ -137,37 +137,20 @@ class _Step3State extends State<Step3> {
                           ],
                         ),
                         const SizedBox(height: 20),
-                        if (state.currentTag.error != null)
-                          Row(children: [
-                            Text(
-                                _localizeTagError(context, state.currentTag) ??
-                                    "",
-                                textAlign: TextAlign.left,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall!
-                                    .copyWith(
-                                      color:
-                                          Theme.of(context).colorScheme.error,
-                                    ))
-                          ]),
-                        if (state.selectedTags.error != null)
-                          Row(
-                            children: [
-                              Text(
+                        Row(children: [
+                          Text(
+                              _localizeTagError(context, state.currentTag) ??
                                   _localizeTagsError(
-                                          context, state.selectedTags) ??
-                                      "",
-                                  textAlign: TextAlign.left,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall!
-                                      .copyWith(
-                                        color:
-                                            Theme.of(context).colorScheme.error,
-                                      )),
-                            ],
-                          ),
+                                      context, state.selectedTags) ??
+                                  '',
+                              textAlign: TextAlign.left,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall!
+                                  .copyWith(
+                                    color: Theme.of(context).colorScheme.error,
+                                  ))
+                        ]),
                         const SizedBox(height: 10),
                         Autocomplete<String>(
                           optionsBuilder:
@@ -196,30 +179,36 @@ class _Step3State extends State<Step3> {
                               TextEditingController textEditingController,
                               FocusNode focusNode,
                               VoidCallback onFieldSubmitted) {
-                            return TextField(
+                            return SearchBar(
                               controller: _textEditingController,
-                              //controller: textEditingController,
                               focusNode: focusNode,
-                              decoration: InputDecoration(
-                                labelText: context.loc.item_tags_title,
-                                hintText: context.loc.item_tags_search_text,
-                                //helperText: context.loc.item_tags_helper_text,
-                                //errorText: _localizeTagsError(context, state.selectedTags),
-                                helperMaxLines: 2,
-                                border: const OutlineInputBorder(),
-                                contentPadding: const EdgeInsets.all(10),
-                                suffixIcon: state.isSuggesting
-                                    ? const IconButton(
-                                        icon: SizedBox(
-                                          height: 12,
-                                          width: 12,
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                        onPressed: null,
-                                      )
-                                    : null,
-                              ),
+                              leading: const Icon(Icons.tag),
+                              trailing: <Widget>[
+                                if (state.isSuggesting)
+                                  const SizedBox(
+                                    height: 12,
+                                    width: 12,
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                Tooltip(
+                                  message: context
+                                      .loc.item_categories_search_tooltip,
+                                  child: IconButton(
+                                    isSelected: false,
+                                    onPressed: () {
+                                      _textEditingController.clear();
+                                      textEditingController.clear();
+                                    },
+                                    icon: const Icon(Icons.clear),
+                                    selectedIcon:
+                                        const Icon(Icons.manage_search),
+                                  ),
+                                )
+                              ],
                               textInputAction: TextInputAction.continueAction,
+                              padding:
+                                  const MaterialStatePropertyAll<EdgeInsets>(
+                                      EdgeInsets.symmetric(horizontal: 16.0)),
                               onSubmitted: (String value) {
                                 context.read<Step3Bloc>().add(AddTag(value));
                                 _textEditingController.clear();
@@ -227,11 +216,23 @@ class _Step3State extends State<Step3> {
                               onChanged: (String value) {
                                 textEditingController.text = value;
                               },
+                              hintText: context.loc.item_tags_search_text,
                             );
                           },
                         ),
                         const SizedBox(
                           height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              textAlign: TextAlign.left,
+                              context.loc.item_selected_tags_remaining_count(
+                                  state.selectedTags.value.length,
+                                  ItemTags.maxTagsCount),
+                              style: Theme.of(context).textTheme.labelSmall,
+                            ),
+                          ],
                         ),
                         Align(
                           alignment: Alignment.topLeft,

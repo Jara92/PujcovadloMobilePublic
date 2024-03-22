@@ -61,6 +61,17 @@
   "item_tags_hint_text": "Přidejte tagy",
   "item_tags_search_text": "Např. pneumatická vrtačka",
   "item_tags_helper_text": "Přidejte vlastní tagy nebo začněte psát a vyberte si z existujících.",
+  "item_selected_tags_remaining_count": "Vybráno {selectedCount} tagů z {maxCount}.",
+  "@item_selected_tags_remaining_count": {
+    "placeholders": {
+      "selectedCount": {
+        "type": "int"
+      },
+      "maxCount": {
+        "type": "int"
+      }
+    }
+  },
   "item_tags_verror_tag_format_is_invalid": "Tag obsahuje nepovolené znaky.",
   "item_tags_verror_too_many_tags": "Můžete přidat maximálně 10 tagů.",
   "item_tags_verror_not_enough_tags": "Přidejte alespoň jeden tag.",
