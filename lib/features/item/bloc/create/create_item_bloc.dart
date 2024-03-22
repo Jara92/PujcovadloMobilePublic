@@ -22,12 +22,20 @@ class CreateItemBloc extends Bloc<CreateItemEvent, CreateItemState> {
         );
 
     on<InitialEvent>(_onInitialEvent);
+    on<UpdatePreviewEvent>(_onUpdatePreviewEvent);
     on<MoveToStepEvent>(_onMoveToStep);
   }
 
   void _onInitialEvent(InitialEvent event, Emitter<CreateItemState> emit) {
     emit(CreateItemState(
-      isValid: false,
+      data: item,
+    ));
+  }
+
+  void _onUpdatePreviewEvent(
+      UpdatePreviewEvent event, Emitter<CreateItemState> emit) {
+    emit(CreateItemState(
+      data: item,
     ));
   }
 

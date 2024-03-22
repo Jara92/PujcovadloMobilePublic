@@ -13,6 +13,10 @@ class Step1SubmitEvent extends CreateItemEvent {
   const Step1SubmitEvent();
 }
 
+class UpdatePreviewEvent extends CreateItemEvent {
+  const UpdatePreviewEvent();
+}
+
 class MoveToStepEvent extends CreateItemEvent {
   final int step;
 

@@ -5,3 +5,4 @@ const step2_categories = 1;
 const step3_tags = 2;
 const step4_gallery = 3;
 const step5_prices = 4;
+const step6_preview = 5;

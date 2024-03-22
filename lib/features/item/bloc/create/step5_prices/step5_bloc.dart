@@ -72,11 +72,12 @@ class Step5Bloc extends Bloc<Step5Event, Step5State> {
       _item.refundableDeposit = state.refundableDeposit.value;
       _item.sellingPrice = state.sellingPrice.value;
 
-      _createItemBloc.add(const MoveToStepEvent(step5_prices));
+      _createItemBloc.add(const MoveToStepEvent(step6_preview));
     }
   }
 
   void _onPreviousStep(PreviousStepEvent event, Emitter<Step5State> emit) {
+    _createItemBloc.add(const UpdatePreviewEvent()); // update the preview
     _createItemBloc.add(const MoveToStepEvent(step4_gallery));
   }
 }
