@@ -12,7 +12,13 @@ class CreateItemBloc extends Bloc<CreateItemEvent, CreateItemState> {
 
   CreateItemBloc({ItemRequest? item}) : super(InitialState()) {
     this.item = item ??
-        ItemRequest(name: "Testovací", description: "Testovací popis na testy");
+        ItemRequest(
+          name: "Testovací",
+          description: "Testovací popis na testy",
+          categories: [1],
+          images: [],
+          tags: ["Vrtačka", "Šroubovák"],
+        );
 
     on<InitialEvent>(_onInitialEvent);
     on<MoveToStepEvent>(_onMoveToStep);

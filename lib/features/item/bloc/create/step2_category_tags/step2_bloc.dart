@@ -34,6 +34,10 @@ class Step2Bloc extends Bloc<Step2Event, Step2State> {
 
   Future<void> _onInitialEvent(
       Step2InitialEvent event, Emitter<Step2State> emit) async {
+    // Init selected categories
+    emit(state.copyWith(
+        selectedCategories: ItemCategories.dirty(_item.categories)));
+
     // TODO
     _categories = await _itemCategoryService.getCategories();
 
