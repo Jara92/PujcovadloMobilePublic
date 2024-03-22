@@ -84,7 +84,7 @@
   "item_photo_gallery_title": "Fotogalerie",
   "item_photo_gallery_description": "Přidejte až 8 fotek. Kliknutím na hvězdičku můžete nastavit hlavní fotku.",
   "item_main_image": "Hlavní fotka",
-  "item_prices_page_title": "Ceny",
+  "item_prices_page_title": "Cena položky",
   "item_prices_page_description": "Nastavte cenu za půjčení a případně i za koupi položky. ",
   "item_price_per_day_title": "Cena za den [Kč]",
   "item_price_per_day_hint_text": "Např. 100",

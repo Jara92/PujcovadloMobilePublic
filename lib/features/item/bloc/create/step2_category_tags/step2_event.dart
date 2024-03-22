@@ -9,12 +9,6 @@ class Step2InitialEvent extends Step2Event {
   const Step2InitialEvent();
 }
 
-class SelectedOptionsChanged extends Step2Event {
-  final List<int> selectedOptions;
-
-  const SelectedOptionsChanged(this.selectedOptions) : super();
-}
-
 class SearchTextUpdated extends Step2Event {
   final String searchText;
 

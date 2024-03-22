@@ -67,11 +67,7 @@ class Step5Bloc extends Bloc<Step5Event, Step5State> {
 
   void _onNextStep(NextStepEvent event, Emitter<Step5State> emit) {
     // Validate the form
-    if (Formz.validate([
-      state.pricePerDay,
-      state.refundableDeposit,
-      state.sellingPrice,
-    ])) {
+    if (state.isValid) {
       _item.pricePerDay = state.pricePerDay.value;
       _item.refundableDeposit = state.refundableDeposit.value;
       _item.sellingPrice = state.sellingPrice.value;

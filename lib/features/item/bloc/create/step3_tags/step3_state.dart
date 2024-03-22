@@ -17,7 +17,6 @@ class Step3State {
   });
 
   Step3State copyWith({
-    bool? isValid,
     ItemTags? selectedTags,
     ItemTag? currentTag,
     List<String>? suggestedTags,

@@ -5,7 +5,6 @@ class Step2State {
   final List<ItemCategoryResponse> categories;
   final ItemCategories selectedCategories;
 
-  // todo: fix this
   bool get isValid => selectedCategories.isValid;
 
   const Step2State({
@@ -14,7 +13,6 @@ class Step2State {
   });
 
   Step2State copyWith({
-    bool? isValid,
     List<ItemCategoryResponse>? categories,
     ItemCategories? selectedCategories,
   }) {

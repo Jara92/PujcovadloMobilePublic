@@ -9,8 +9,8 @@ class Step4State {
   /*final ItemImage? mainImage;*/
   final int? mainImageIndex;
 
-  /* Always true because we dont require images */
-  bool get isValid => true;
+  /* True if maximum is not exceeded */
+  bool get isValid => maximumImagesExceeded == false;
 
   const Step4State({
     this.images = const [],
@@ -18,7 +18,6 @@ class Step4State {
   });
 
   Step4State copyWith({
-    bool? isValid,
     List<ItemImage>? images,
     int? mainImage,
   }) {

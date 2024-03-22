@@ -15,7 +15,6 @@ class Step1State {
   Step1State copyWith({
     ItemName? name,
     ItemDescription? description,
-    bool? isValid,
   }) {
     return Step1State(
       name: name ?? this.name,

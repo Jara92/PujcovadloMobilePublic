@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:formz/formz.dart';
 import 'package:meta/meta.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
 import 'package:pujcovadlo_client/features/item/models/models.dart';
@@ -37,7 +36,6 @@ class Step1Bloc extends Bloc<Step1Event, Step1State> {
     // Emit new state
     emit(state.copyWith(
       name: name,
-      isValid: Formz.validate([name]),
     ));
   }
 
@@ -49,12 +47,11 @@ class Step1Bloc extends Bloc<Step1Event, Step1State> {
     // Emit new state
     emit(state.copyWith(
       description: description,
-      isValid: Formz.validate([description]),
     ));
   }
 
   void _onNextStep(NextStepEvent event, Emitter<Step1State> emit) {
-    if (state.name.isValid && state.description.isValid) {
+    if (state.isValid) {
       _item.name = state.name.value;
       _item.description = state.description.value;
 

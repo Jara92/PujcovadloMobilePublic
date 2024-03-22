@@ -92,7 +92,7 @@ class Step4Bloc extends Bloc<Step4Event, Step4State> {
   }
 
   void _onNextStep(NextStepEvent event, Emitter<Step4State> emit) {
-    if (true) {
+    if (state.isValid) {
       // Set images to the item
       _item.images = state.images
           .map((img) => ImageRequest(

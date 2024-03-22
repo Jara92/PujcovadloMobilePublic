@@ -27,7 +27,6 @@ class Step2Bloc extends Bloc<Step2Event, Step2State> {
     on<Step2InitialEvent>(_onInitialEvent);
     on<SearchTextUpdated>(_onSearchTextUpdated);
     on<CategoryOptionSelected>(_onCategoryOptionSelected);
-    on<SelectedOptionsChanged>(_onSelectedOptionsChanged);
     on<NextStepEvent>(_onNextStep);
     on<PreviousStepEvent>(_onPreviousStep);
   }
@@ -70,17 +69,8 @@ class Step2Bloc extends Bloc<Step2Event, Step2State> {
     emit(state.copyWith(selectedCategories: selectedCategories));
   }
 
-  void _onSelectedOptionsChanged(
-      SelectedOptionsChanged event, Emitter<Step2State> emit) {
-    /* final selectedOptions = event.selectedOptions;
-
-    emit(state.copyWith(selectedCategories: selectedOptions));
-
-    print(selectedOptions);*/
-  }
-
   void _onNextStep(NextStepEvent event, Emitter<Step2State> emit) {
-    if (state.selectedCategories.isValid) {
+    if (state.isValid) {
       _item.categories = state.selectedCategories.value;
       _createItemBloc.add(const MoveToStepEvent(step3_tags));
     }
