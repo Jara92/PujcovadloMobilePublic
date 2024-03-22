@@ -107,8 +107,10 @@ class _Step5State extends State<Step5> {
             // Update text fields and round the values so the decimal part is hidden
             _controllerPricePerDay.text =
                 state.pricePerDay.value?.round().toString() ?? "";
-            /*_controllerRefundableDeposit.text = state.refundableDeposit.value?.round().toString() ?? "";
-            _controllerSellingPrice.text = state.sellingPrice.value?.round().toString() ?? "";*/
+            _controllerRefundableDeposit.text =
+                state.refundableDeposit.value?.round().toString() ?? "";
+            _controllerSellingPrice.text =
+                state.sellingPrice.value?.round().toString() ?? "";
           },
           builder: (context, state) {
             return FormContainer(
