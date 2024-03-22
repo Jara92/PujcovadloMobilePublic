@@ -15,6 +15,7 @@ class CreateItemBloc extends Bloc<CreateItemEvent, CreateItemState> {
         ItemRequest(
           name: "Testovací",
           description: "Testovací popis na testy",
+          pricePerDay: 100,
           categories: [1],
           images: [],
           tags: ["Vrtačka", "Šroubovák"],

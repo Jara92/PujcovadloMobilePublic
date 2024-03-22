@@ -105,7 +105,7 @@ class Step4Bloc extends Bloc<Step4Event, Step4State> {
           ? _item.images[state.mainImageIndex!]
           : null;
 
-      _createItemBloc.add(const MoveToStepEvent(step4_gallery));
+      _createItemBloc.add(const MoveToStepEvent(step5_prices));
     }
   }
 

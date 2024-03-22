@@ -5,6 +5,10 @@ class ItemRequest{
   String? name;
   String? description;
 
+  double? pricePerDay;
+  double? refundableDeposit;
+  double? sellingPrice;
+
   List<ImageRequest> images;
   ImageRequest? mainImage;
   List<String> tags;
@@ -14,6 +18,9 @@ class ItemRequest{
     this.id,
     this.name,
     this.description,
+    this.pricePerDay,
+    this.refundableDeposit,
+    this.sellingPrice,
     this.images = const [],
     this.mainImage,
     this.tags = const [],

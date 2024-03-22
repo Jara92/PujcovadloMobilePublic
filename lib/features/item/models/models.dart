@@ -2,5 +2,8 @@ export 'item_categories.dart';
 export 'item_description.dart';
 export 'item_image.dart';
 export 'item_name.dart';
+export 'item_price_per_day.dart';
+export 'item_refundable_deposit.dart';
+export 'item_selling_price.dart';
 export 'item_tag.dart';
 export 'item_tags.dart';
