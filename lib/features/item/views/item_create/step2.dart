@@ -4,6 +4,8 @@ import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/step2_category_tags/step2_bloc.dart';
+import 'package:pujcovadlo_client/features/item/models/item_categories.dart';
+import 'package:pujcovadlo_client/features/item/responses/item_category_response.dart';
 
 class Step2 extends StatefulWidget {
   const Step2({super.key});
@@ -14,17 +16,36 @@ class Step2 extends StatefulWidget {
 
 class _Step2State extends State<Step2> {
   late final MultiSelectController _categoriesController;
+  late final TextEditingController _searchController;
 
   @override
   void initState() {
     super.initState();
     _categoriesController = MultiSelectController();
+    _searchController = TextEditingController();
   }
 
   @override
   void dispose() {
     _categoriesController.dispose();
+    _searchController.dispose();
     super.dispose();
+  }
+
+  String? _localizeCategoriesError(
+      BuildContext context, ItemCategories categories) {
+    if (categories.isPure || categories.isValid) {
+      return null;
+    }
+
+    switch (categories.error) {
+      case ItemCategoriesValidationError.tooManyCategories:
+        return context.loc.item_categories_verror_too_many_categories;
+      case ItemCategoriesValidationError.notEnoughtCategories:
+        return context.loc.item_categories_verror_not_enough_categories;
+      case null:
+        return null;
+    }
   }
 
   @override
@@ -85,63 +106,80 @@ class _Step2State extends State<Step2> {
                           ],
                         ),
                         const SizedBox(height: 20),
-                        //SizedBox(height: 20),
-                        Wrap(
-                          direction: Axis.horizontal,
-                          children: [
-                            MultiSelectDropDown(
-                              controller: _categoriesController,
-                              searchLabel:
-                                  context.loc.item_categories_search_text,
-                              hint: context.loc.item_categories_hint_text,
-                              hintColor: Colors.black,
-                              inputDecoration: BoxDecoration(
-                                border: Border.all(color: Colors.black54),
-                                borderRadius: BorderRadius.circular(5.0),
+                        SearchBar(
+                          controller: _searchController,
+                          leading: const Icon(Icons.search),
+                          trailing: <Widget>[
+                            Tooltip(
+                              message:
+                                  context.loc.item_categories_search_tooltip,
+                              child: IconButton(
+                                isSelected: false,
+                                onPressed: () {
+                                  _searchController.clear();
+                                  context
+                                      .read<Step2Bloc>()
+                                      .add(const SearchTextUpdated(""));
+                                },
+                                icon: const Icon(Icons.clear),
+                                selectedIcon: const Icon(Icons.manage_search),
                               ),
-                              //dropdownHeight: 300,
-                              clearIcon: const Icon(Icons.close),
-                              selectedOptionIcon:
-                                  const Icon(Icons.check_circle),
-                              onOptionSelected: (options) => context
-                                  .read<Step2Bloc>()
-                                  .add(SelectedOptionsChanged(options
-                                      .map((e) => e.value as int)
-                                      .toList())),
-                              options: state.categories
-                                  .map((e) =>
-                                      ValueItem(label: e.name, value: e.id))
-                                  .toList(),
-                              maxItems: 10,
-                              // TODO
-                              searchEnabled: true,
-                              selectionType: SelectionType.multi,
-                              searchBackgroundColor: Colors.white,
-                              dropdownBackgroundColor: Colors.white,
-                              chipConfig: ChipConfig(
-                                spacing: 10,
-                                runSpacing: 0,
-                                autoScroll: true,
-                                //separator: Text("|"),
-                                wrapType: WrapType.wrap,
-                                backgroundColor: Theme.of(context)
-                                    .colorScheme
-                                    .onInverseSurface,
-                                deleteIcon: const Icon(
-                                  Icons.close,
-                                  size: 19,
-                                ),
-                                deleteIconColor: Colors.black87,
-                                radius: 8,
-                                labelStyle: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontSize: 11),
-                              ),
-                              //dropdownHeight: 300,
-                              optionTextStyle: const TextStyle(fontSize: 12),
-                            ),
+                            )
                           ],
+                          padding: const MaterialStatePropertyAll<EdgeInsets>(
+                              EdgeInsets.symmetric(horizontal: 16.0)),
+                          onChanged: (String value) {
+                            context
+                                .read<Step2Bloc>()
+                                .add(SearchTextUpdated(value));
+                          },
+                          hintText: context.loc.item_searching_in_categories,
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            if (state.selectedCategories.isValid ||
+                                state.selectedCategories.isPure)
+                              Text(
+                                textAlign: TextAlign.left,
+                                context.loc.item_selected_categories_count(
+                                    state.selectedCategories.value.length),
+                                style: Theme.of(context).textTheme.labelSmall,
+                              ),
+                            if (state.selectedCategories.isNotValid &&
+                                !state.selectedCategories.isPure)
+                              Text(
+                                _localizeCategoriesError(
+                                    context, state.selectedCategories)!,
+                                textAlign: TextAlign.left,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelSmall!
+                                    .copyWith(
+                                      color:
+                                          Theme.of(context).colorScheme.error,
+                                    ),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 15),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Wrap(
+                            spacing: 5.0,
+                            children: state.categories
+                                .map((ItemCategoryResponse exercise) {
+                              return FilterChip(
+                                label: Text(exercise.name),
+                                selected: state.selectedCategories.value
+                                    .contains(exercise.id),
+                                onSelected: (bool selected) => context
+                                    .read<Step2Bloc>()
+                                    .add(CategoryOptionSelected(
+                                        exercise.id, selected)),
+                              );
+                            }).toList(),
+                          ),
                         ),
                       ],
                     ),

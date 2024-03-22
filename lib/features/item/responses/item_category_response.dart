@@ -10,12 +10,15 @@ class ItemCategoryResponse extends Equatable {
 
   final String alias;
 
+  final int? parentId;
+
   final List<LinkResponse> links;
 
   const ItemCategoryResponse({
     required this.id,
     required this.name,
     required this.alias,
+    this.parentId,
     this.links = const [],
   });
 
@@ -24,6 +27,7 @@ class ItemCategoryResponse extends Equatable {
       id: json['id'] as int,
       name: json['name'] as String,
       alias: json['alias'] as String,
+      parentId: json['parentId'] as int?,
       links: (json['_links'] as List<Object>)
           .map((e) => LinkResponse.fromJson(e as Map<String, Object>))
           .toList(),
@@ -31,5 +35,5 @@ class ItemCategoryResponse extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, name, alias];
+  List<Object?> get props => [id, name, alias, parentId];
 }

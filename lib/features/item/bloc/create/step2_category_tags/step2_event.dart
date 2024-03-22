@@ -15,6 +15,19 @@ class SelectedOptionsChanged extends Step2Event {
   const SelectedOptionsChanged(this.selectedOptions) : super();
 }
 
+class SearchTextUpdated extends Step2Event {
+  final String searchText;
+
+  const SearchTextUpdated(this.searchText) : super();
+}
+
+class CategoryOptionSelected extends Step2Event {
+  final int categoryId;
+  final bool isChecked;
+
+  const CategoryOptionSelected(this.categoryId, this.isChecked) : super();
+}
+
 class NextStepEvent extends Step2Event {
   const NextStepEvent();
 }

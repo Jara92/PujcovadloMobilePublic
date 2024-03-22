@@ -35,6 +35,16 @@
   "item_name_helper_text": "Název položky by měl být stručný a výstižný. ",
   "item_categories_page_title": "Kategorie",
   "item_categories_page_description": "Vyberte alespoň jednu kategorii, do které patří Vaše položka. Správným výběrem kategorií zvýšíte šanci, že Vaši položku najdou ostatní uživatelé.",
+  "item_searching_in_categories": "Hledání v kategoriích",
+  "item_selected_categories_count": "Vybráno {count} kategorií",
+  "@item_selected_categories_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "item_categories_search_tooltip": "Smazat hledání",
   "item_description_title": "Popis položky",
   "item_description_hint_text": "Např. popis parametrů, stavu, výbavy, možností využití, možností výpůjčení...",
   "item_description_helper_text": "Popis by měl obsahovat všechny důležité informace, které by mohly zajímat ostatní uživatele. ",
@@ -42,6 +52,8 @@
   "item_categories_hint_text": "Vyberte kategorie",
   "item_categories_search_text": "Např. nářadí, sportovní pomůcky...",
   "item_categories_select_at_least_one": "Vyberte alespoň jednu kategorii.",
+  "item_categories_verror_too_many_categories": "Můžete vybrat maximálně 5 kategorií.",
+  "item_categories_verror_not_enough_categories": "Vyberte alespoň jednu kategorii.",
   "item_tags_page_title": "Tagy",
   "item_tags_page_description": "Přidejte alespoň jeden tag, který vystihuje Vaší položku. Více tagů zvyšuje šanci, že Vaši položku najdou ostatní uživatelé.",
   "item_tags_page_description_2": "Začněte psát a vyberte si z existujících tagů nebo přidejte vlastní. Můžete přiřadit až 10 tagů.",
