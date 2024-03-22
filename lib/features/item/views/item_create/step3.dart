@@ -234,6 +234,9 @@ class _Step3State extends State<Step3> {
                             ),
                           ],
                         ),
+                        const SizedBox(
+                          height: 10,
+                        ),
                         Align(
                           alignment: Alignment.topLeft,
                           child: Wrap(

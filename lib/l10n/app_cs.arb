@@ -48,6 +48,7 @@
     }
   },
   "item_categories_search_tooltip": "Smazat hledání",
+  "item_categories_no_seach_results": "Žádná kategorie neodpovídá vyhledání. Zkuste zadat jiný výraz nebo výraz přidejte mezi tagy v následujícím kroku.",
   "item_description_title": "Popis položky",
   "item_description_hint_text": "Např. popis parametrů, stavu, výbavy, možností využití, možností výpůjčení...",
   "item_description_helper_text": "Popis by měl obsahovat všechny důležité informace, které by mohly zajímat ostatní uživatele. ",

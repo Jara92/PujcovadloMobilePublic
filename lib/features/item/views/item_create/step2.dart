@@ -165,24 +165,51 @@ class _Step2State extends State<Step2> {
                           ],
                         ),
                         const SizedBox(height: 15),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Wrap(
-                            spacing: 5.0,
-                            children: state.categories
-                                .map((ItemCategoryResponse exercise) {
-                              return FilterChip(
-                                label: Text(exercise.name),
-                                selected: state.selectedCategories.value
-                                    .contains(exercise.id),
-                                onSelected: (bool selected) => context
-                                    .read<Step2Bloc>()
-                                    .add(CategoryOptionSelected(
-                                        exercise.id, selected)),
-                              );
-                            }).toList(),
-                          ),
-                        ),
+                        (state.categories.isEmpty)
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                      height: 250,
+                                      width: 250,
+                                      child: Center(
+                                          child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.search,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            size: 100,
+                                          ),
+                                          Text(
+                                            context.loc
+                                                .item_categories_no_seach_results,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ))),
+                                ],
+                              )
+                            : Align(
+                                alignment: Alignment.topLeft,
+                                child: Wrap(
+                                  spacing: 5.0,
+                                  children: state.categories
+                                      .map((ItemCategoryResponse exercise) {
+                                    return FilterChip(
+                                      label: Text(exercise.name),
+                                      selected: state.selectedCategories.value
+                                          .contains(exercise.id),
+                                      onSelected: (bool selected) => context
+                                          .read<Step2Bloc>()
+                                          .add(CategoryOptionSelected(
+                                              exercise.id, selected)),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
                       ],
                     ),
                   ),
