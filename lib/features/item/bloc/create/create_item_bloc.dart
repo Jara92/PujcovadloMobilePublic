@@ -10,7 +10,8 @@ part 'create_item_steps.dart';
 class CreateItemBloc extends Bloc<CreateItemEvent, CreateItemState> {
   late final ItemRequest item;
 
-  CreateItemBloc({ItemRequest? item}) : super(InitialState()) {
+  CreateItemBloc(ItemRequest? item) : super(const InitialState()) {
+    // TODO: debug only
     this.item = item ??
         ItemRequest(
           name: "Testovací",

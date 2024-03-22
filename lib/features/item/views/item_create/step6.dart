@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/preview/preview_bloc.dart';
+import 'package:pujcovadlo_client/features/item/views/item_create/summary.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_create/form_container.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_create/preview_widget.dart';
 
@@ -105,10 +106,12 @@ class _Step6State extends State<Step6> {
                   ElevatedButton.icon(
                     icon: const Icon(Icons.send),
                     label: Text(context.loc.publish),
-                    onPressed: state.isValid
-                        ? () => context
-                            .read<PreviewBloc>()
-                            .add(const NextStepEvent())
+                    onPressed: () => state.data != null
+                        ? Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => Summary(item: state.data!),
+                            ),
+                          )
                         : null,
                   ),
                 ],

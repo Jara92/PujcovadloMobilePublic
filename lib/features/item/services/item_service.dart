@@ -391,6 +391,8 @@ class ItemService {
   }
 
   Future<ItemDetailResponse> createItem(ItemRequest request) async {
+    await Future.delayed(Duration(milliseconds: 1700));
+
     int id = 20;
 
     // Create item on the server
@@ -411,7 +413,8 @@ class ItemService {
         pricePerDay: 100.0,
         refundableDeposit: 100.0,
         sellingPrice: 100.0,
-        createdAt: DateTime.now());
+      createdAt: DateTime.now(),
+    );
   }
 
   Future<ItemDetailResponse> updateItem(ItemRequest item) async {
