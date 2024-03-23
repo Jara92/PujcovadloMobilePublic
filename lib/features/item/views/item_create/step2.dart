@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/step2_category_tags/step2_bloc.dart';
@@ -16,19 +15,16 @@ class Step2 extends StatefulWidget {
 }
 
 class _Step2State extends State<Step2> {
-  late final MultiSelectController _categoriesController;
   late final TextEditingController _searchController;
 
   @override
   void initState() {
     super.initState();
-    _categoriesController = MultiSelectController();
     _searchController = TextEditingController();
   }
 
   @override
   void dispose() {
-    _categoriesController.dispose();
     _searchController.dispose();
     super.dispose();
   }
