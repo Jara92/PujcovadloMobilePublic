@@ -5,11 +5,11 @@ class LinkResponse {
 
   LinkResponse({required this.href, required this.rel, required this.method});
 
-  factory LinkResponse.fromJson(Map<String, Object> json) {
+  factory LinkResponse.fromJson(Map<String, dynamic> json) {
     return LinkResponse(
-      href: json['href'] as String?,
-      rel: json['rel'] as String,
-      method: json['method'] as String,
+      href: json['Href'] as String,
+      rel: json['Rel'] as String,
+      method: json['Method'] as String,
     );
   }
 }

@@ -1,7 +1,7 @@
-import 'package:flutter/foundation.dart';
+import 'package:pujcovadlo_client/core/responses/image_response.dart';
+import 'package:pujcovadlo_client/core/responses/link_response.dart';
 import 'package:pujcovadlo_client/features/authentication/responses/user_response.dart';
-import '../enums/item_status.dart';
-import '../../../core/responses/image_response.dart';
+import 'package:pujcovadlo_client/features/item/enums/item_status.dart';
 
 class ItemResponse {
   int id;
@@ -26,7 +26,7 @@ class ItemResponse {
 
   ImageResponse? mainImage;
 
-  //IList<LinkResponse> links = new List<LinkResponse>();
+  List<LinkResponse> links;
 
   ItemResponse({
     required this.id,
@@ -41,24 +41,27 @@ class ItemResponse {
     required this.owner,
     this.mainImage,
     //this.images,
-    //this.links
+    this.links = const [],
   });
 
-  factory ItemResponse.fromJson(Map<String, Object> json) {
+  factory ItemResponse.fromJson(Map<String, dynamic> json) {
     return ItemResponse(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      alias: json['alias'] as String,
-      status: ItemStatusExtension.fromValue(json['status'] as int),
-      pricePerDay: json['pricePerDay'] as double,
-      refundableDeposit: json['refundableDeposit'] as double?,
-      sellingPrice: json['sellingPrice'] as double?,
-      owner: UserResponse.fromJson(json['owner'] as Map<String, Object>),
-      latitude: json['latitude'] as double?,
-      longitude: json['longitude'] as double?,
-      mainImage: json['mainImage'] != null
-          ? ImageResponse.fromJson(json['mainImage'] as Map<String, Object>)
+      id: json['Id'] as int,
+      name: json['Name'] as String,
+      alias: json['Alias'] as String,
+      status: ItemStatusExtension.fromValue(json['Status'] as int),
+      pricePerDay: json['PricePerDay']?.toDouble(),
+      refundableDeposit: json['RefundableDeposit']?.toDouble(),
+      sellingPrice: json['SellingPrice']?.toDouble(),
+      owner: UserResponse.fromJson(json['Owner'] as Map<String, dynamic>),
+      latitude: json['Latitude']?.toDouble(),
+      longitude: json['Longitude']?.toDouble(),
+      mainImage: json['MainImage'] != null
+          ? ImageResponse.fromJson(json['MainImage'] as Map<String, dynamic>)
           : null,
+      links: (json['_links'] as List)
+          .map((e) => LinkResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 }

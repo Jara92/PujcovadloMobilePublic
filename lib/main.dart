@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -5,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'dart:io' show Platform;
 import 'package:pujcovadlo_client/config.dart';
 import 'package:pujcovadlo_client/core/bloc/application_bloc.dart';
 import 'package:pujcovadlo_client/core/constants/routes.dart';
@@ -91,6 +92,8 @@ Future loadConfiguration() {
 void registerDependencies() {
   GetIt locator = GetIt.instance;
   locator.registerSingleton<Config>(Config());
+  locator.registerSingleton<HttpService>(HttpService());
+
   locator.registerSingleton<ItemService>(ItemService());
   locator.registerSingleton<ItemCategoryService>(ItemCategoryService());
   locator.registerSingleton<ItemTagService>(ItemTagService());

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pujcovadlo_client/core/custom_colors.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
+import 'package:pujcovadlo_client/core/widgets/item_placeholder_image.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -17,11 +18,13 @@ class ItemListTileWidget extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            flex: 3,
-            child: Container(
+              flex: 3,
+              child: Container(
                 padding: const EdgeInsets.only(right: 0),
+
+                /// TODO: placeholder when cannot load the image
                 child: item.mainImage?.url == null
-                    ? Image.asset("images/item_placeholder.png")
+                    ? const ItemPlaceholderImage()
                     : FadeInImage.memoryNetwork(
                         placeholder: kTransparentImage,
                         // TODO: add url of placeholder image??
@@ -29,8 +32,9 @@ class ItemListTileWidget extends StatelessWidget {
                         width: 100,
                         height: 100,
                         fit: BoxFit.cover,
-                      )),
-          ),
+                        imageErrorBuilder: (context, error, stackTrace) =>
+                            const ItemPlaceholderImage()),
+              )),
           Expanded(
             flex: 7,
             child: Container(

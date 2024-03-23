@@ -23,18 +23,18 @@ class UserResponse {
     this.links = const [],
   });
 
-  factory UserResponse.fromJson(Map<String, Object> json) {
+  factory UserResponse.fromJson(Map<String, dynamic> json) {
     return UserResponse(
-      id: json['id'] as String,
-      username: json['username'] as String,
-      firstName: json['firstName'] as String,
-      lastName: json['lastName'] as String,
-      profile: json['profile'] != null
+      id: json['Id'] as String,
+      username: json['Username'] as String,
+      firstName: json['FirstName'] as String,
+      lastName: json['LastName'] as String,
+/*      profile: json['Profile'] != null
           ? ProfileResponse.fromJson(json['profile'] as Map<String, Object>)
           : null,
-      links: (json['links'] as List<Object>)
+      links: (json['Links'] as List<Object>)
           .map((e) => LinkResponse.fromJson(e as Map<String, Object>))
-          .toList(),
+          .toList(),*/
     );
   }
 }
