@@ -44,3 +44,5 @@ app.*.map.json
 
 # Configuration files
 .env
+.env.ios
+.env.android

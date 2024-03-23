@@ -1,13 +1,16 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:pujcovadlo_client/Config.dart';
+import 'dart:io' show Platform;
+import 'package:pujcovadlo_client/config.dart';
 import 'package:pujcovadlo_client/core/bloc/application_bloc.dart';
 import 'package:pujcovadlo_client/core/constants/routes.dart';
 import 'package:pujcovadlo_client/core/custom_colors.dart';
+import 'package:pujcovadlo_client/core/services/http_service.dart';
 import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
 import 'package:pujcovadlo_client/features/item/services/item_category_service.dart';
 import 'package:pujcovadlo_client/features/item/services/item_service.dart';
@@ -16,9 +19,7 @@ import 'package:pujcovadlo_client/features/item/views/item_list_view.dart';
 import 'package:pujcovadlo_client/features/profiles/views/my_profile_view.dart';
 
 Future<void> main() async {
-  // To load the .env file contents into dotenv.
-  await dotenv.load(fileName: ".env");
-
+  await loadConfiguration();
   registerDependencies();
   debugPaintSizeEnabled = false;
 
@@ -72,6 +73,19 @@ Future<void> main() async {
           itemsListRoute: (context) => ItemListView(),
         },
       )));
+}
+
+// load the .env file contents into dotenv.
+Future loadConfiguration() {
+  if (kDebugMode) {
+    if (Platform.isIOS) {
+      return dotenv.load(fileName: ".env.ios");
+    } else if (Platform.isAndroid) {
+      return dotenv.load(fileName: ".env.android");
+    }
+  }
+
+  return dotenv.load(fileName: ".env");
 }
 
 void registerDependencies() {
