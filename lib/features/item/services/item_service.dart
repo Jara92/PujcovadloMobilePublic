@@ -1,3 +1,5 @@
+import 'package:get_it/get_it.dart';
+import 'package:pujcovadlo_client/Config.dart';
 import 'package:pujcovadlo_client/features/authentication/responses/user_response.dart';
 import 'package:pujcovadlo_client/features/profiles/responses/profile_aggregations.dart';
 import 'package:pujcovadlo_client/features/profiles/responses/profile_response.dart';
@@ -9,6 +11,8 @@ import '../responses/item_detail_response.dart';
 import '../responses/item_response.dart';
 
 class ItemService {
+  final Config config = GetIt.instance.get<Config>();
+
   Future<List<ItemResponse>> getItems() async {
     // Simulate a delay of 2 seconds (adjust as needed)
     //await Future.delayed(Duration(milliseconds: 1700));
