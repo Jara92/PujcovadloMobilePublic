@@ -34,6 +34,7 @@ class SummaryBloc extends Bloc<SummaryEvent, SummaryState> {
     try {
       final response = await _trySave(item);
 
+      // TODO: Dont pass full response because when updating we dont have all the data
       emit(SuccessState(response: response));
     } on Exception catch (e) {
       emit(ErrorState(error: e));

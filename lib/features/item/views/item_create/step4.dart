@@ -66,8 +66,6 @@ class _Step4State extends State<Step4> {
 
               // get image from gallery
               _addImageFromGallery(callback);
-
-              print(context);
             },
           ),
           CupertinoActionSheetAction(

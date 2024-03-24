@@ -18,10 +18,11 @@ class HttpService {
   }
 
   /// Sends a HTTP GET request.
-  Future<Response> get(
-      {required Uri uri,
-      bool sendAuthorizationToken = true,
-      Map<String, String> headers = const {}}) async {
+  Future<Response> get({
+    required Uri uri,
+    bool sendAuthorizationToken = true,
+    Map<String, String> headers = const {},
+  }) async {
     return http.get(
       uri,
       headers: _buildHeaders(
