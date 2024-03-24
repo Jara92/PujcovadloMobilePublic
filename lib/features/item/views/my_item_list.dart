@@ -111,7 +111,6 @@ class _MyItemListState extends State<MyItemList> {
       child: ItemListWidget(
         items: state.items,
         isLastPage: state.isLastPage,
-        // todo
         itemBuilder: (context, item) => MyItemListTileWidget(item: item),
         onItemTap: (ItemResponse item) {
           // TODO: link to item edit

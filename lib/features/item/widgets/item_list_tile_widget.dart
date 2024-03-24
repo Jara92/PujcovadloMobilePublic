@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
-import 'package:pujcovadlo_client/core/widgets/item_placeholder_image.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
+import 'package:pujcovadlo_client/features/item/widgets/item_main_image.dart';
 import 'package:pujcovadlo_client/features/profiles/widgets/profile_rating_widget.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class ItemListTileWidget extends StatelessWidget {
   final ItemResponse item;
@@ -21,19 +20,7 @@ class ItemListTileWidget extends StatelessWidget {
               flex: 3,
               child: Container(
                 padding: const EdgeInsets.only(right: 0),
-
-                /// TODO: placeholder when cannot load the image
-                child: item.mainImage?.url == null
-                    ? const ItemPlaceholderImage()
-                    : FadeInImage.memoryNetwork(
-                        placeholder: kTransparentImage,
-                        // TODO: add url of placeholder image??
-                        image: item.mainImage?.url ?? '',
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                        imageErrorBuilder: (context, error, stackTrace) =>
-                            const ItemPlaceholderImage()),
+                child: ItemMainImage(item: item),
               )),
           Expanded(
             flex: 7,

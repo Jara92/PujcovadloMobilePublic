@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:pujcovadlo_client/features/item/widgets/item_main_image.dart';
 
 class MyItemListTileWidget extends StatelessWidget {
   final ItemResponse item;
@@ -16,20 +16,11 @@ class MyItemListTileWidget extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            flex: 3,
-            child: Container(
+              flex: 3,
+              child: Container(
                 padding: const EdgeInsets.only(right: 0),
-                child: item.mainImage?.url == null
-                    ? Image.asset("images/item_placeholder.png")
-                    : FadeInImage.memoryNetwork(
-                        placeholder: kTransparentImage,
-                        // TODO: add url of placeholder image??
-                        image: item.mainImage?.url ?? '',
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      )),
-          ),
+                child: ItemMainImage(item: item),
+              )),
           Expanded(
             flex: 7,
             child: Container(
