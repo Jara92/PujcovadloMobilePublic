@@ -1,11 +1,16 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart' show immutable;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pujcovadlo_client/core/responses/response_list.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 part 'list_event.dart';
 part 'list_state.dart';
+
+EventTransformer<Event> debounce<Event>(Duration duration) {
+  return (events, mapper) => events.debounce(duration).switchMap(mapper);
+}
 
 abstract class ListBloc<TData, TState extends ListState<TData>>
     extends Bloc<ListEvent<TData>, TState> {
@@ -13,7 +18,7 @@ abstract class ListBloc<TData, TState extends ListState<TData>>
 
   ListBloc(super.initState) {
     on<InitialEvent<TData>>(onInitialEvent);
-    on<ReloadItemsEvent<TData>>(onReloadItems);
+    on<ReloadItemsEvent<TData>>(onReloadItemsEvent);
     on<LoadMoreEvent<TData>>(onLoadMoreEvent);
   }
 
@@ -22,13 +27,16 @@ abstract class ListBloc<TData, TState extends ListState<TData>>
     add(const ReloadItemsEvent());
   }
 
-  Future<void> onReloadItems(
+  Future<void> onReloadItemsEvent(
       ListEvent<TData> event, Emitter<TState> emit) async {
     throw UnimplementedError();
   }
 
   Future<void> reloadItems(ListEvent event, Emitter<TState> emit,
       Future<ResponseList<TData>> Function() fetcher) async {
+    // Emit waiting state
+    emit(state.copyWith(status: ListStateEnum.loading) as TState);
+
     try {
       // Load items
       var items = await fetcher.call();

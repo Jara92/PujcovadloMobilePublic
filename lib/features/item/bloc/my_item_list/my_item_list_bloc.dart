@@ -18,7 +18,10 @@ class MyItemListBloc extends ListBloc<ItemResponse, MyItemListState> {
   late final ItemFilter myItemsFilter;
 
   MyItemListBloc() : super(const InitialState()) {
-    on<SearchTextUpdated>(_onSearchTextUpdated);
+    on<SearchTextUpdated>(
+      _onSearchTextUpdated,
+      transformer: debounce(const Duration(milliseconds: 500)),
+    );
   }
 
   @override
@@ -30,17 +33,16 @@ class MyItemListBloc extends ListBloc<ItemResponse, MyItemListState> {
     super.onInitialEvent(event, emit);
   }
 
-  Future<void> _onSearchTextUpdated(
+  void _onSearchTextUpdated(
       SearchTextUpdated event, Emitter<MyItemListState> emit) {
     emit(state.copyWith(search: event.searchText));
-
     myItemsFilter.search = event.searchText;
 
-    return onReloadItems(event, emit);
+    add(const ReloadItemsEvent());
   }
 
   @override
-  Future<void> onReloadItems(
+  Future<void> onReloadItemsEvent(
       ListEvent<ItemResponse> event, Emitter<MyItemListState> emit) async {
     return reloadItems(
         event, emit, () => itemService.getItems(filter: myItemsFilter));

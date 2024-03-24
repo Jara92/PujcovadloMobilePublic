@@ -55,6 +55,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
   http: ^1.2.1
   paginated_list: ^1.2.3
+  stream_transform: ^2.1.0
 
 dev_dependencies:
   flutter_test:
