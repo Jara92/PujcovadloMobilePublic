@@ -17,12 +17,20 @@ class ItemService {
   final Config config = GetIt.instance.get<Config>();
   final HttpService http = GetIt.instance.get<HttpService>();
 
-  Future<List<ItemResponse>> getItems({ItemFilter? filter}) async {
+  Future<ResponseList<ItemResponse>> getItems({ItemFilter? filter}) {
     filter ??= ItemFilter();
 
     var uri = Uri.parse("${config.apiEndpoint}/items")
         .replace(queryParameters: filter.toMap());
 
+    return _getItemsByUri(uri);
+  }
+
+  Future<ResponseList<ItemResponse>> getItemsByUri(String uri) {
+    return _getItemsByUri(Uri.parse(uri));
+  }
+
+  Future<ResponseList<ItemResponse>> _getItemsByUri(Uri uri) async {
     final response = await http.get(uri: uri);
 
     // Parse JSON if the server returned a 200 OK response
@@ -31,15 +39,13 @@ class ItemService {
           jsonDecode(response.body) as Map<String, dynamic>,
           ItemResponse.fromJson);
 
-      return data.data;
+      return data;
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception(
-          'Failed to load album: ${response.statusCode} ${response.body}');
+          'Failed to load items: ${response.statusCode} ${response.body}');
     }
-
-    return [];
   }
 
   List<ItemResponse> _myItems = [
@@ -170,14 +176,14 @@ class ItemService {
     ),
   ];
 
-  Future<List<ItemResponse>> getMyItems() async {
+/*  Future<List<ItemResponse>> getMyItems(ItemFilter filter) async {
     // Simulate a delay of 2 seconds (adjust as needed)
     //await Future.delayed(Duration(milliseconds: 1700));
     await Future.delayed(Duration(milliseconds: 500));
 
     // Fetch items from the server
     return _myItems;
-  }
+  }*/
 
   Future<ItemDetailResponse?> getItemByUri(String uri) {
     return _getItemByUri(Uri.parse(uri));

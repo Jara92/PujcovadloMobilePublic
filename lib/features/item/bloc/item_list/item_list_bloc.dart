@@ -1,6 +1,6 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart' show immutable;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:meta/meta.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
 import 'package:pujcovadlo_client/features/item/services/item_service.dart';
 
@@ -23,8 +23,7 @@ class ItemListBloc extends Bloc<ItemListEvent, ItemListState> {
 
       //this.items.addAll(items);
 
-      emit(ItemListLoaded(items: items, isLoading: false));
-
+      emit(ItemListLoaded(items: items.data, isLoading: false));
     });
   }
 }

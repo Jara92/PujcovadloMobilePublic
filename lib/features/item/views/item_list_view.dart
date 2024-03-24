@@ -70,6 +70,7 @@ class _ItemListViewState extends State<ItemListView> {
                           : Expanded(
                               child: ItemListWidget(
                                 items: state.items,
+                                isLastPage: state.isLastPage,
                                 itemBuilder: (context, item) =>
                                     ItemListTileWidget(item: item),
                                 onItemTap: (ItemResponse item) {
@@ -78,6 +79,9 @@ class _ItemListViewState extends State<ItemListView> {
                                       MaterialPageRoute(
                                           builder: (context) => ItemDetailView(item: item)));
                                 },
+                                onLoadMore: (index) => context
+                                    .read<ItemListBloc>()
+                                    .add(const LoadMoreEvent()),
                               ),
                             ),
                     ],

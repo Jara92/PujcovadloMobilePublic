@@ -1,5 +1,7 @@
 import 'package:pujcovadlo_client/core/responses/link_response.dart';
 
+export 'package:pujcovadlo_client/core/constants/link_rels.dart';
+
 class ResponseList<T> {
   final List<T> data;
   final List<LinkResponse> links;
@@ -17,5 +19,12 @@ class ResponseList<T> {
               json['_links'].map((x) => LinkResponse.fromJson(x)))
           : [],
     );
+  }
+
+  String? get nextPageLink {
+    return links
+        .where((element) => element.rel == LinkRels.next)
+        .firstOrNull
+        ?.href;
   }
 }
