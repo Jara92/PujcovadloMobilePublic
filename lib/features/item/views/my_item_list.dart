@@ -23,11 +23,11 @@ class MyItemList extends StatelessWidget {
                   builder: (context, state) {
                     Widget mainContent = const SizedBox.shrink();
 
-                    if (state.status == MyItemListStateEnum.loaded) {
+                    if (state.status == ListStateEnum.loaded) {
                       mainContent = _buildItemList(context, state);
                     }
 
-                    if (state.status == MyItemListStateEnum.loading) {
+                    if (state.status == ListStateEnum.loading) {
                       mainContent = const Expanded(
                           child: Center(child: CircularProgressIndicator()));
                     }

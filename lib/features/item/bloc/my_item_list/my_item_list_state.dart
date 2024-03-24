@@ -1,25 +1,20 @@
 part of 'my_item_list_bloc.dart';
 
-enum MyItemListStateEnum { initial, loading, loaded, error }
-
 @immutable
-class MyItemListState {
-  final MyItemListStateEnum status;
-  final List<ItemResponse> items;
-  final bool isLastPage;
-  final Exception? error;
+class MyItemListState extends ListState<ItemResponse> {
   final String search;
 
   const MyItemListState({
-    required this.status,
-    required this.items,
-    required this.isLastPage,
+    required super.status,
+    required super.items,
+    required super.isLastPage,
+    super.error,
     this.search = "",
-    this.error,
   });
 
+  @override
   MyItemListState copyWith({
-    MyItemListStateEnum? status,
+    ListStateEnum? status,
     List<ItemResponse>? items,
     bool? isLastPage,
     String? search,
@@ -38,7 +33,7 @@ class MyItemListState {
 class InitialState extends MyItemListState {
   const InitialState()
       : super(
-          status: MyItemListStateEnum.initial,
+          status: ListStateEnum.initial,
           items: const [],
           isLastPage: false,
         );
@@ -47,7 +42,7 @@ class InitialState extends MyItemListState {
 class ErrorState extends MyItemListState {
   const ErrorState({
     required super.error,
-    super.status = MyItemListStateEnum.error,
+    super.status = ListStateEnum.error,
     super.isLastPage = false,
     super.items = const [],
   }) : super();
@@ -56,7 +51,7 @@ class ErrorState extends MyItemListState {
 class LoadingState extends MyItemListState {
   const LoadingState()
       : super(
-          status: MyItemListStateEnum.loading,
+          status: ListStateEnum.loading,
           items: const [],
           isLastPage: false,
         );
@@ -65,6 +60,6 @@ class LoadingState extends MyItemListState {
 class LoadedState extends MyItemListState {
   const LoadedState({required super.items, required super.isLastPage})
       : super(
-          status: MyItemListStateEnum.loaded,
+          status: ListStateEnum.loaded,
         );
 }

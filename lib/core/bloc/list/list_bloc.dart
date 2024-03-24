@@ -1,0 +1,88 @@
+import 'dart:async';
+
+import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
+import 'package:pujcovadlo_client/core/responses/response_list.dart';
+
+part 'list_event.dart';
+part 'list_state.dart';
+
+abstract class ListBloc<TData, TState extends ListState<TData>>
+    extends Bloc<ListEvent<TData>, TState> {
+  String? nextPageLink;
+
+  ListBloc(super.initState) {
+    on<InitialEvent<TData>>(onInitialEvent);
+    on<ReloadItemsEvent<TData>>(onReloadItems);
+    on<LoadMoreEvent<TData>>(onLoadMoreEvent);
+  }
+
+  Future<void> onInitialEvent(
+      InitialEvent<TData> event, Emitter<TState> emit) async {
+    add(const ReloadItemsEvent());
+  }
+
+  Future<void> onReloadItems(
+      ListEvent<TData> event, Emitter<TState> emit) async {
+    throw UnimplementedError();
+  }
+
+  Future<void> reloadItems(ListEvent event, Emitter<TState> emit,
+      Future<ResponseList<TData>> Function() fetcher) async {
+    try {
+      // Load items
+      var items = await fetcher.call();
+
+      // Update next page link
+      nextPageLink = items.nextPageLink;
+
+      // Emit loaded state
+      emit(state.copyWith(
+        status: ListStateEnum.loaded,
+        items: items.data,
+        isLastPage: nextPageLink == null,
+      ) as TState);
+    } on Exception catch (e) {
+      // Emit error state
+      emit(state.copyWith(
+        status: ListStateEnum.error,
+        error: e,
+      ) as TState);
+    }
+  }
+
+  Future<void> onLoadMoreEvent(
+      LoadMoreEvent<TData> event, Emitter<TState> emit) async {
+    throw UnimplementedError();
+  }
+
+  Future<void> loadMore(ListEvent event, Emitter<TState> emit,
+      Future<ResponseList<TData>> Function() fetcher) async {
+    // If there is no next page, then return
+    if (nextPageLink == null) {
+      return;
+    }
+
+    // Do nothing if the state is not loaded
+    if (state.status != ListStateEnum.loaded) {
+      return;
+    }
+
+    try {
+      // Load more items
+      var listData = await fetcher.call();
+
+      // Update next page link
+      nextPageLink = listData.nextPageLink;
+
+      // Emit loaded state with new items
+      emit(state.copyWith(
+        items: state.items..addAll(listData.data),
+        // take all items from previous state and add new items
+        isLastPage: nextPageLink == null,
+      ) as TState);
+    } on Exception catch (e) {
+      // Do nothing if an exception was thrown because we are loaidng more items
+    }
+  }
+}
