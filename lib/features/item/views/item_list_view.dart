@@ -76,9 +76,7 @@ class _ItemListViewState extends State<ItemListView> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => ItemDetailView(
-                                                itemId: item.id,
-                                              )));
+                                          builder: (context) => ItemDetailView(item: item)));
                                 },
                               ),
                             ),

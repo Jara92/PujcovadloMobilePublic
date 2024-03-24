@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
 class ItemPlaceholderImage extends StatelessWidget {
-  const ItemPlaceholderImage({super.key});
+  final double width;
+  final double height;
+
+  const ItemPlaceholderImage({this.width = 75, this.height = 75, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Image.asset(
       "images/item_placeholder.png",
-      /*     width: 75,
-      height: 75,*/
+      width: width,
+      height: height,
       fit: BoxFit.contain,
     );
   }

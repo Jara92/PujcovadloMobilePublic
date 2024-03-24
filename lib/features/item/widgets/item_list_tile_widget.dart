@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pujcovadlo_client/core/custom_colors.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/core/widgets/item_placeholder_image.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
+import 'package:pujcovadlo_client/features/profiles/widgets/profile_rating_widget.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class ItemListTileWidget extends StatelessWidget {
@@ -62,20 +62,9 @@ class ItemListTileWidget extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.star,
-                              color: CustomColors.gold,
-                              size: 20,
-                            ),
-                            Text(
-                              "4.4",
-                              style: Theme.of(context).textTheme.labelSmall!,
-                            ),
-                          ])
+                      ProfileRatingWidget(
+                        user: item.owner,
+                      )
                     ],
                   ),
                   Column(

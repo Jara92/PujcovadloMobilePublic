@@ -24,20 +24,19 @@ class ProfileResponse {
     this.aggregations,
   });
 
-  factory ProfileResponse.fromJson(Map<String, Object> json) {
+  factory ProfileResponse.fromJson(Map<String, dynamic> json) {
     return ProfileResponse(
-      id: json['id'] as int,
-      description: json['description'] as String?,
-      profileImage: json['profileImage'] != null
-          ? ImageResponse.fromJson(json['profileImage'] as Map<String, Object>)
+      id: json['Id'] as int,
+      description: json['Description'] as String?,
+      profileImage: json['ProfileImage'] != null
+          ? ImageResponse.fromJson(json['ProfileImage'] as Map<String, dynamic>)
           : null,
-      //user: UserResponse.fromJson(json['user'] as Map<String, Object>),
-      links: (json['links'] as List<Object>)
-          .map((e) => LinkResponse.fromJson(e as Map<String, Object>))
+      links: (json['_links'] as List<dynamic>)
+          .map((e) => LinkResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
-      aggregations: json['aggregations'] != null
+      aggregations: json['_aggregations'] != null
           ? ProfileAggregations.fromJson(
-              json['aggregations'] as Map<String, Object>)
+              json['_aggregations'] as Map<String, dynamic>)
           : null,
     );
   }

@@ -6,8 +6,6 @@ import 'package:pujcovadlo_client/core/responses/response_list.dart';
 import 'package:pujcovadlo_client/core/services/http_service.dart';
 import 'package:pujcovadlo_client/features/authentication/responses/user_response.dart';
 import 'package:pujcovadlo_client/features/item/filters/item_filter.dart';
-import 'package:pujcovadlo_client/features/profiles/responses/profile_aggregations.dart';
-import 'package:pujcovadlo_client/features/profiles/responses/profile_response.dart';
 
 import '../../../core/responses/image_response.dart';
 import '../enums/item_status.dart';
@@ -181,113 +179,28 @@ class ItemService {
     return _myItems;
   }
 
-  Future<ItemDetailResponse?> getItem(int id) async {
-    // Simulate a delay of 2 seconds (adjust as needed)
-    await Future.delayed(Duration(milliseconds: 1700));
+  Future<ItemDetailResponse?> getItemByUri(String uri) {
+    return _getItemByUri(Uri.parse(uri));
+  }
 
-    // Fetch item from the server
-    return ItemDetailResponse(
-      id: id,
-      name: "Item ${id}",
-      alias: "item",
-      description:
-          "Description of item ${id}. This item is very good and handy for everyone. You can use it for many purposes. I will borrow it to you for a very good price. You will be happy with it. I promise.",
-      parameters: "",
-      status: ItemStatus.public,
-      pricePerDay: 100.0,
-      refundableDeposit: 100.0,
-      sellingPrice: 2000.0,
-      owner: UserResponse(
-          id: "1",
-          username: "user1",
-          firstName: "Jaroslav",
-          lastName: "Fikar",
-          profile: ProfileResponse(
-              id: 1,
-              description: "Description of user 1",
-              aggregations: ProfileAggregations(
-                countIfPublicItems: 6,
-                averageRating: 4.5,
-                totalReviews: 10,
-              ),
-              profileImage: ImageResponse(
-                  id: 1,
-                  name: "Item 1",
-                  path: "item-1.jpg",
-                  url:
-                      "https://bilder.obi.cz/7d81d317-d581-42c1-b7fe-896a3b36292a/prZZB/yDrill_aku_sroubovak_bosch.jpg",
-                  links: []),
-              links: []),
-          links: []),
-      latitude: 50.10518008471686,
-      longitude: 14.38936269587655,
-      mainImage: ImageResponse(
-          id: 1,
-          name: "Item 1",
-          path: "item-1.jpg",
-          url:
-              "https://bilder.obi.cz/7d81d317-d581-42c1-b7fe-896a3b36292a/prZZB/yDrill_aku_sroubovak_bosch.jpg",
-          links: []),
-      images: [
-        ImageResponse(
-          id: 1,
-          name: "Item 1",
-          path: "item-1.jpg",
-          url:
-              "https://bilder.obi.cz/7d81d317-d581-42c1-b7fe-896a3b36292a/prZZB/yDrill_aku_sroubovak_bosch.jpg",
-          links: [],
-        ),
-        ImageResponse(
-          id: 2,
-          name: "Item 1",
-          path: "item-1.jpg",
-          url:
-              "https://bilder.obi.cz/7d81d317-d581-42c1-b7fe-896a3b36292a/prZZB/yDrill_aku_sroubovak_bosch.jpg",
-          links: [],
-        ),
-        ImageResponse(
-          id: 3,
-          name: "Item 1",
-          path: "item-1.jpg",
-          url:
-              "https://bilder.obi.cz/7d81d317-d581-42c1-b7fe-896a3b36292a/prZZB/yDrill_aku_sroubovak_bosch.jpg",
-          links: [],
-        ),
-        ImageResponse(
-          id: 4,
-          name: "Item 1",
-          path: "item-1.jpg",
-          url:
-              "https://bilder.obi.cz/7d81d317-d581-42c1-b7fe-896a3b36292a/prZZB/yDrill_aku_sroubovak_bosch.jpg",
-          links: [],
-        ),
-        ImageResponse(
-          id: 5,
-          name: "Item 1",
-          path: "item-1.jpg",
-          url:
-              "https://bilder.obi.cz/7d81d317-d581-42c1-b7fe-896a3b36292a/prZZB/yDrill_aku_sroubovak_bosch.jpg",
-          links: [],
-        ),
-        ImageResponse(
-          id: 6,
-          name: "Item 1",
-          path: "item-1.jpg",
-          url:
-              "https://bilder.obi.cz/7d81d317-d581-42c1-b7fe-896a3b36292a/prZZB/yDrill_aku_sroubovak_bosch.jpg",
-          links: [],
-        ),
-        ImageResponse(
-          id: 7,
-          name: "Item 1",
-          path: "item-1.jpg",
-          // Placeholder 75x75
-          url: "https://via.placeholder.com/75x75.png",
-          links: [],
-        ),
-      ],
-      createdAt: DateTime.now().add(Duration(days: -10)),
-    );
+  Future<ItemDetailResponse?> getItemById(int id) async {
+    return _getItemByUri(Uri.parse("${config.apiEndpoint}/items/$id"));
+  }
+
+  Future<ItemDetailResponse?> _getItemByUri(Uri uri) async {
+    final response = await http.get(uri: uri);
+
+    // Parse JSON if the server returned a 200 OK response
+    if (response.isSuccessCode) {
+      var data = ItemDetailResponse.fromJson(jsonDecode(response.body));
+
+      return data;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception(
+          'Failed to load item: ${response.statusCode} ${response.body}');
+    }
   }
 
   Future<ItemDetailResponse> createItem(ItemRequest request) async {

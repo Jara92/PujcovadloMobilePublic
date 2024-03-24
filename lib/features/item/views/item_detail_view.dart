@@ -3,12 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pujcovadlo_client/core/widgets/not_found_widget.dart';
 import 'package:pujcovadlo_client/core/widgets/operation_error_widget.dart';
 import 'package:pujcovadlo_client/features/item/bloc/item_detail/item_detail_bloc.dart';
+import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_detail_widget.dart';
 
 class ItemDetailView extends StatefulWidget {
-  final int itemId;
+  final ItemResponse? item;
+  final int? itemId;
 
-  const ItemDetailView({super.key, required this.itemId});
+  const ItemDetailView({super.key, this.itemId, this.item});
 
   @override
   State<ItemDetailView> createState() => _ItemDetailViewState();
@@ -25,7 +27,8 @@ class _ItemDetailViewState extends State<ItemDetailView> {
           child: BlocProvider(
             create: (context) {
               var bloc = ItemDetailBloc();
-              bloc.add(LoadItemDetail(itemId: widget.itemId));
+              bloc.add(
+                  LoadItemDetail(itemId: widget.itemId, item: widget.item));
               return bloc;
             },
             child: BlocBuilder<ItemDetailBloc, ItemDetailState>(

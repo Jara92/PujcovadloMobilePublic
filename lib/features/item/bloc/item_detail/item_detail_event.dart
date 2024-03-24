@@ -4,7 +4,8 @@ part of 'item_detail_bloc.dart';
 abstract class ItemDetailEvent {}
 
 class LoadItemDetail extends ItemDetailEvent {
-  final int itemId;
+  final int? itemId;
+  final ItemResponse? item;
 
-  LoadItemDetail({required this.itemId});
+  LoadItemDetail({this.itemId, this.item});
 }

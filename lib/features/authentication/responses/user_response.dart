@@ -29,12 +29,11 @@ class UserResponse {
       username: json['Username'] as String,
       firstName: json['FirstName'] as String,
       lastName: json['LastName'] as String,
-/*      profile: json['Profile'] != null
-          ? ProfileResponse.fromJson(json['profile'] as Map<String, Object>)
-          : null,
-      links: (json['Links'] as List<Object>)
-          .map((e) => LinkResponse.fromJson(e as Map<String, Object>))
-          .toList(),*/
-    );
+        profile: json['Profile'] != null
+            ? ProfileResponse.fromJson(json['Profile'] as Map<String, dynamic>)
+            : null,
+        links: (json['_links'] as List<dynamic>)
+            .map((e) => LinkResponse.fromJson(e as Map<String, dynamic>))
+            .toList());
   }
 }

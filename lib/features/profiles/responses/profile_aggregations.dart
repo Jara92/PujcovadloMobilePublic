@@ -1,21 +1,21 @@
 class ProfileAggregations {
-  int? countIfPublicItems;
+  int countIfPublicItems;
 
   double? averageRating;
 
   int totalReviews;
 
   ProfileAggregations({
-    this.countIfPublicItems,
+    required this.countIfPublicItems,
     this.averageRating,
-    this.totalReviews = 0,
+    required this.totalReviews,
   });
 
-  factory ProfileAggregations.fromJson(Map<String, Object> json) {
+  factory ProfileAggregations.fromJson(Map<String, dynamic> json) {
     return ProfileAggregations(
-      countIfPublicItems: json['countIfPublicItems'] as int?,
-      averageRating: json['averageRating'] as double?,
-      totalReviews: json['totalReviews'] as int,
+      countIfPublicItems: json['CountOfPublicItems'].toInt(),
+      averageRating: json['AverageRating']?.toDouble(),
+      totalReviews: json['TotalReviews'].toInt(),
     );
   }
 }

@@ -64,4 +64,11 @@ class ItemResponse {
           .toList(),
     );
   }
+
+  String? get selfLink {
+    return links
+        .where((element) => element.rel == LinkRels.self)
+        .firstOrNull
+        ?.href;
+  }
 }

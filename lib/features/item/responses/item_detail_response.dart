@@ -1,5 +1,9 @@
 import 'dart:core';
+
 import 'package:pujcovadlo_client/core/responses/image_response.dart';
+import 'package:pujcovadlo_client/core/responses/link_response.dart';
+import 'package:pujcovadlo_client/features/authentication/responses/user_response.dart';
+import 'package:pujcovadlo_client/features/item/enums/item_status.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
 
 class ItemDetailResponse extends ItemResponse {
@@ -39,5 +43,39 @@ class ItemDetailResponse extends ItemResponse {
     super.latitude,
     super.longitude,
     super.mainImage,
+    super.links = const [],
   });
+
+  factory ItemDetailResponse.fromJson(Map<String, dynamic> json) {
+    return ItemDetailResponse(
+      id: json['Id'] as int,
+      name: json['Name'] as String,
+      description: json['Description'] as String,
+      parameters: json['Parameters'] as String,
+      alias: json['Alias'] as String,
+      status: ItemStatusExtension.fromValue(json['Status'] as int),
+      pricePerDay: json['PricePerDay']?.toDouble(),
+      refundableDeposit: json['RefundableDeposit']?.toDouble(),
+      sellingPrice: json['SellingPrice']?.toDouble(),
+      owner: UserResponse.fromJson(json['Owner'] as Map<String, dynamic>),
+      latitude: json['Latitude']?.toDouble(),
+      longitude: json['Longitude']?.toDouble(),
+      mainImage: json['MainImage'] != null
+          ? ImageResponse.fromJson(json['MainImage'] as Map<String, dynamic>)
+          : null,
+      images: (json['Images'] as List)
+          .map((e) => ImageResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      createdAt: DateTime.parse(json['CreatedAt'].toString()),
+      updatedAt: json['UpdatedAt'] != null
+          ? DateTime.parse(json['UpdatedAt'].toString())
+          : null,
+      approvedAt: json['ApprovedAt'] != null
+          ? DateTime.parse(json['ApprovedAt'].toString())
+          : null,
+      links: (json['_links'] as List)
+          .map((e) => LinkResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
 }

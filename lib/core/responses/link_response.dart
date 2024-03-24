@@ -1,3 +1,5 @@
+export 'package:pujcovadlo_client/core/constants/link_rels.dart';
+
 class LinkResponse {
   String? href;
   String rel;

@@ -1,12 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
+import 'package:pujcovadlo_client/core/widgets/item_placeholder_image.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_detail_response.dart';
 import 'package:pujcovadlo_client/features/profiles/widgets/profile_rating_widget.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ItemDetailWidget extends StatefulWidget {
@@ -70,55 +70,69 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
           Container(
             margin: const EdgeInsets.symmetric(vertical: 10),
             //color: Colors.red,
-            child: Column(
-              children: [
-                CarouselSlider(
-                  options: CarouselOptions(
-                    height: 300,
-                    enlargeCenterPage: true,
-                    onPageChanged: (index, reason) {
-                      setState(() {
-                        _current = index;
-                      });
-                    },
-                  ),
-                  carouselController: _controller,
-                  items: widget.item.images.map((i) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return Container(
-                          width: MediaQuery.of(context).size.width,
-                          margin: EdgeInsets.symmetric(horizontal: 5),
-                          child: FittedBox(
-                            child: Image.network(i.url),
-                            fit: BoxFit.fill,
+            child: (widget.item.images.isNotEmpty)
+                ? Column(
+                    children: [
+                      CarouselSlider(
+                        options: CarouselOptions(
+                          height: 250,
+                          enlargeCenterPage: true,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              _current = index;
+                            });
+                          },
+                        ),
+                        carouselController: _controller,
+                        items: widget.item.images.map((i) {
+                          return Builder(
+                            builder: (BuildContext context) {
+                              return Container(
+                                width: MediaQuery.of(context).size.width,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: FadeInImage.memoryNetwork(
+                                    placeholder: kTransparentImage,
+                                    // TODO: add url of placeholder image??
+                                    image: i.url ?? '',
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                    imageErrorBuilder:
+                                        (context, error, stackTrace) =>
+                                            const ItemPlaceholderImage()),
+                              );
+                            },
+                          );
+                        }).toList(),
+                      ),
+                      Wrap(
+                          children:
+                              widget.item.images.asMap().entries.map((entry) {
+                        return GestureDetector(
+                          onTap: () => _controller.animateToPage(entry.key),
+                          child: Container(
+                            width: 12.0,
+                            height: 12.0,
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 4.0),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: (Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.white
+                                        : Colors.black)
+                                    .withOpacity(
+                                        _current == entry.key ? 0.9 : 0.4)),
                           ),
                         );
-                      },
-                    );
-                  }).toList(),
-                ),
-                Wrap(
-                    children: widget.item.images.asMap().entries.map((entry) {
-                  return GestureDetector(
-                    onTap: () => _controller.animateToPage(entry.key),
-                    child: Container(
-                      width: 12.0,
-                      height: 12.0,
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 4.0),
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: (Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.white
-                                  : Colors.black)
-                              .withOpacity(_current == entry.key ? 0.9 : 0.4)),
-                    ),
-                  );
-                }).toList()),
-              ],
-            ),
+                      }).toList()),
+                    ],
+                  )
+                : const ItemPlaceholderImage(
+                    width: 250,
+                    height: 250,
+                  ),
           ),
           Container(
             margin: const EdgeInsets.only(bottom: 5),
@@ -229,7 +243,14 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
           ),
           Container(
               margin: const EdgeInsets.only(bottom: 20),
-              child: Text(widget.item.description)),
+              child: Row(
+                children: [
+                  Text(
+                    widget.item.description,
+                    textAlign: TextAlign.left,
+                  ),
+                ],
+              )),
           Divider(),
           Container(
             margin: const EdgeInsets.only(bottom: 5),
@@ -298,74 +319,82 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
                   ),
                 ]),
           ),
-          Divider(),
-          Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            child: Row(
-              children: [
-                Text(
-                  context.loc.where_can_you_find_it,
-                  style: Theme.of(context).textTheme.titleMedium!,
-                ),
-              ],
-            ),
-          ),
-          Container(
-              height: 200,
-              margin: const EdgeInsets.only(bottom: 5),
-              // TODO: Improve location anonymization
-              child: FlutterMap(
-                options: MapOptions(
-                  initialCenter:
-                      LatLng(widget.item.latitude!, widget.item.longitude!),
-                  initialZoom: 14.5,
-                ),
-                children: [
-                  TileLayer(
-                    urlTemplate:
-                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName: 'com.example.app',
-                  ),
-                  RichAttributionWidget(
-                    attributions: [
-                      TextSourceAttribution(
-                        'OpenStreetMap contributors',
-                        onTap: () => launchUrl(
-                            Uri.parse('https://openstreetmap.org/copyright')),
-                      ),
-                    ],
-                  ),
-                  CircleLayer(circles: [
-                    CircleMarker(
-                      point:
-                          LatLng(widget.item.latitude!, widget.item.longitude!),
-                      color: Theme.of(context).primaryColor.withOpacity(0.5),
-                      borderColor: Theme.of(context).primaryColor,
-                      borderStrokeWidth: 2,
-                      radius: 250,
-                      useRadiusInMeter: true,
-                    ),
-                  ]),
-                ],
-              )),
-          Row(
+          if (widget.item.latitude != null && widget.item.longitude != null)
+            _buildMap(widget.item),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMap(ItemDetailResponse item) {
+    return Column(
+      children: [
+        Divider(),
+        Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          child: Row(
             children: [
-              Icon(
-                Icons.info_outline,
-                color: Theme.of(context).primaryColor,
-                size: 20,
-              ),
-              const SizedBox(width: 5),
-              Expanded(
-                child: Text(
-                  context.loc.owner_will_tell_you_exact_location,
-                  style: Theme.of(context).textTheme.labelSmall,
-                ),
+              Text(
+                context.loc.where_can_you_find_it,
+                style: Theme.of(context).textTheme.titleMedium!,
               ),
             ],
           ),
-        ],
-      ),
+        ),
+        Container(
+            height: 200,
+            margin: const EdgeInsets.only(bottom: 5),
+            // TODO: Improve location anonymization
+            child: FlutterMap(
+              options: MapOptions(
+                initialCenter:
+                    LatLng(widget.item.latitude!, widget.item.longitude!),
+                initialZoom: 14.5,
+              ),
+              children: [
+                TileLayer(
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  userAgentPackageName: 'com.example.app',
+                ),
+                RichAttributionWidget(
+                  attributions: [
+                    TextSourceAttribution(
+                      'OpenStreetMap contributors',
+                      onTap: () => launchUrl(
+                          Uri.parse('https://openstreetmap.org/copyright')),
+                    ),
+                  ],
+                ),
+                CircleLayer(circles: [
+                  CircleMarker(
+                    point:
+                        LatLng(widget.item.latitude!, widget.item.longitude!),
+                    color: Theme.of(context).primaryColor.withOpacity(0.5),
+                    borderColor: Theme.of(context).primaryColor,
+                    borderStrokeWidth: 2,
+                    radius: 250,
+                    useRadiusInMeter: true,
+                  ),
+                ]),
+              ],
+            )),
+        Row(
+          children: [
+            Icon(
+              Icons.info_outline,
+              color: Theme.of(context).primaryColor,
+              size: 20,
+            ),
+            const SizedBox(width: 5),
+            Expanded(
+              child: Text(
+                context.loc.owner_will_tell_you_exact_location,
+                style: Theme.of(context).textTheme.labelSmall,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
