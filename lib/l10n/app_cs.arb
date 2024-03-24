@@ -11,6 +11,7 @@
   "close": "Zavřít",
   "save": "Uložit",
   "delete": "Smazat",
+  "clear_search": "Smazat hledání",
   "error_message": "Něco se pokazilo. Zkuste to prosím znovu.",
   "pick_from_gallery": "Vybrat z galerie",
   "take_photo": "Vyfotit",
@@ -139,6 +140,7 @@
   "menu_orders": "Vypůjčené",
   "menu_messages": "Zprávy",
   "what_are_you_looking_for": "Co hledáte?",
+  "searching_in_my_items": "Hledání v mých položkách",
   "price": "{price}",
   "@price": {
     "placeholders": {

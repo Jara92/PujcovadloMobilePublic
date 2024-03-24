@@ -8,8 +8,27 @@ import 'package:pujcovadlo_client/features/item/views/item_create_view.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_list_widget.dart';
 import 'package:pujcovadlo_client/features/item/widgets/my_item_list_tile_widget.dart';
 
-class MyItemList extends StatelessWidget {
+class MyItemList extends StatefulWidget {
   const MyItemList({super.key});
+
+  @override
+  State<MyItemList> createState() => _MyItemListState();
+}
+
+class _MyItemListState extends State<MyItemList> {
+  late final TextEditingController searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,18 +54,38 @@ class MyItemList extends StatelessWidget {
                     return Column(
                       children: [
                         Container(
-                          margin: const EdgeInsets.only(bottom: 5),
-                          child: TextField(
-                            onChanged: (value) {
-                              BlocProvider.of<MyItemListBloc>(context)
-                                  .add(SearchTextUpdated(searchText: value));
-                            },
-                            decoration: InputDecoration(
-                              icon: const Icon(Icons.search),
-                              hintText: context.loc.what_are_you_looking_for,
-                            ),
-                          ),
-                        ),
+                            margin: const EdgeInsets.only(bottom: 10),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: SearchBar(
+                              controller: searchController,
+                              leading: const Icon(Icons.search),
+                              trailing: <Widget>[
+                                Tooltip(
+                                  message: context.loc.clear_search,
+                                  child: IconButton(
+                                    isSelected: false,
+                                    onPressed: () {
+                                      // clear value
+                                      searchController.clear();
+
+                                      // trigger on changed
+                                      BlocProvider.of<MyItemListBloc>(context)
+                                          .add(const SearchTextUpdated(
+                                              searchText: ""));
+                                    },
+                                    icon: const Icon(Icons.clear),
+                                  ),
+                                )
+                              ],
+                              padding:
+                                  const MaterialStatePropertyAll<EdgeInsets>(
+                                      EdgeInsets.symmetric(horizontal: 16.0)),
+                              onChanged: (value) =>
+                                  BlocProvider.of<MyItemListBloc>(context).add(
+                                      SearchTextUpdated(searchText: value)),
+                              hintText: context.loc.searching_in_my_items,
+                            )),
                         mainContent,
                       ],
                     );
