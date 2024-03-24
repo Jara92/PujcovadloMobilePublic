@@ -6,17 +6,12 @@ import 'package:pujcovadlo_client/features/item/bloc/item_detail/item_detail_blo
 import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_detail_widget.dart';
 
-class ItemDetailView extends StatefulWidget {
+class ItemDetailView extends StatelessWidget {
   final ItemResponse? item;
   final int? itemId;
 
   const ItemDetailView({super.key, this.itemId, this.item});
 
-  @override
-  State<ItemDetailView> createState() => _ItemDetailViewState();
-}
-
-class _ItemDetailViewState extends State<ItemDetailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,33 +20,29 @@ class _ItemDetailViewState extends State<ItemDetailView> {
         child: Padding(
           padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
           child: BlocProvider(
-            create: (context) {
-              var bloc = ItemDetailBloc();
-              bloc.add(
-                  LoadItemDetail(itemId: widget.itemId, item: widget.item));
-              return bloc;
-            },
+            create: (context) => ItemDetailBloc()
+              ..add(LoadItemDetail(itemId: itemId, item: item)),
             child: BlocBuilder<ItemDetailBloc, ItemDetailState>(
               builder: (context, state) {
                 // Display item not found message
                 if (state is ItemDetailNotFound) {
                   return const NotFoundWidget();
                 }
-        
+
                 // Display item detail
                 if (state is ItemDetailLoaded) {
                   return ItemDetailWidget(item: state.item);
                 }
-        
+
                 // Display error message
                 if (state is ItemDetailFailed) {
                   return const OperationErrorWidget();
                 }
-        
+
                 if (state.isLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
-        
+
                 return const Column();
               },
             ),
