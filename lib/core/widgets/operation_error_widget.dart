@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 
+typedef RetryCallback = void Function();
+
 class OperationErrorWidget extends StatelessWidget {
   final String? title;
   final String? message;
+  final RetryCallback? onRetry;
 
-  const OperationErrorWidget({this.title, this.message, super.key});
+  const OperationErrorWidget(
+      {this.title, this.message, this.onRetry, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +28,15 @@ class OperationErrorWidget extends StatelessWidget {
           Text(
             message ?? context.loc.error_message,
             style: Theme.of(context).textTheme.labelMedium!,
-          )
+          ),
+          if (onRetry != null)
+            Container(
+              margin: const EdgeInsets.only(top: 10),
+              child: ElevatedButton(
+                onPressed: onRetry,
+                child: const Icon(Icons.refresh),
+              ),
+            ),
         ],
       ),
     );

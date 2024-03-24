@@ -18,21 +18,21 @@ abstract class ListBloc<TData, TState extends ListState<TData>>
 
   ListBloc(super.initState) {
     on<InitialEvent<TData>>(onInitialEvent);
-    on<ReloadItemsEvent<TData>>(onReloadItemsEvent);
+    on<LoadItemsEvent<TData>>(onLoadItemsEvent);
     on<LoadMoreEvent<TData>>(onLoadMoreEvent);
   }
 
   Future<void> onInitialEvent(
       InitialEvent<TData> event, Emitter<TState> emit) async {
-    add(const ReloadItemsEvent());
+    //add(const ReloadItemsEvent());
   }
 
-  Future<void> onReloadItemsEvent(
+  Future<void> onLoadItemsEvent(
       ListEvent<TData> event, Emitter<TState> emit) async {
     throw UnimplementedError();
   }
 
-  Future<void> reloadItems(ListEvent event, Emitter<TState> emit,
+  Future<void> loadItems(ListEvent event, Emitter<TState> emit,
       Future<ResponseList<TData>> Function() fetcher) async {
     // Emit waiting state
     emit(state.copyWith(status: ListStateEnum.loading) as TState);
@@ -71,11 +71,6 @@ abstract class ListBloc<TData, TState extends ListState<TData>>
       return;
     }
 
-    // Do nothing if the state is not loaded
-    if (state.status != ListStateEnum.loaded) {
-      return;
-    }
-
     try {
       // Load more items
       var listData = await fetcher.call();
@@ -85,11 +80,23 @@ abstract class ListBloc<TData, TState extends ListState<TData>>
 
       // Emit loaded state with new items
       emit(state.copyWith(
-        items: state.items..addAll(listData.data),
+        status: ListStateEnum.loaded,
+        items: listData.data,
+        //items: state.items..addAll(listData.data),
         // take all items from previous state and add new items
         isLastPage: nextPageLink == null,
       ) as TState);
     } on Exception catch (e) {
+      print(e);
+
+      emit(
+        state.copyWith(
+          status: ListStateEnum.error,
+          error: e,
+          items: const [],
+          isLastPage: false,
+        ) as TState,
+      );
       // Do nothing if an exception was thrown because we are loaidng more items
     }
   }

@@ -54,8 +54,10 @@ dependencies:
   #textfield_tags: ^3.0.1
   flutter_dotenv: ^5.1.0
   http: ^1.2.1
-  paginated_list: ^1.2.3
+  paginated_list: ^1.2.3 # todo remove
+  infinite_scroll_pagination: ^4.0.0
   stream_transform: ^2.1.0
+  rxdart: ^0.27.7
 
 dev_dependencies:
   flutter_test:

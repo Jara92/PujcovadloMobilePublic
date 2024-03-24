@@ -9,8 +9,8 @@ class InitialEvent<T> extends ListEvent<T> {
   const InitialEvent();
 }
 
-class ReloadItemsEvent<T> extends ListEvent<T> {
-  const ReloadItemsEvent();
+class LoadItemsEvent<T> extends ListEvent<T> {
+  const LoadItemsEvent();
 }
 
 class LoadMoreEvent<T> extends ListEvent<T> {

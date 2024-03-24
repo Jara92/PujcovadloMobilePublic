@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
+import 'package:pujcovadlo_client/core/widgets/messages/loading_next_page_error.dart';
+import 'package:pujcovadlo_client/core/widgets/not_found_widget.dart';
+import 'package:pujcovadlo_client/core/widgets/operation_error_widget.dart';
 import 'package:pujcovadlo_client/features/item/bloc/my_item_list/my_item_list_bloc.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
 import 'package:pujcovadlo_client/features/item/views/item_create_view.dart';
-import 'package:pujcovadlo_client/features/item/widgets/item_list_widget.dart';
 import 'package:pujcovadlo_client/features/item/widgets/my_item_list_tile_widget.dart';
 
 class MyItemList extends StatefulWidget {
@@ -16,40 +19,64 @@ class MyItemList extends StatefulWidget {
 }
 
 class _MyItemListState extends State<MyItemList> {
+  late final MyItemListBloc _bloc;
   late final TextEditingController searchController;
+  late final PagingController<String, ItemResponse> _pagingController;
 
   @override
   void initState() {
     super.initState();
+
+    // Create a new bloc
+    _bloc = MyItemListBloc()..add(const InitialEvent());
+
+    // Init controllers
     searchController = TextEditingController();
+    _pagingController = PagingController(firstPageKey: "");
+
+    _pagingController
+        .addPageRequestListener((pageKey) => _bloc.add(const LoadMoreEvent()));
   }
 
   @override
   void dispose() {
     searchController.dispose();
+    _pagingController.dispose();
+    _bloc.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MyItemListBloc>(
-      create: (context) => MyItemListBloc()..add(const InitialEvent()),
+      create: (context) => _bloc,
       child: Scaffold(
           body: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: SafeArea(
-                child: BlocBuilder<MyItemListBloc, MyItemListState>(
+                child: BlocConsumer<MyItemListBloc, MyItemListState>(
+                  listener: (context, state) {
+                    if (state.status == ListStateEnum.loaded) {
+                      if (state.isLastPage) {
+                        _pagingController.appendLastPage(state.items);
+                      } else {
+                        _pagingController.appendPage(state.items,
+                            context.read<MyItemListBloc>().nextPageLink!);
+                      }
+                    }
+
+                    if (state.status == ListStateEnum.error) {
+                      _pagingController.error = state.error;
+                    }
+
+                    if (state.status == ListStateEnum.refreshing) {
+                      _pagingController.refresh();
+                    }
+                  },
                   builder: (context, state) {
                     Widget mainContent = const SizedBox.shrink();
 
-                    if (state.status == ListStateEnum.loaded) {
-                      mainContent = _buildItemList(context, state);
-                    }
-
-                    if (state.status == ListStateEnum.loading) {
-                      mainContent = const Expanded(
-                          child: Center(child: CircularProgressIndicator()));
-                    }
+                    mainContent = _buildItemList(context, state);
 
                     return Column(
                       children: [
@@ -106,17 +133,25 @@ class _MyItemListState extends State<MyItemList> {
   }
 
   Widget _buildItemList(BuildContext context, MyItemListState state) {
-    // TODO: ADD SCREEN FOR NO ITEMS
     return Expanded(
-      child: ItemListWidget(
-        items: state.items,
-        isLastPage: state.isLastPage,
-        itemBuilder: (context, item) => MyItemListTileWidget(item: item),
-        onItemTap: (ItemResponse item) {
-          // TODO: link to item edit
-        },
-        onLoadMore: (index) =>
-            context.read<MyItemListBloc>().add(const LoadMoreEvent()),
+      child: PagedListView<String, ItemResponse>(
+        pagingController: _pagingController,
+        builderDelegate: PagedChildBuilderDelegate<ItemResponse>(
+          firstPageErrorIndicatorBuilder: (_) => OperationErrorWidget(
+            onRetry: _pagingController.refresh,
+          ),
+          noItemsFoundIndicatorBuilder: (_) => NotFoundWidget(
+            title: context.loc.no_items_found,
+            message: context.loc.no_items_found_message,
+          ),
+          newPageErrorIndicatorBuilder: (_) => LoadingNextPageErrorWidget(
+            onRetry: _pagingController.retryLastFailedRequest,
+          ),
+          itemBuilder: (context, item, index) => GestureDetector(
+            onTap: () {}, // todo: edit item
+            child: MyItemListTileWidget(item: item),
+          ),
+        ),
       ),
     );
   }

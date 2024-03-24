@@ -1,6 +1,6 @@
 part of 'list_bloc.dart';
 
-enum ListStateEnum { initial, loading, loaded, error }
+enum ListStateEnum { initial, loading, loaded, refreshing, error }
 
 @immutable
 class ListState<T> {

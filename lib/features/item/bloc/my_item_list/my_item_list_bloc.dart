@@ -35,22 +35,28 @@ class MyItemListBloc extends ListBloc<ItemResponse, MyItemListState> {
 
   void _onSearchTextUpdated(
       SearchTextUpdated event, Emitter<MyItemListState> emit) {
-    emit(state.copyWith(search: event.searchText));
+    emit(state.copyWith(
+        search: event.searchText, status: ListStateEnum.refreshing));
     myItemsFilter.search = event.searchText;
-
-    add(const ReloadItemsEvent());
   }
 
   @override
-  Future<void> onReloadItemsEvent(
+  Future<void> onLoadItemsEvent(
       ListEvent<ItemResponse> event, Emitter<MyItemListState> emit) async {
-    return reloadItems(
+    return loadItems(
         event, emit, () => itemService.getItems(filter: myItemsFilter));
   }
 
   @override
   Future<void> onLoadMoreEvent(
       LoadMoreEvent<ItemResponse> event, Emitter<MyItemListState> emit) async {
+    if (state.status == ListStateEnum.refreshing || // Get new items
+        nextPageLink == null || // No more items
+        nextPageLink!.isEmpty) {
+      return loadItems(
+          event, emit, () => itemService.getItems(filter: myItemsFilter));
+    }
+
     return loadMore(
         event, emit, () => itemService.getItemsByUri(nextPageLink!));
   }
