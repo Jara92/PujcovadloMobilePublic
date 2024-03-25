@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
+import 'package:pujcovadlo_client/core/helpers/debouncer.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/step3_tags/step3_bloc.dart';
 import 'package:pujcovadlo_client/features/item/models/models.dart';
@@ -16,11 +17,17 @@ class Step3 extends StatefulWidget {
 
 class _Step3State extends State<Step3> {
   late final TextEditingController _textEditingController;
+  late final Debounceable<List<String>, String> _debouncedSearch;
+  late final Step3Bloc _bloc;
 
   @override
   void initState() {
     super.initState();
     _textEditingController = TextEditingController();
+    _bloc = Step3Bloc(context.read<CreateItemBloc>())
+      ..add(const Step3InitialEvent());
+    _debouncedSearch = debounce<List<String>, String>(
+        _search, const Duration(milliseconds: 500));
   }
 
   @override
@@ -29,45 +36,10 @@ class _Step3State extends State<Step3> {
     _textEditingController.dispose();
   }
 
-  String? _localizeTagError(BuildContext context, ItemTag tag) {
-    if (tag.isPure || tag.isValid) {
-      return null;
-    }
-
-    switch (tag.error) {
-      case ItemTagValidationError.invalid:
-        return context.loc.item_tags_verror_tag_format_is_invalid;
-      case ItemTagValidationError.tooShort:
-        return context.loc.item_tags_verror_tag_is_too_short;
-      case ItemTagValidationError.tooLong:
-        return context.loc.item_tags_verror_tag_is_too_long;
-      case null:
-        return null;
-    }
-  }
-
-  String? _localizeTagsError(BuildContext context, ItemTags tags) {
-    if (tags.isPure || tags.isValid) {
-      return null;
-    }
-
-    switch (tags.error) {
-      case ItemTagsValidationError.invalid:
-        return context.loc.item_tags_verror_tag_format_is_invalid;
-      case ItemTagsValidationError.tooManyTags:
-        return context.loc.item_tags_verror_too_many_tags;
-      case ItemTagsValidationError.notEnoughTags:
-        return context.loc.item_tags_verror_not_enough_tags;
-      case null:
-        return null;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => Step3Bloc(context.read<CreateItemBloc>())
-        ..add(const Step3InitialEvent()),
+      create: (context) => _bloc,
       child: Scaffold(
         appBar: AppBar(
           title: Text(context.loc.title_create_new_item),
@@ -114,21 +86,14 @@ class _Step3State extends State<Step3> {
                   const SizedBox(height: 10),
                   Autocomplete<String>(
                     optionsBuilder: (TextEditingValue textEditingValue) async {
-                      // Begin the searching task
-                      final task = context
-                          .read<Step3Bloc>()
-                          .suggestTags(textEditingValue.text);
+                      final options =
+                          await _debouncedSearch(textEditingValue.text);
 
-                      // Create searching event so the bloc can handle the state
-                      context
-                          .read<Step3Bloc>()
-                          .add(SearchTagChanged(textEditingValue.text, task));
+                      if (options == null) {
+                        return List<String>.empty();
+                      }
 
-                      // Wait for the result
-                      final suggestedtags = await task;
-
-                      // Return the result
-                      return suggestedtags;
+                      return options;
                     },
                     onSelected: (String selection) {
                       context
@@ -246,5 +211,53 @@ class _Step3State extends State<Step3> {
         ),
       ),
     );
+  }
+
+  Future<List<String>> _search(String query) async {
+    // Begin the searching task
+    final task = _bloc.suggestTags(query);
+
+    // Create searching event so the bloc can handle the state
+    _bloc.add(SearchTagChanged(query, task));
+
+    // Wait for the result
+    final suggestedtags = await task;
+
+    // Return the result
+    return suggestedtags;
+  }
+
+  String? _localizeTagError(BuildContext context, ItemTag tag) {
+    if (tag.isPure || tag.isValid) {
+      return null;
+    }
+
+    switch (tag.error) {
+      case ItemTagValidationError.invalid:
+        return context.loc.item_tags_verror_tag_format_is_invalid;
+      case ItemTagValidationError.tooShort:
+        return context.loc.item_tags_verror_tag_is_too_short;
+      case ItemTagValidationError.tooLong:
+        return context.loc.item_tags_verror_tag_is_too_long;
+      case null:
+        return null;
+    }
+  }
+
+  String? _localizeTagsError(BuildContext context, ItemTags tags) {
+    if (tags.isPure || tags.isValid) {
+      return null;
+    }
+
+    switch (tags.error) {
+      case ItemTagsValidationError.invalid:
+        return context.loc.item_tags_verror_tag_format_is_invalid;
+      case ItemTagsValidationError.tooManyTags:
+        return context.loc.item_tags_verror_too_many_tags;
+      case ItemTagsValidationError.notEnoughTags:
+        return context.loc.item_tags_verror_not_enough_tags;
+      case null:
+        return null;
+    }
   }
 }

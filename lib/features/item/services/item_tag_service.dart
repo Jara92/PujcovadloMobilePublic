@@ -1,25 +1,34 @@
+import 'dart:convert';
+
+import 'package:get_it/get_it.dart';
+import 'package:pujcovadlo_client/config.dart';
+import 'package:pujcovadlo_client/core/responses/response_list.dart';
+import 'package:pujcovadlo_client/core/services/http_service.dart';
+import 'package:pujcovadlo_client/features/item/filters/item_tag_filter.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_tag_response.dart';
 
 class ItemTagService {
-  Future<List<ItemTagResponse>> getTags(String? search) async {
-    await Future.delayed(const Duration(milliseconds: 500));
+  final Config config = GetIt.instance.get<Config>();
+  final HttpService _http = GetIt.instance.get<HttpService>();
 
-    return [
-      ItemTagResponse(id: 1, name: "Elektrická vrtačka"),
-      ItemTagResponse(id: 2, name: "Kladivo"),
-      ItemTagResponse(id: 3, name: "Pila"),
-      ItemTagResponse(id: 4, name: "Šroubovák"),
-      ItemTagResponse(id: 5, name: "Klíč"),
-      ItemTagResponse(id: 6, name: "Příklepová vrtačka"),
-      ItemTagResponse(id: 7, name: "Pneumatický kladivo"),
-      ItemTagResponse(id: 8, name: "Pneumatická pistole"),
-      ItemTagResponse(id: 9, name: "Pneumatický šroubovák"),
-      ItemTagResponse(id: 10, name: "Pneumatický klíč"),
-      ItemTagResponse(id: 11, name: "Pneumatická příklepová vrtačka"),
-      ItemTagResponse(id: 12, name: "Pneumatická pistole"),
-      ItemTagResponse(id: 13, name: "Pneumatický šroubovák"),
-    ]
-        .where((tag) => tag.name.toLowerCase().contains(search!.toLowerCase()))
-        .toList();
+  Future<ResponseList<ItemTagResponse>> getTags(ItemTagFilter filter) async {
+    final uri = Uri.parse("${config.apiEndpoint}/item-tags")
+        .replace(queryParameters: filter.toMap());
+
+    final response = await _http.get(uri: uri);
+
+    // Parse JSON if the server returned a 200 OK response
+    if (response.isSuccessCode) {
+      var data = ResponseList<ItemTagResponse>.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>,
+          ItemTagResponse.fromJson);
+
+      return data;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception(
+          'Failed to load tags: ${response.statusCode} ${response.body}');
+    }
   }
 }

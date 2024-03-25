@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
+import 'package:pujcovadlo_client/features/item/filters/item_tag_filter.dart';
 import 'package:pujcovadlo_client/features/item/models/models.dart';
 import 'package:pujcovadlo_client/features/item/requests/item_request.dart';
 import 'package:pujcovadlo_client/features/item/services/item_tag_service.dart';
@@ -36,22 +37,28 @@ class Step3Bloc extends Bloc<Step3Event, Step3State> {
   /// This is because Autocomplete widget's options cannot be updated manually.
   Future<List<String>> suggestTags(String tag) async {
     // Do nothing if the tag is empty
-    if (tag.isEmpty) return [];
+    if (tag.isEmpty) return List<String>.empty();
 
     // Do nothing if the input is too short
-    // TODO
-    //if (tag.length < 3) return [];
+    if (tag.length <= 2) return List<String>.empty();
 
-    return (await _itemTagService.getTags(tag))
-        // Get only tag names
-        .map((e) => e.name)
-        // Filter out already selected tags
-        .where((tag) => !state.selectedTags.value.contains(tag))
-        .toList();
+    try {
+      final tags = await _itemTagService.getTags(ItemTagFilter(search: tag));
+
+      // Get only tag names
+      return tags.data
+          .map((e) => e.name)
+          // Filter out already selected tags
+          .where((tag) => !state.selectedTags.value.contains(tag))
+          .toList();
+    } on Exception catch (e) {
+      print(e);
+      return List<String>.empty();
+    }
   }
 
-  Future<void> _onInitialEvent(Step3InitialEvent event,
-      Emitter<Step3State> emit) async {
+  Future<void> _onInitialEvent(
+      Step3InitialEvent event, Emitter<Step3State> emit) async {
     // Init selected tags
     emit(state.copyWith(selectedTags: ItemTags.dirty(_item.tags)));
   }
