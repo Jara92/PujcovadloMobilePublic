@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart' show immutable;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
 import 'package:pujcovadlo_client/features/item/requests/item_request.dart';
 
@@ -12,7 +12,7 @@ class PreviewBloc extends Bloc<PreviewEvent, PreviewState> {
 
   PreviewBloc(CreateItemBloc createItemBloc) : super(const InitialState()) {
     _createItemBloc = createItemBloc;
-    _item = _createItemBloc.item;
+    _item = _createItemBloc.state.data!;
 
     on<PreviewUpdate>(_onPreviewUpdate);
     on<NextStepEvent>(_onNextStep);

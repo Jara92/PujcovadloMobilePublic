@@ -6,7 +6,9 @@ abstract class CreateItemEvent {
 }
 
 class InitialEvent extends CreateItemEvent {
-  const InitialEvent();
+  final int? itemId;
+
+  const InitialEvent({required this.itemId});
 }
 
 class Step1SubmitEvent extends CreateItemEvent {

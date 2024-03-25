@@ -1,34 +1,59 @@
 part of 'create_item_bloc.dart';
 
+enum CreateItemStateEnum { initial, loading, loaded, error }
+
 @immutable
 class CreateItemState {
-  final int step;
-  final bool isValid;
+  final CreateItemStateEnum status;
   final int activeStepperIndex;
   final ItemRequest? data;
+  final Exception? error;
 
   const CreateItemState({
-    this.step = 0,
-    this.isValid = true,
-    this.activeStepperIndex = 0,
+    required this.status,
+    required this.activeStepperIndex,
     this.data,
+    this.error,
   });
 
   CreateItemState copyWith({
-    ItemName? name,
-    ItemDescription? description,
+    CreateItemStateEnum? status,
     int? activeStepperIndex,
-    bool? isValid,
+    ItemRequest? data,
+    Exception? error,
   }) {
     return CreateItemState(
-      step: activeStepperIndex ?? this.step,
-      isValid: isValid ?? this.isValid,
+      status: status ?? this.status,
       activeStepperIndex: activeStepperIndex ?? this.activeStepperIndex,
+      data: data ?? this.data,
+      error: error ?? this.error,
     );
   }
 }
 
 class InitialState extends CreateItemState {
-  const InitialState({ItemRequest? item})
-      : super(data: item, step: 0, isValid: true);
+  const InitialState()
+      : super(
+          status: CreateItemStateEnum.initial,
+          activeStepperIndex: 0,
+        );
+}
+
+class LoadedState extends CreateItemState {
+  const LoadedState(ItemRequest data)
+      : super(
+          status: CreateItemStateEnum.loaded,
+          activeStepperIndex: 0,
+          data: data,
+        );
+}
+
+class ErrorState extends CreateItemState {
+  const ErrorState({
+    required Exception error,
+  }) : super(
+          status: CreateItemStateEnum.error,
+          activeStepperIndex: 0,
+          error: error,
+        );
 }

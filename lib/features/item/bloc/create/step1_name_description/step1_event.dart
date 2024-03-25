@@ -6,7 +6,7 @@ abstract class Step1Event {
 }
 
 class Step1InitialEvent extends Step1Event {
-  const Step1InitialEvent();
+  const Step1InitialEvent() : super();
 }
 
 class ItemNameChanged extends Step1Event {

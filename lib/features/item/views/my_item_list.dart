@@ -154,7 +154,8 @@ class _MyItemListState extends State<MyItemList> {
             onRetry: _pagingController.retryLastFailedRequest,
           ),
           itemBuilder: (context, item, index) => GestureDetector(
-            onTap: () {}, // todo: edit item
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ItemCreateView(itemId: item.id))),
             child: MyItemListTileWidget(item: item),
           ),
         ),

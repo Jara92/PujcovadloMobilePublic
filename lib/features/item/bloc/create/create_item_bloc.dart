@@ -1,18 +1,21 @@
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
-import 'package:pujcovadlo_client/features/item/models/models.dart';
+import 'package:flutter/foundation.dart' show immutable;
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:pujcovadlo_client/features/item/requests/item_request.dart';
+import 'package:pujcovadlo_client/features/item/services/item_service.dart';
 
 part 'create_item_event.dart';
 part 'create_item_state.dart';
 part 'create_item_steps.dart';
 
 class CreateItemBloc extends Bloc<CreateItemEvent, CreateItemState> {
-  late final ItemRequest item;
+  final ItemService itemService = GetIt.instance<ItemService>();
 
-  CreateItemBloc(ItemRequest? item) : super(const InitialState()) {
+  //ItemRequest? item;
+
+  CreateItemBloc() : super(const InitialState()) {
     // TODO: debug only
-    this.item = item ??
+/*    this.item = item ??
         ItemRequest(
           name: "Testovací",
           description: "Testovací popis na testy",
@@ -20,30 +23,52 @@ class CreateItemBloc extends Bloc<CreateItemEvent, CreateItemState> {
           categories: [1],
           images: [],
           tags: ["Vrtačka", "Šroubovák"],
-        );
+        );*/
 
     on<InitialEvent>(_onInitialEvent);
     on<UpdatePreviewEvent>(_onUpdatePreviewEvent);
     on<MoveToStepEvent>(_onMoveToStep);
   }
 
-  void _onInitialEvent(InitialEvent event, Emitter<CreateItemState> emit) {
-    emit(CreateItemState(
-      data: item,
+  void _onInitialEvent(
+      InitialEvent event, Emitter<CreateItemState> emit) async {
+    // Loading
+    emit(state.copyWith(
+      status: CreateItemStateEnum.loading,
     ));
+
+    // base item request
+    var request = ItemRequest();
+
+    try {
+      // If itemId is set we are editing item so we need to load its data.
+      if (event.itemId != null) {
+        // get item detail
+        var itemDetail = await itemService.getItemById(event.itemId!);
+
+        // convert item detail to editable request
+        request = itemService.responseToRequest(itemDetail);
+      }
+
+      // Emit loaded state
+      emit(LoadedState(request));
+    } on Exception catch (error) {
+      emit(ErrorState(
+        error: error,
+      ));
+    }
   }
 
   void _onUpdatePreviewEvent(
       UpdatePreviewEvent event, Emitter<CreateItemState> emit) {
-    emit(CreateItemState(
-      data: item,
+    emit(state.copyWith(
+      data: state.data,
     ));
   }
 
   void _onMoveToStep(MoveToStepEvent event, Emitter<CreateItemState> emit) {
-    emit(CreateItemState(
+    emit(state.copyWith(
       activeStepperIndex: event.step,
-      isValid: true,
     ));
   }
 }

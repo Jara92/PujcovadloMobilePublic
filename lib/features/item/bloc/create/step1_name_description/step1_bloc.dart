@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart' show immutable;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
 import 'package:pujcovadlo_client/features/item/models/models.dart';
 import 'package:pujcovadlo_client/features/item/requests/item_request.dart';
@@ -14,7 +14,7 @@ class Step1Bloc extends Bloc<Step1Event, Step1State> {
 
   Step1Bloc(CreateItemBloc createItemBloc) : super(const InitialState()) {
     _createItemBloc = createItemBloc;
-    _item = _createItemBloc.item;
+    _item = _createItemBloc.state.data!;
 
     on<Step1InitialEvent>(_onInitialEvent);
     on<ItemNameChanged>(_onItemNameChanged);

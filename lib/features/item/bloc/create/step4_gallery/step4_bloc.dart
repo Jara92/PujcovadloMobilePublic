@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart' show immutable;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:meta/meta.dart';
 import 'package:pujcovadlo_client/core/requests/image_request.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
 import 'package:pujcovadlo_client/features/item/models/models.dart';
@@ -18,7 +18,7 @@ class Step4Bloc extends Bloc<Step4Event, Step4State> {
 
   Step4Bloc(CreateItemBloc createItemBloc) : super(const InitialState()) {
     _createItemBloc = createItemBloc;
-    _item = _createItemBloc.item;
+    _item = _createItemBloc.state.data!;
 
     on<Step4InitialEvent>(_onInitialEvent);
     on<AddImage>(_onAddImage);

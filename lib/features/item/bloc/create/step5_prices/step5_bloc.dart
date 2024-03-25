@@ -1,6 +1,6 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart' show immutable;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:meta/meta.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
 import 'package:pujcovadlo_client/features/item/models/models.dart';
 import 'package:pujcovadlo_client/features/item/requests/item_request.dart';
@@ -15,7 +15,7 @@ class Step5Bloc extends Bloc<Step5Event, Step5State> {
 
   Step5Bloc(CreateItemBloc createItemBloc) : super(const InitialState()) {
     _createItemBloc = createItemBloc;
-    _item = _createItemBloc.item;
+    _item = _createItemBloc.state.data!;
 
     on<Step5InitialEvent>(_onInitialEvent);
     on<PricePerDayChanged>(_onPricePerDayChanged);

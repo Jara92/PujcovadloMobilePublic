@@ -1,6 +1,6 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart' show immutable;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:meta/meta.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
 import 'package:pujcovadlo_client/features/item/models/item_categories.dart';
 import 'package:pujcovadlo_client/features/item/models/models.dart';
@@ -22,7 +22,7 @@ class Step2Bloc extends Bloc<Step2Event, Step2State> {
 
   Step2Bloc(CreateItemBloc createItemBloc) : super(const InitialState()) {
     _createItemBloc = createItemBloc;
-    _item = _createItemBloc.item;
+    _item = _createItemBloc.state.data!;
 
     on<Step2InitialEvent>(_onInitialEvent);
     on<SearchTextUpdated>(_onSearchTextUpdated);
