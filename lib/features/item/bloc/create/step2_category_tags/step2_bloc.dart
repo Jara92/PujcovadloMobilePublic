@@ -37,7 +37,7 @@ class Step2Bloc extends Bloc<Step2Event, Step2State> {
       Step2InitialEvent event, Emitter<Step2State> emit) async {
     // Init selected categories
     emit(state.copyWith(
-        selectedCategories: ItemCategories.dirty(_item.categories)));
+        selectedCategories: ItemCategories.pure(_item.categories)));
 
     // Load categories
     await _fetchCategories(emit);
@@ -69,6 +69,8 @@ class Step2Bloc extends Bloc<Step2Event, Step2State> {
 
   Future<void> _onSearchTextUpdated(
       SearchTextUpdated event, Emitter<Step2State> emit) async {
+    //  todo: not working
+
     // Do nothing if categories are not loaded
     if (_categories == null) return;
 

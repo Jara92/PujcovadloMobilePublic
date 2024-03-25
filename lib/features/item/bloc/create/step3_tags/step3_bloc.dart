@@ -60,7 +60,7 @@ class Step3Bloc extends Bloc<Step3Event, Step3State> {
   Future<void> _onInitialEvent(
       Step3InitialEvent event, Emitter<Step3State> emit) async {
     // Init selected tags
-    emit(state.copyWith(selectedTags: ItemTags.dirty(_item.tags)));
+    emit(state.copyWith(selectedTags: ItemTags.pure(_item.tags)));
   }
 
   Future<void> _onSearchTagChanged(
