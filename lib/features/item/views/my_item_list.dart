@@ -56,19 +56,25 @@ class _MyItemListState extends State<MyItemList> {
               child: SafeArea(
                 child: BlocConsumer<MyItemListBloc, MyItemListState>(
                   listener: (context, state) {
+                    // New items loaded?
                     if (state.status == ListStateEnum.loaded) {
+                      // Append items to the list as the last page of the list
                       if (state.isLastPage) {
                         _pagingController.appendLastPage(state.items);
-                      } else {
+                      }
+                      // Append items to the list as a new page
+                      else {
                         _pagingController.appendPage(
                             state.items, state.nextPageLink);
                       }
                     }
 
+                    // Error occurred?
                     if (state.status == ListStateEnum.error) {
                       _pagingController.error = state.error;
                     }
 
+                    // Initial state? Should refresh the list
                     if (state.status == ListStateEnum.initial) {
                       _pagingController.refresh();
                     }

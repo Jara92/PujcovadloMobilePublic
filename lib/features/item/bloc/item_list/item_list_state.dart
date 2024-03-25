@@ -1,21 +1,54 @@
 part of 'item_list_bloc.dart';
 
 @immutable
-abstract class ItemListState {
-  final bool isLoading;
-  final List<ItemResponse> items;
+class ItemListState extends ListState<ItemResponse> {
+  final String search;
 
-  const ItemListState({this.isLoading = false, this.items = const <ItemResponse>[]});
+  const ItemListState({
+    required super.status,
+    required super.items,
+    super.nextPageLink,
+    super.error,
+    this.search = "",
+  });
+
+  @override
+  ItemListState copyWith({
+    ListStateEnum? status,
+    List<ItemResponse>? items,
+    String? nextPageLink,
+    String? search,
+    Exception? error,
+  }) {
+    return ItemListState(
+      status: status ?? this.status,
+      items: items ?? this.items,
+      nextPageLink: nextPageLink ?? this.nextPageLink,
+      search: search ?? this.search,
+      error: error ?? this.error,
+    );
+  }
 }
 
-class ItemListInitial extends ItemListState {
-  const ItemListInitial({super.isLoading, super.items});
+class InitialState extends ItemListState {
+  const InitialState()
+      : super(
+          status: ListStateEnum.initial,
+          items: const [],
+        );
 }
 
-class ItemListLoading extends ItemListState {
-  const ItemListLoading({super.isLoading});
+class ErrorState extends ItemListState {
+  const ErrorState({
+    required super.error,
+    super.status = ListStateEnum.error,
+    super.items = const [],
+  }) : super();
 }
 
-class ItemListLoaded extends ItemListState {
-  const ItemListLoaded({super.isLoading, required super.items});
+class LoadedState extends ItemListState {
+  const LoadedState({required super.items, required super.nextPageLink})
+      : super(
+          status: ListStateEnum.loaded,
+        );
 }
