@@ -33,31 +33,29 @@ class MyItemListBloc extends ListBloc<ItemResponse, MyItemListState> {
     super.onInitialEvent(event, emit);
   }
 
-  void _onSearchTextUpdated(
-      SearchTextUpdated event, Emitter<MyItemListState> emit) {
-    emit(state.copyWith(
-        search: event.searchText, status: ListStateEnum.refreshing));
-    myItemsFilter.search = event.searchText;
-  }
-
   @override
-  Future<void> onLoadItemsEvent(
-      ListEvent<ItemResponse> event, Emitter<MyItemListState> emit) async {
-    return loadItems(
-        event, emit, () => itemService.getItems(filter: myItemsFilter));
-  }
-
-  @override
-  Future<void> onLoadMoreEvent(
-      LoadMoreEvent<ItemResponse> event, Emitter<MyItemListState> emit) async {
-    if (state.status == ListStateEnum.refreshing || // Get new items
-        nextPageLink == null || // No more items
-        nextPageLink!.isEmpty) {
+  Future<void> onLoadItemsEvent(LoaditemsEvent<ItemResponse> event,
+      Emitter<MyItemListState> emit) async {
+    // Load first page
+    if (state.status == ListStateEnum.initial ||
+        // First request failed and there is no next page link
+        (state.status == ListStateEnum.error && event.nextPageLink.isEmpty)) {
       return loadItems(
           event, emit, () => itemService.getItems(filter: myItemsFilter));
     }
 
-    return loadMore(
-        event, emit, () => itemService.getItemsByUri(nextPageLink!));
+    // Load another page using next page link
+    return loadItems(
+        event, emit, () => itemService.getItemsByUri(event.nextPageLink));
+  }
+
+  void _onSearchTextUpdated(
+      SearchTextUpdated event, Emitter<MyItemListState> emit) {
+    // Update search text and status to refreshing
+    emit(state.copyWith(
+        search: event.searchText, status: ListStateEnum.initial));
+
+    // Update filter
+    myItemsFilter.search = event.searchText;
   }
 }

@@ -9,10 +9,8 @@ class InitialEvent<T> extends ListEvent<T> {
   const InitialEvent();
 }
 
-class LoadItemsEvent<T> extends ListEvent<T> {
-  const LoadItemsEvent();
-}
+class LoaditemsEvent<T> extends ListEvent<T> {
+  final String nextPageLink;
 
-class LoadMoreEvent<T> extends ListEvent<T> {
-  const LoadMoreEvent();
+  const LoaditemsEvent(this.nextPageLink) : super();
 }

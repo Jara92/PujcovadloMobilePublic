@@ -34,8 +34,8 @@ class _MyItemListState extends State<MyItemList> {
     searchController = TextEditingController();
     _pagingController = PagingController(firstPageKey: "");
 
-    _pagingController
-        .addPageRequestListener((pageKey) => _bloc.add(const LoadMoreEvent()));
+    _pagingController.addPageRequestListener(
+        (pageKey) => _bloc.add(LoaditemsEvent(pageKey)));
   }
 
   @override
@@ -60,8 +60,8 @@ class _MyItemListState extends State<MyItemList> {
                       if (state.isLastPage) {
                         _pagingController.appendLastPage(state.items);
                       } else {
-                        _pagingController.appendPage(state.items,
-                            context.read<MyItemListBloc>().nextPageLink!);
+                        _pagingController.appendPage(
+                            state.items, state.nextPageLink);
                       }
                     }
 
@@ -69,7 +69,7 @@ class _MyItemListState extends State<MyItemList> {
                       _pagingController.error = state.error;
                     }
 
-                    if (state.status == ListStateEnum.refreshing) {
+                    if (state.status == ListStateEnum.initial) {
                       _pagingController.refresh();
                     }
                   },

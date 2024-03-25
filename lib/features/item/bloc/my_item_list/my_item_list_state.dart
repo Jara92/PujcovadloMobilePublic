@@ -7,7 +7,7 @@ class MyItemListState extends ListState<ItemResponse> {
   const MyItemListState({
     required super.status,
     required super.items,
-    required super.isLastPage,
+    super.nextPageLink,
     super.error,
     this.search = "",
   });
@@ -16,14 +16,14 @@ class MyItemListState extends ListState<ItemResponse> {
   MyItemListState copyWith({
     ListStateEnum? status,
     List<ItemResponse>? items,
-    bool? isLastPage,
+    String? nextPageLink,
     String? search,
     Exception? error,
   }) {
     return MyItemListState(
       status: status ?? this.status,
       items: items ?? this.items,
-      isLastPage: isLastPage ?? this.isLastPage,
+      nextPageLink: nextPageLink ?? this.nextPageLink,
       search: search ?? this.search,
       error: error ?? this.error,
     );
@@ -35,7 +35,6 @@ class InitialState extends MyItemListState {
       : super(
           status: ListStateEnum.initial,
           items: const [],
-          isLastPage: false,
         );
 }
 
@@ -43,22 +42,12 @@ class ErrorState extends MyItemListState {
   const ErrorState({
     required super.error,
     super.status = ListStateEnum.error,
-    super.isLastPage = false,
     super.items = const [],
   }) : super();
 }
 
-class LoadingState extends MyItemListState {
-  const LoadingState()
-      : super(
-          status: ListStateEnum.loading,
-          items: const [],
-          isLastPage: false,
-        );
-}
-
 class LoadedState extends MyItemListState {
-  const LoadedState({required super.items, required super.isLastPage})
+  const LoadedState({required super.items, required super.nextPageLink})
       : super(
           status: ListStateEnum.loaded,
         );

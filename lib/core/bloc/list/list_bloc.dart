@@ -14,90 +14,44 @@ EventTransformer<Event> debounce<Event>(Duration duration) {
 
 abstract class ListBloc<TData, TState extends ListState<TData>>
     extends Bloc<ListEvent<TData>, TState> {
-  String? nextPageLink;
 
   ListBloc(super.initState) {
     on<InitialEvent<TData>>(onInitialEvent);
-    on<LoadItemsEvent<TData>>(onLoadItemsEvent);
-    on<LoadMoreEvent<TData>>(onLoadMoreEvent);
+    on<LoaditemsEvent<TData>>(onLoadItemsEvent);
   }
 
-  Future<void> onInitialEvent(
-      InitialEvent<TData> event, Emitter<TState> emit) async {
-    //add(const ReloadItemsEvent());
-  }
+  Future<void> onInitialEvent(InitialEvent<TData> event,
+      Emitter<TState> emit) async {}
 
-  Future<void> onLoadItemsEvent(
-      ListEvent<TData> event, Emitter<TState> emit) async {
+  Future<void> onLoadItemsEvent(LoaditemsEvent<TData> event,
+      Emitter<TState> emit) async {
     throw UnimplementedError();
   }
 
-  Future<void> loadItems(ListEvent event, Emitter<TState> emit,
+  Future<void> loadItems(LoaditemsEvent<TData> event, Emitter<TState> emit,
       Future<ResponseList<TData>> Function() fetcher) async {
-    // Emit waiting state
-    emit(state.copyWith(status: ListStateEnum.loading) as TState);
-
-    try {
-      // Load items
-      var items = await fetcher.call();
-
-      // Update next page link
-      nextPageLink = items.nextPageLink;
-
-      // Emit loaded state
-      emit(state.copyWith(
-        status: ListStateEnum.loaded,
-        items: items.data,
-        isLastPage: nextPageLink == null,
-      ) as TState);
-    } on Exception catch (e) {
-      // Emit error state
-      emit(state.copyWith(
-        status: ListStateEnum.error,
-        error: e,
-      ) as TState);
-    }
-  }
-
-  Future<void> onLoadMoreEvent(
-      LoadMoreEvent<TData> event, Emitter<TState> emit) async {
-    throw UnimplementedError();
-  }
-
-  Future<void> loadMore(ListEvent event, Emitter<TState> emit,
-      Future<ResponseList<TData>> Function() fetcher) async {
-    // If there is no next page, then return
-    if (nextPageLink == null) {
-      return;
-    }
-
     try {
       // Load more items
       var listData = await fetcher.call();
 
-      // Update next page link
-      nextPageLink = listData.nextPageLink;
-
       // Emit loaded state with new items
       emit(state.copyWith(
-        status: ListStateEnum.loaded,
-        items: listData.data,
-        //items: state.items..addAll(listData.data),
-        // take all items from previous state and add new items
-        isLastPage: nextPageLink == null,
+        status: ListStateEnum.loaded, // Set status to loaded
+        items: listData.data, // Add new items to the list
+        nextPageLink: listData.nextPageLink ??
+            '', // If null set next page link to empty string
       ) as TState);
     } on Exception catch (e) {
-      print(e);
+      // print(e);
 
       emit(
         state.copyWith(
-          status: ListStateEnum.error,
-          error: e,
-          items: const [],
-          isLastPage: false,
+          status: ListStateEnum.error, // error state
+          error: e, // pass error
+          items: const [], // no new items
+          nextPageLink: event.nextPageLink, // Set the same next page link
         ) as TState,
       );
-      // Do nothing if an exception was thrown because we are loaidng more items
     }
   }
 }
