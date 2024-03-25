@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pujcovadlo_client/core/widgets/not_found_widget.dart';
-import 'package:pujcovadlo_client/core/widgets/operation_error_widget.dart';
+import 'package:pujcovadlo_client/core/widgets/errors/not_found_error.dart';
+import 'package:pujcovadlo_client/core/widgets/errors/operation_error.dart';
 import 'package:pujcovadlo_client/features/item/bloc/item_detail/item_detail_bloc.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_detail_widget.dart';
@@ -26,7 +26,7 @@ class ItemDetailView extends StatelessWidget {
               builder: (context, state) {
                 // Display item not found message
                 if (state is ItemDetailNotFound) {
-                  return const NotFoundWidget();
+                  return const NotFoundError();
                 }
 
                 // Display item detail
@@ -36,7 +36,7 @@ class ItemDetailView extends StatelessWidget {
 
                 // Display error message
                 if (state is ItemDetailFailed) {
-                  return const OperationErrorWidget();
+                  return const OperationError();
                 }
 
                 if (state.isLoading) {

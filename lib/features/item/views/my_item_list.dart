@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
+import 'package:pujcovadlo_client/core/widgets/errors/loading_next_page_error.dart';
+import 'package:pujcovadlo_client/core/widgets/errors/not_found_error.dart';
+import 'package:pujcovadlo_client/core/widgets/errors/operation_error.dart';
 import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
-import 'package:pujcovadlo_client/core/widgets/messages/loading_next_page_error.dart';
-import 'package:pujcovadlo_client/core/widgets/not_found_widget.dart';
-import 'package:pujcovadlo_client/core/widgets/operation_error_widget.dart';
 import 'package:pujcovadlo_client/features/item/bloc/my_item_list/my_item_list_bloc.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
 import 'package:pujcovadlo_client/features/item/views/item_create_view.dart';
@@ -143,10 +143,10 @@ class _MyItemListState extends State<MyItemList> {
       child: PagedListView<String, ItemResponse>(
         pagingController: _pagingController,
         builderDelegate: PagedChildBuilderDelegate<ItemResponse>(
-          firstPageErrorIndicatorBuilder: (_) => OperationErrorWidget(
+          firstPageErrorIndicatorBuilder: (_) => OperationError(
             onRetry: _pagingController.refresh,
           ),
-          noItemsFoundIndicatorBuilder: (_) => NotFoundWidget(
+          noItemsFoundIndicatorBuilder: (_) => NotFoundError(
             title: context.loc.no_items_found,
             message: context.loc.no_items_found_message,
           ),

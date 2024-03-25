@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
+import 'package:pujcovadlo_client/core/widgets/errors/loading_next_page_error.dart';
+import 'package:pujcovadlo_client/core/widgets/errors/not_found_error.dart';
+import 'package:pujcovadlo_client/core/widgets/errors/operation_error.dart';
 import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
-import 'package:pujcovadlo_client/core/widgets/messages/loading_next_page_error.dart';
-import 'package:pujcovadlo_client/core/widgets/not_found_widget.dart';
-import 'package:pujcovadlo_client/core/widgets/operation_error_widget.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_list_tile_widget.dart';
 
@@ -13,7 +13,7 @@ import '../bloc/item_list/item_list_bloc.dart';
 import 'item_detail_view.dart';
 
 class ItemListView extends StatefulWidget {
-  ItemListView({super.key});
+  const ItemListView({super.key});
 
   @override
   State<ItemListView> createState() => _ItemListViewState();
@@ -90,14 +90,10 @@ class _ItemListViewState extends State<ItemListView> {
                           leading: const Icon(Icons.search),
                           trailing: <Widget>[
                             Tooltip(
-                              message: 'Advanced search',
+                              message: context.loc.advanced_search,
                               child: IconButton(
                                 isSelected: false,
-                                onPressed: () {
-                                  setState(() {
-                                    //isDark = !isDark;
-                                  });
-                                },
+                                onPressed: () {},
                                 icon: const Icon(Icons.manage_search),
                                 selectedIcon: const Icon(Icons.manage_search),
                               ),
@@ -105,11 +101,9 @@ class _ItemListViewState extends State<ItemListView> {
                           ],
                           padding: const MaterialStatePropertyAll<EdgeInsets>(
                               EdgeInsets.symmetric(horizontal: 16.0)),
-                          onChanged: (value) {
-                            //print("onChanged");
-                            BlocProvider.of<ItemListBloc>(context)
-                                .add(SearchTextUpdated(searchText: value));
-                          },
+                          onChanged: (value) =>
+                              BlocProvider.of<ItemListBloc>(context)
+                                  .add(SearchTextUpdated(searchText: value)),
                           hintText: context.loc.what_are_you_looking_for,
                         ),
                       ),
@@ -129,10 +123,10 @@ class _ItemListViewState extends State<ItemListView> {
       child: PagedListView<String, ItemResponse>(
         pagingController: _pagingController,
         builderDelegate: PagedChildBuilderDelegate<ItemResponse>(
-          firstPageErrorIndicatorBuilder: (_) => OperationErrorWidget(
+          firstPageErrorIndicatorBuilder: (_) => OperationError(
             onRetry: _pagingController.refresh,
           ),
-          noItemsFoundIndicatorBuilder: (_) => NotFoundWidget(
+          noItemsFoundIndicatorBuilder: (_) => NotFoundError(
             title: context.loc.no_items_found,
             message: context.loc.no_items_found_message,
           ),
