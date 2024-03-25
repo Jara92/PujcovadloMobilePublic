@@ -53,6 +53,8 @@ class ItemService {
       pricePerDay: itemDetailResponse.pricePerDay,
       refundableDeposit: itemDetailResponse.refundableDeposit,
       sellingPrice: itemDetailResponse.sellingPrice,
+      categories: itemDetailResponse.categories.map((e) => e.id).toList(),
+      tags: itemDetailResponse.tags.map((e) => e.name).toList(),
 /*      images: itemDetailResponse.images.map((e) => ImageRequest(
         id: e.id,
         name: e.name,
