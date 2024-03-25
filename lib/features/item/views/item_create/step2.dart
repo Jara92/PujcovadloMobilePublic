@@ -62,19 +62,19 @@ class _Step2State extends State<Step2> {
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
-        body: FormContainer(
-          child: Column(
-            children: [
-              ItemFormHeading(
-                title: context.loc.item_categories_page_title,
-                description: context.loc.item_categories_page_description,
-                bottomMargin: 0,
-              ),
-              Row(
+        body: BlocBuilder<Step2Bloc, Step2State>(
+          builder: (context, state) {
+            return FormContainer(
+              child: Column(
                 children: [
-                  BlocBuilder<Step2Bloc, Step2State>(
-                    builder: (context, state) {
-                      return Text(
+                  ItemFormHeading(
+                    title: context.loc.item_categories_page_title,
+                    description: context.loc.item_categories_page_description,
+                    bottomMargin: 0,
+                  ),
+                  Row(
+                    children: [
+                      Text(
                         _localizeCategoriesError(
                                 context, state.selectedCategories) ??
                             '',
@@ -82,72 +82,54 @@ class _Step2State extends State<Step2> {
                         style: Theme.of(context).textTheme.labelSmall!.copyWith(
                               color: Theme.of(context).colorScheme.error,
                             ),
-                      );
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  SearchBar(
+                    controller: _searchController,
+                    leading: const Icon(Icons.search),
+                    trailing: <Widget>[
+                      Tooltip(
+                        message: context.loc.item_categories_search_tooltip,
+                        child: IconButton(
+                          isSelected: false,
+                          onPressed: () {
+                            _searchController.clear();
+                            context
+                                .read<Step2Bloc>()
+                                .add(const SearchTextUpdated(""));
+                          },
+                          icon: const Icon(Icons.clear),
+                          selectedIcon: const Icon(Icons.manage_search),
+                        ),
+                      )
+                    ],
+                    padding: const MaterialStatePropertyAll<EdgeInsets>(
+                        EdgeInsets.symmetric(horizontal: 16.0)),
+                    onChanged: (String value) {
+                      context.read<Step2Bloc>().add(SearchTextUpdated(value));
                     },
-                  )
-                ],
-              ),
-              const SizedBox(height: 10),
-              SearchBar(
-                controller: _searchController,
-                leading: const Icon(Icons.search),
-                trailing: <Widget>[
-                  Tooltip(
-                    message: context.loc.item_categories_search_tooltip,
-                    child: IconButton(
-                      isSelected: false,
-                      onPressed: () {
-                        _searchController.clear();
-                        context
-                            .read<Step2Bloc>()
-                            .add(const SearchTextUpdated(""));
-                      },
-                      icon: const Icon(Icons.clear),
-                      selectedIcon: const Icon(Icons.manage_search),
-                    ),
-                  )
-                ],
-                padding: const MaterialStatePropertyAll<EdgeInsets>(
-                    EdgeInsets.symmetric(horizontal: 16.0)),
-                onChanged: (String value) {
-                  context.read<Step2Bloc>().add(SearchTextUpdated(value));
-                },
-                hintText: context.loc.item_searching_in_categories,
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  BlocBuilder<Step2Bloc, Step2State>(
-                    builder: (context, state) {
-                      return Text(
+                    hintText: context.loc.item_searching_in_categories,
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Text(
                         textAlign: TextAlign.left,
                         context.loc.item_selected_categories_count(
                             state.selectedCategories.value.length,
                             ItemCategories.maxCategoriesCount),
                         style: Theme.of(context).textTheme.labelSmall,
-                      );
-                    },
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 15),
+                  _buildMainBody(context, state),
                 ],
               ),
-              const SizedBox(height: 15),
-              BlocConsumer<Step2Bloc, Step2State>(
-                  listener: (context, state) {},
-                  builder: (context, state) {
-                    if (state.status == Step2StateEnum.loaded) {
-                      return (state.categories.isEmpty)
-                          ? _buildEmptyMessage(context)
-                          : _buildCategoriesList(context, state);
-                    }
-
-                    if (state.status == Step2StateEnum.error) {
-                      return _buildFailedMessage(context);
-                    }
-
-                    return const Center(child: CircularProgressIndicator());
-                  }),
-            ],
-          ),
+            );
+          },
         ),
         bottomNavigationBar: BottomAppBar(
           child: BlocBuilder<Step2Bloc, Step2State>(
@@ -177,6 +159,20 @@ class _Step2State extends State<Step2> {
         ),
       ),
     );
+  }
+
+  Widget _buildMainBody(BuildContext context, Step2State state) {
+    if (state.status == Step2StateEnum.loaded) {
+      return (state.categories.isEmpty)
+          ? _buildEmptyMessage(context)
+          : _buildCategoriesList(context, state);
+    }
+
+    if (state.status == Step2StateEnum.error) {
+      return _buildFailedMessage(context);
+    }
+
+    return const Center(child: CircularProgressIndicator());
   }
 
   Widget _buildEmptyMessage(BuildContext context) {
