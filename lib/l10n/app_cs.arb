@@ -16,6 +16,7 @@
   "delete": "Smazat",
   "advanced_search": "Pokročilé vyhledávání",
   "clear_search": "Smazat hledání",
+  "no_search_results": "Žádné výsledky",
   "error_message": "Něco se pokazilo. Zkuste to prosím znovu.",
   "pick_from_gallery": "Vybrat z galerie",
   "take_photo": "Vyfotit",

@@ -4,7 +4,9 @@ import 'package:pujcovadlo_client/core/responses/image_response.dart';
 import 'package:pujcovadlo_client/core/responses/link_response.dart';
 import 'package:pujcovadlo_client/features/authentication/responses/user_response.dart';
 import 'package:pujcovadlo_client/features/item/enums/item_status.dart';
+import 'package:pujcovadlo_client/features/item/responses/item_category_response.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
+import 'package:pujcovadlo_client/features/item/responses/item_tag_response.dart';
 
 class ItemDetailResponse extends ItemResponse {
   String description;
@@ -13,9 +15,9 @@ class ItemDetailResponse extends ItemResponse {
 
   List<ImageResponse> images;
 
-  //List<ItemCategoryResponse> categories;
+  List<ItemCategoryResponse> categories;
 
-  //List<ItemTagResponse> tags;
+  List<ItemTagResponse> tags;
 
   DateTime createdAt;
 
@@ -26,8 +28,8 @@ class ItemDetailResponse extends ItemResponse {
   ItemDetailResponse({
     required this.description,
     required this.parameters,
-    //required this.categories,
-    //required this.tags,
+    required this.categories,
+    required this.tags,
     required this.createdAt,
     this.images = const [],
     this.updatedAt,
@@ -52,6 +54,12 @@ class ItemDetailResponse extends ItemResponse {
       name: json['Name'] as String,
       description: json['Description'] as String,
       parameters: json['Parameters'] as String,
+      categories: (json['Categories'] as List)
+          .map((e) => ItemCategoryResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      tags: (json['Tags'] as List)
+          .map((e) => ItemTagResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
       alias: json['Alias'] as String,
       status: ItemStatusExtension.fromValue(json['Status'] as int),
       pricePerDay: json['PricePerDay']?.toDouble(),

@@ -24,8 +24,10 @@ class OperationError extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     fontWeight: FontWeight.bold,
                   )),
+          SizedBox(height: 10),
           Text(
             message ?? context.loc.error_message,
+            textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.labelMedium!,
           ),
           if (onRetry != null)

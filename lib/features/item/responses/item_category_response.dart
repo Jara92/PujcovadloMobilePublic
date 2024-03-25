@@ -22,18 +22,18 @@ class ItemCategoryResponse extends Equatable {
     this.links = const [],
   });
 
-  factory ItemCategoryResponse.fromJson(Map<String, Object> json) {
+  factory ItemCategoryResponse.fromJson(Map<String, dynamic> json) {
     return ItemCategoryResponse(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      alias: json['alias'] as String,
-      parentId: json['parentId'] as int?,
-      links: (json['_links'] as List<Object>)
-          .map((e) => LinkResponse.fromJson(e as Map<String, Object>))
+      id: json['Id'] as int,
+      name: json['Name'] as String,
+      alias: json['Alias'] as String,
+      parentId: json['ParentId'] as int?,
+      links: (json['_links'] as List<dynamic>)
+          .map((e) => LinkResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
   }
 
   @override
-  List<Object?> get props => [id, name, alias, parentId];
+  List<Object> get props => [id, name, alias];
 }

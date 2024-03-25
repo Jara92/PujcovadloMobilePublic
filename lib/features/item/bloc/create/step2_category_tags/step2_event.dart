@@ -22,6 +22,10 @@ class CategoryOptionSelected extends Step2Event {
   const CategoryOptionSelected(this.categoryId, this.isChecked) : super();
 }
 
+class ReloadCategoriesEvent extends Step2Event {
+  const ReloadCategoriesEvent();
+}
+
 class NextStepEvent extends Step2Event {
   const NextStepEvent();
 }

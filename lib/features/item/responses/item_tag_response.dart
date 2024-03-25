@@ -12,10 +12,10 @@ class ItemTagResponse extends Equatable {
     required this.name,
   });
 
-  factory ItemTagResponse.fromJson(Map<String, Object> json) {
+  factory ItemTagResponse.fromJson(Map<String, dynamic> json) {
     return ItemTagResponse(
-      id: json['id'] as int,
-      name: json['name'] as String,
+      id: json['Id'] as int,
+      name: json['Name'].toString(),
     );
   }
 

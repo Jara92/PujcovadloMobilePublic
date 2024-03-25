@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pujcovadlo_client/core/responses/response_list.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
 import 'package:pujcovadlo_client/features/item/models/item_categories.dart';
 import 'package:pujcovadlo_client/features/item/models/models.dart';
@@ -18,7 +19,7 @@ class Step2Bloc extends Bloc<Step2Event, Step2State> {
   //late final ItemRequest item;
   late final CreateItemBloc _createItemBloc;
   late final ItemRequest _item;
-  late final List<ItemCategoryResponse> _categories;
+  ResponseList<ItemCategoryResponse>? _categories;
 
   Step2Bloc(CreateItemBloc createItemBloc) : super(const InitialState()) {
     _createItemBloc = createItemBloc;
@@ -27,6 +28,7 @@ class Step2Bloc extends Bloc<Step2Event, Step2State> {
     on<Step2InitialEvent>(_onInitialEvent);
     on<SearchTextUpdated>(_onSearchTextUpdated);
     on<CategoryOptionSelected>(_onCategoryOptionSelected);
+    on<ReloadCategoriesEvent>(_onReloadCategoriesEvent);
     on<NextStepEvent>(_onNextStep);
     on<PreviousStepEvent>(_onPreviousStep);
   }
@@ -39,13 +41,40 @@ class Step2Bloc extends Bloc<Step2Event, Step2State> {
 
     // TODO
     _categories = await _itemCategoryService.getCategories();
-
-    emit(state.copyWith(categories: _categories));
+    // Load categories
+    await _fetchCategories(emit);
   }
 
-  void _onSearchTextUpdated(SearchTextUpdated event, Emitter<Step2State> emit) {
+  Future<void> _fetchCategories(Emitter<Step2State> emit) async {
+    emit(state.copyWith(status: Step2StateEnum.loading));
+
+    // get all categories using the service
+    try {
+      // load categories
+      _categories = await _itemCategoryService.getCategories();
+
+      // Emit loaded state
+      emit(state.copyWith(
+        status: Step2StateEnum.loaded,
+        categories: _categories!.data,
+      ));
+    } on Exception catch (e) {
+      print(e);
+      emit(state.copyWith(
+        status: Step2StateEnum.error,
+        error: e,
+      ));
+      return;
+    }
+  }
+
+  Future<void> _onSearchTextUpdated(
+      SearchTextUpdated event, Emitter<Step2State> emit) async {
+    // Do nothing if categories are not loaded
+    if (_categories == null) return;
+
     emit(state.copyWith(
-        categories: _categories
+        categories: _categories!.data
             .where((category) => category.name
                 .toLowerCase()
                 .contains(event.searchText.toLowerCase()))
@@ -67,6 +96,11 @@ class Step2Bloc extends Bloc<Step2Event, Step2State> {
     }
 
     emit(state.copyWith(selectedCategories: selectedCategories));
+  }
+
+  Future<void> _onReloadCategoriesEvent(
+      ReloadCategoriesEvent event, Emitter<Step2State> emit) async {
+    await _fetchCategories(emit);
   }
 
   void _onNextStep(NextStepEvent event, Emitter<Step2State> emit) {

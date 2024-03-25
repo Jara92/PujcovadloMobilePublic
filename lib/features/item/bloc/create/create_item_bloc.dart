@@ -9,22 +9,9 @@ part 'create_item_state.dart';
 part 'create_item_steps.dart';
 
 class CreateItemBloc extends Bloc<CreateItemEvent, CreateItemState> {
-  final ItemService itemService = GetIt.instance<ItemService>();
-
-  //ItemRequest? item;
+  final ItemService _itemService = GetIt.instance<ItemService>();
 
   CreateItemBloc() : super(const InitialState()) {
-    // TODO: debug only
-/*    this.item = item ??
-        ItemRequest(
-          name: "Testovací",
-          description: "Testovací popis na testy",
-          pricePerDay: 100,
-          categories: [1],
-          images: [],
-          tags: ["Vrtačka", "Šroubovák"],
-        );*/
-
     on<InitialEvent>(_onInitialEvent);
     on<UpdatePreviewEvent>(_onUpdatePreviewEvent);
     on<MoveToStepEvent>(_onMoveToStep);
@@ -44,10 +31,10 @@ class CreateItemBloc extends Bloc<CreateItemEvent, CreateItemState> {
       // If itemId is set we are editing item so we need to load its data.
       if (event.itemId != null) {
         // get item detail
-        var itemDetail = await itemService.getItemById(event.itemId!);
+        var itemDetail = await _itemService.getItemById(event.itemId!);
 
         // convert item detail to editable request
-        request = itemService.responseToRequest(itemDetail);
+        request = _itemService.responseToRequest(itemDetail);
       }
 
       // Emit loaded state
