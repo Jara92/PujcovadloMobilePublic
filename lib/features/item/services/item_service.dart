@@ -4,11 +4,8 @@ import 'package:get_it/get_it.dart';
 import 'package:pujcovadlo_client/config.dart';
 import 'package:pujcovadlo_client/core/responses/response_list.dart';
 import 'package:pujcovadlo_client/core/services/http_service.dart';
-import 'package:pujcovadlo_client/features/authentication/responses/user_response.dart';
 import 'package:pujcovadlo_client/features/item/filters/item_filter.dart';
 
-import '../../../core/responses/image_response.dart';
-import '../enums/item_status.dart';
 import '../requests/item_request.dart';
 import '../responses/item_detail_response.dart';
 import '../responses/item_response.dart';
@@ -73,19 +70,15 @@ class ItemService {
     );
   }
 
-    // Fetch items from the server
-    return _myItems;
-  }*/
-
-  Future<ItemDetailResponse?> getItemByUri(String uri) {
+  Future<ItemDetailResponse> getItemByUri(String uri) {
     return _getItemByUri(Uri.parse(uri));
   }
 
-  Future<ItemDetailResponse?> getItemById(int id) async {
+  Future<ItemDetailResponse> getItemById(int id) async {
     return _getItemByUri(Uri.parse("${config.apiEndpoint}/items/$id"));
   }
 
-  Future<ItemDetailResponse?> _getItemByUri(Uri uri) async {
+  Future<ItemDetailResponse> _getItemByUri(Uri uri) async {
     final response = await http.get(uri: uri);
 
     // Parse JSON if the server returned a 200 OK response
@@ -104,54 +97,16 @@ class ItemService {
   Future<ItemDetailResponse> createItem(ItemRequest request) async {
     await Future.delayed(Duration(milliseconds: 1700));
 
-    int id = 20;
-
-    // Create item on the server
-    return ItemDetailResponse(
-      id: id,
-      name: "Item ${id}",
-      alias: "item",
-      description:
-          "Description of item ${id}. This item is very good and handy for everyone. You can use it for many purposes. I will borrow it to you for a very good price. You will be happy with it. I promise.",
-      parameters: "",
-      status: ItemStatus.public,
-      owner: UserResponse(
-          id: "1",
-          username: "user1",
-          firstName: "User",
-          lastName: "One",
-          links: []),
-      pricePerDay: 100.0,
-      refundableDeposit: 100.0,
-      sellingPrice: 100.0,
-      createdAt: DateTime.now(),
-    );
+    throw UnimplementedError();
   }
 
   Future<ItemDetailResponse> updateItem(ItemRequest item) async {
     // Update item on the server
-    return ItemDetailResponse(
-      id: item.id!,
-      name: "Item ${item.id!}",
-      alias: "item",
-      description:
-          "Description of item ${item.id!}. This item is very good and handy for everyone. You can use it for many purposes. I will borrow it to you for a very good price. You will be happy with it. I promise.",
-      parameters: "",
-      status: ItemStatus.public,
-      owner: UserResponse(
-          id: "1",
-          username: "user1",
-          firstName: "User",
-          lastName: "One",
-          links: []),
-      pricePerDay: 100.0,
-      refundableDeposit: 100.0,
-      sellingPrice: 2000.0,
-      createdAt: DateTime.now().add(Duration(days: -10)),
-    );
+    throw UnimplementedError();
   }
 
   Future<void> deleteItem(int id) async {
     // Delete item on the server
+    throw UnimplementedError();
   }
 }
