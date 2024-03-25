@@ -15,7 +15,7 @@ class ItemTag extends FormzInput<String, ItemTagValidationError> {
   const ItemTag.dirty([super.value = ""]) : super.dirty();
 
   static const _minTagLength = 4;
-  static const _maxTagLength = 20;
+  static const _maxTagLength = 40;
 
   static final _tagNameRegex = Regex.simpleTextRegex;
 

@@ -65,6 +65,7 @@ class Step3Bloc extends Bloc<Step3Event, Step3State> {
 
   Future<void> _onSearchTagChanged(
       SearchTagChanged event, Emitter<Step3State> emit) async {
+    // Save new search tag
     final search = ItemTag.dirty(event.tag);
     emit(state.copyWith(currentTag: search));
 
@@ -79,6 +80,10 @@ class Step3Bloc extends Bloc<Step3Event, Step3State> {
   }
 
   Future<void> _onAddTag(AddTag event, Emitter<Step3State> emit) async {
+    // Save the tag
+    final search = ItemTag.dirty(event.tag);
+    emit(state.copyWith(currentTag: search));
+
     // Do nothing if the tag is empty
     if (event.tag.isEmpty) {
       return;
@@ -87,14 +92,12 @@ class Step3Bloc extends Bloc<Step3Event, Step3State> {
     // Do nothing if the tag is already selected
     if (state.selectedTags.value.contains(event.tag)) return;
 
-    final search = ItemTag.dirty(event.tag);
-    emit(state.copyWith(currentTag: search));
-
     // Dont continue if the tag is not valid
     if (search.isNotValid) return;
 
     emit(state.copyWith(
       selectedTags: ItemTags.dirty([...state.selectedTags.value, event.tag]),
+      // Clear the current tag when successfully added
       currentTag: const ItemTag.pure(),
     ));
   }

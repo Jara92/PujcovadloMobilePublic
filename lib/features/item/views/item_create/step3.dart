@@ -52,7 +52,11 @@ class _Step3State extends State<Step3> {
         ),
         body: BlocConsumer<Step3Bloc, Step3State>(
           listener: (context, state) {
-            _textEditingController.text = state.currentTag.value;
+            // Update controllers value only when the value is different
+            // This is to prevent the cursor from moving to the end of the text
+            if (_textEditingController.text != state.currentTag.value) {
+              _textEditingController.text = state.currentTag.value;
+            }
           },
           builder: (context, state) {
             return FormContainer(
@@ -131,10 +135,9 @@ class _Step3State extends State<Step3> {
                             EdgeInsets.symmetric(horizontal: 16.0)),
                         onSubmitted: (String value) {
                           context.read<Step3Bloc>().add(AddTag(value));
-                          _textEditingController.clear();
-                          textEditingController.clear();
                         },
                         onChanged: (String value) {
+                          // pass changes to Autocomplete's controller
                           textEditingController.text = value;
                         },
                         hintText: context.loc.item_tags_search_text,
