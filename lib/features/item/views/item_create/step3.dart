@@ -87,19 +87,16 @@ class _Step3State extends State<Step3> {
                   const SizedBox(height: 10),
                   Autocomplete<String>(
                     optionsBuilder: (TextEditingValue textEditingValue) async {
+                      // Wait for the options
                       final options =
                           await _debouncedSearch.call(textEditingValue.text);
 
+                      // If the options are null, return an empty list
                       if (options == null) {
                         return List<String>.empty();
                       }
 
                       return options;
-                    },
-                    onSelected: (String selection) {
-                      context
-                          .read<Step3Bloc>()
-                          .add(SelectSuggestion(selection));
                     },
                     fieldViewBuilder: (BuildContext context,
                         TextEditingController textEditingController,
@@ -135,6 +132,7 @@ class _Step3State extends State<Step3> {
                         onSubmitted: (String value) {
                           context.read<Step3Bloc>().add(AddTag(value));
                           _textEditingController.clear();
+                          textEditingController.clear();
                         },
                         onChanged: (String value) {
                           textEditingController.text = value;
