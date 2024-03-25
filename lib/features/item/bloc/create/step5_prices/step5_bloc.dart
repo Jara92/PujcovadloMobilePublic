@@ -27,8 +27,9 @@ class Step5Bloc extends Bloc<Step5Event, Step5State> {
 
   void _onInitialEvent(Step5InitialEvent event, Emitter<Step5State> emit) {
     emit(Step5State(
-      pricePerDay: ItemPricePerDay.dirty(_item.pricePerDay),
-      refundableDeposit: ItemRefundableDeposit.dirty(_item.refundableDeposit),
+      pricePerDay: ItemPricePerDay.pure(_item.pricePerDay),
+      refundableDeposit: ItemRefundableDeposit.pure(_item.refundableDeposit),
+      sellingPrice: ItemSellingPrice.pure(_item.sellingPrice),
     ));
   }
 

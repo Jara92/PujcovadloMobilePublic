@@ -5,6 +5,7 @@ import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dar
 import 'package:pujcovadlo_client/features/item/bloc/create/preview/preview_bloc.dart';
 import 'package:pujcovadlo_client/features/item/views/item_create/summary.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_create/form_container.dart';
+import 'package:pujcovadlo_client/features/item/widgets/item_create/item_form_heading.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_create/preview_widget.dart';
 
 class Step6 extends StatefulWidget {
@@ -28,11 +29,7 @@ class _Step6State extends State<Step6> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) {
-        final bloc = PreviewBloc(context.read<CreateItemBloc>());
-        //bloc.add(const PreviewInitialEvent());
-        return bloc;
-      },
+      create: (context) => PreviewBloc(context.read<CreateItemBloc>()),
       child: Scaffold(
         appBar: AppBar(
           title: Text(context.loc.title_create_new_item),
@@ -51,37 +48,10 @@ class _Step6State extends State<Step6> {
               return FormContainer(
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Icon(Icons.info_outline,
-                            color: Theme.of(context).primaryColor),
-                        const SizedBox(width: 5),
-                        Expanded(
-                          child: Text(
-                            context.loc.item_preview_page_title,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                        ),
-                      ],
+                    ItemFormHeading(
+                      title: context.loc.item_preview_page_title,
+                      description: context.loc.item_preview_page_description,
                     ),
-                    const SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            context.loc.item_preview_page_description,
-                            style: Theme.of(context).textTheme.labelSmall!,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
                     if (state.data != null)
                       ItemPreviewWidget(item: state.data!),
                   ],

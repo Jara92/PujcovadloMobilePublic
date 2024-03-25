@@ -39,8 +39,6 @@ class Step2Bloc extends Bloc<Step2Event, Step2State> {
     emit(state.copyWith(
         selectedCategories: ItemCategories.dirty(_item.categories)));
 
-    // TODO
-    _categories = await _itemCategoryService.getCategories();
     // Load categories
     await _fetchCategories(emit);
   }
@@ -50,6 +48,7 @@ class Step2Bloc extends Bloc<Step2Event, Step2State> {
 
     // get all categories using the service
     try {
+      //throw Exception('Failed to load categories');
       // load categories
       _categories = await _itemCategoryService.getCategories();
 

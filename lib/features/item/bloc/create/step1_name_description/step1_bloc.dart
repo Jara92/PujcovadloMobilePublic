@@ -24,8 +24,8 @@ class Step1Bloc extends Bloc<Step1Event, Step1State> {
 
   void _onInitialEvent(Step1InitialEvent event, Emitter<Step1State> emit) {
     emit(Step1State(
-      name: ItemName.dirty(_item.name ?? ""),
-      description: ItemDescription.dirty(_item.description ?? ""),
+      name: ItemName.pure(_item.name ?? ""),
+      description: ItemDescription.pure(_item.description ?? ""),
     ));
   }
 

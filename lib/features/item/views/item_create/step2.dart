@@ -68,6 +68,7 @@ class _Step2State extends State<Step2> {
               ItemFormHeading(
                 title: context.loc.item_categories_page_title,
                 description: context.loc.item_categories_page_description,
+                bottomMargin: 0,
               ),
               Row(
                 children: [

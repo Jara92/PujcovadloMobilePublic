@@ -97,11 +97,8 @@ class _Step4State extends State<Step4> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) {
-        final bloc = Step4Bloc(context.read<CreateItemBloc>());
-        bloc.add(const Step4InitialEvent());
-        return bloc;
-      },
+      create: (context) => Step4Bloc(context.read<CreateItemBloc>())
+        ..add(const Step4InitialEvent()),
       child: Scaffold(
         appBar: AppBar(
           title: Text(context.loc.title_create_new_item),

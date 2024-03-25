@@ -6,6 +6,7 @@ import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dar
 import 'package:pujcovadlo_client/features/item/bloc/create/step1_name_description/step1_bloc.dart';
 import 'package:pujcovadlo_client/features/item/models/models.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_create/form_container.dart';
+import 'package:pujcovadlo_client/features/item/widgets/item_create/item_form_heading.dart';
 
 class Step1 extends StatefulWidget {
   const Step1({super.key});
@@ -60,11 +61,8 @@ class _Step1State extends State<Step1> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) {
-        final bloc = Step1Bloc(context.read<CreateItemBloc>());
-        bloc.add(const Step1InitialEvent());
-        return bloc;
-      },
+      create: (context) => Step1Bloc(context.read<CreateItemBloc>())
+        ..add(const Step1InitialEvent()),
       child: Scaffold(
         appBar: AppBar(
           title: Text(context.loc.title_create_new_item),
@@ -83,34 +81,11 @@ class _Step1State extends State<Step1> {
             return FormContainer(
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      Icon(Icons.info_outline,
-                          color: Theme.of(context).primaryColor),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: Text(
-                          context.loc.item_name_and_description_title,
-                          style:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                      ),
-                    ],
+                  ItemFormHeading(
+                    title: context.loc.item_name_and_description_title,
+                    description:
+                        context.loc.item_name_and_description_description,
                   ),
-                  const SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          context.loc.item_name_and_description_description,
-                          style: Theme.of(context).textTheme.labelSmall!,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
                   Row(
                     children: [
                       Expanded(

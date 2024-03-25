@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 class ItemFormHeading extends StatelessWidget {
   final String title;
   final String? description;
+  final double bottomMargin;
 
-  const ItemFormHeading({required this.title, this.description, super.key});
+  const ItemFormHeading(
+      {required this.title,
+      this.description,
+      this.bottomMargin = 10,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +30,7 @@ class ItemFormHeading extends StatelessWidget {
           ],
         ),
         ..._buildDescription(context),
+        SizedBox(height: bottomMargin),
       ],
     );
   }

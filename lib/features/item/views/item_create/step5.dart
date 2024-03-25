@@ -6,6 +6,7 @@ import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dar
 import 'package:pujcovadlo_client/features/item/bloc/create/step5_prices/step5_bloc.dart';
 import 'package:pujcovadlo_client/features/item/models/models.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_create/form_container.dart';
+import 'package:pujcovadlo_client/features/item/widgets/item_create/item_form_heading.dart';
 
 class Step5 extends StatefulWidget {
   const Step5({super.key});
@@ -88,11 +89,8 @@ class _Step5State extends State<Step5> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) {
-        final bloc = Step5Bloc(context.read<CreateItemBloc>());
-        bloc.add(const Step5InitialEvent());
-        return bloc;
-      },
+      create: (context) => Step5Bloc(context.read<CreateItemBloc>())
+        ..add(const Step5InitialEvent()),
       child: Scaffold(
         appBar: AppBar(
           title: Text(context.loc.title_create_new_item),
@@ -116,35 +114,10 @@ class _Step5State extends State<Step5> {
             return FormContainer(
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Icon(Icons.info_outline,
-                          color: Theme.of(context).primaryColor),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: Text(
-                          context.loc.item_prices_page_title,
-                          style:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                      ),
-                    ],
+                  ItemFormHeading(
+                    title: context.loc.item_prices_page_title,
+                    description: context.loc.item_prices_page_description,
                   ),
-                  const SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          context.loc.item_prices_page_description,
-                          style: Theme.of(context).textTheme.labelSmall!,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
                   Row(
                     children: [
                       Expanded(
