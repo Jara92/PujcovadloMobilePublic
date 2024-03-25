@@ -3,19 +3,22 @@ import 'dart:async';
 
 typedef Debounceable<S, T> = Future<S?> Function(T parameter);
 
-/// Returns a new function that is a debounced version of the given function.
+/// Returns a new object that is a debounced version of the given function.
 ///
 /// This means that the original function will be called only after no calls
 /// have been made for the given Duration.
-Debounceable<S, T> debounce<S, T>(
-    Debounceable<S?, T> function, Duration duration) {
-  Debouncer? debounceTimer;
+class DebounceableFunction<S, T> {
+  DebouncerTimer? debounceTimer;
+  final Debounceable<S?, T> function;
+  final Duration duration;
 
-  return (T parameter) async {
+  DebounceableFunction(this.function, this.duration);
+
+  Future<S?> call(T parameter) async {
     if (debounceTimer != null && !debounceTimer!.isCompleted) {
       debounceTimer!.cancel();
     }
-    debounceTimer = Debouncer(duration);
+    debounceTimer = DebouncerTimer(duration);
     try {
       await debounceTimer!.future;
     } catch (error) {
@@ -25,14 +28,23 @@ Debounceable<S, T> debounce<S, T>(
       rethrow;
     }
     return function(parameter);
-  };
+  }
+
+  void cancel() {
+    if (debounceTimer != null) debounceTimer!.cancel();
+  }
 }
 
+/*DebounceableObject<S, T> debounce<S, T>(
+    Debounceable<S?, T> function, Duration duration) {
+  return DebounceableObject(function, duration);
+}*/
+
 // A wrapper around Timer used for debouncing.
-class Debouncer {
+class DebouncerTimer {
   final Duration debounceDuration;
 
-  Debouncer(this.debounceDuration) {
+  DebouncerTimer(this.debounceDuration) {
     _timer = Timer(debounceDuration, _onComplete);
   }
 
@@ -48,6 +60,10 @@ class Debouncer {
   bool get isCompleted => _completer.isCompleted;
 
   void cancel() {
+    // Do nothing if the completer is already completed
+    if (_completer.isCompleted) return;
+
+    // Cancel the timer and complete the completer with an error
     _timer.cancel();
     _completer.completeError(const DebouncerCancelException());
   }
@@ -56,9 +72,4 @@ class Debouncer {
 // An exception indicating that the timer was canceled.
 class DebouncerCancelException implements Exception {
   const DebouncerCancelException();
-}
-
-// An exception indicating that a network request has failed.
-class DebouncerNetworkException implements Exception {
-  const DebouncerNetworkException();
 }

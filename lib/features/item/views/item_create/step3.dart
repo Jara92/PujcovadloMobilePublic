@@ -17,7 +17,7 @@ class Step3 extends StatefulWidget {
 
 class _Step3State extends State<Step3> {
   late final TextEditingController _textEditingController;
-  late final Debounceable<List<String>, String> _debouncedSearch;
+  late final DebounceableFunction<List<String>, String> _debouncedSearch;
   late final Step3Bloc _bloc;
 
   @override
@@ -26,7 +26,7 @@ class _Step3State extends State<Step3> {
     _textEditingController = TextEditingController();
     _bloc = Step3Bloc(context.read<CreateItemBloc>())
       ..add(const Step3InitialEvent());
-    _debouncedSearch = debounce<List<String>, String>(
+    _debouncedSearch = DebounceableFunction<List<String>, String>(
         _search, const Duration(milliseconds: 500));
   }
 
@@ -34,6 +34,7 @@ class _Step3State extends State<Step3> {
   void dispose() {
     super.dispose();
     _textEditingController.dispose();
+    _debouncedSearch.cancel();
   }
 
   @override
@@ -87,7 +88,7 @@ class _Step3State extends State<Step3> {
                   Autocomplete<String>(
                     optionsBuilder: (TextEditingValue textEditingValue) async {
                       final options =
-                          await _debouncedSearch(textEditingValue.text);
+                          await _debouncedSearch.call(textEditingValue.text);
 
                       if (options == null) {
                         return List<String>.empty();
