@@ -9,6 +9,8 @@ import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/step4_gallery/step4_bloc.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_create/form_container.dart';
+import 'package:pujcovadlo_client/features/item/widgets/item_placeholder_image.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class Step4 extends StatefulWidget {
   const Step4({super.key});
@@ -154,80 +156,7 @@ class _Step4State extends State<Step4> {
                   ),
                   const SizedBox(height: 20),
                   if (state.images.isNotEmpty)
-                    GridView.count(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: state.images.asMap().entries.map((entry) {
-                        final index = entry.key;
-                        final img = entry.value;
-
-                        return Stack(children: <Widget>[
-                          Positioned.fill(
-                            child: Image.file(
-                              img.value!,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Align(
-                              alignment: Alignment.topRight,
-                              child: Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: IconButton(
-                                  icon: const Icon(Icons.delete),
-                                  color: Colors.white,
-                                  onPressed: () => {
-                                    context
-                                        .read<Step4Bloc>()
-                                        .add(RemoveImage(index))
-                                  },
-                                ),
-                              )),
-                          Align(
-                              alignment: Alignment.topLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: IconButton(
-                                  icon: Icon(
-                                      // Display full star if the image is the main image
-                                      index == state.mainImageIndex
-                                          ? Icons.star
-                                          : Icons.star_border_sharp),
-                                  color: CustomColors.gold,
-                                  onPressed: () => {
-                                    context
-                                        .read<Step4Bloc>()
-                                        .add(SetMainImage(index))
-                                  },
-                                ),
-                              )),
-                          /* Display the Align only for the main image */
-                          if (index == state.mainImageIndex)
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Container(
-                                width: double.infinity,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer,
-                                child: Text(
-                                  context.loc.item_main_image,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                              ),
-                            )
-                        ]);
-                      }).toList(),
-                    ),
+                    _buildImageGallery(context, state)
                 ],
               ),
             );
@@ -260,6 +189,89 @@ class _Step4State extends State<Step4> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildImageGallery(BuildContext context, Step4State state) {
+    return GridView.count(
+      shrinkWrap: true,
+      scrollDirection: Axis.vertical,
+      crossAxisCount: 2,
+      mainAxisSpacing: 10,
+      crossAxisSpacing: 10,
+      physics: const NeverScrollableScrollPhysics(),
+      children: state.images
+          // Filter out deleted images
+          .where((img) => img.value.isDeleted == false)
+          .toList()
+          .asMap()
+          .entries
+          .map((entry) {
+        final index = entry.key;
+        // Get ItemRequest using model
+        final img = entry.value.value;
+
+        return Stack(children: <Widget>[
+          Positioned.fill(
+            child: img.isTemporary
+                ? Image.file(
+                    img.tmpFile!,
+                    fit: BoxFit.cover,
+                  )
+                : FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage,
+                    image: img.previewLink ?? '',
+                    fit: BoxFit.cover,
+                    imageErrorBuilder: (context, error, stackTrace) =>
+                        const ItemPlaceholderImage(fit: BoxFit.cover),
+                  ),
+          ),
+          Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: IconButton(
+                  icon: const Icon(Icons.delete),
+                  color: Colors.white,
+                  onPressed: () =>
+                      {context.read<Step4Bloc>().add(RemoveImage(index))},
+                ),
+              )),
+          Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: IconButton(
+                  icon: Icon(
+                      // Display full star if the image is the main image
+                      index == state.mainImageIndex
+                          ? Icons.star
+                          : Icons.star_border_sharp),
+                  color: CustomColors.gold,
+                  onPressed: () =>
+                      {context.read<Step4Bloc>().add(SetMainImage(index))},
+                ),
+              )),
+          /* Display the Align only for the main image */
+          if (index == state.mainImageIndex)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                width: double.infinity,
+                color: Theme.of(context).colorScheme.primaryContainer,
+                child: Text(
+                  context.loc.item_main_image,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+              ),
+            )
+        ]);
+      }).toList(),
     );
   }
 }

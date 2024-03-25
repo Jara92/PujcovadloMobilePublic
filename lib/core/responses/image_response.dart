@@ -31,6 +31,10 @@ class ImageResponse {
           .toList(),
     );
   }
+
+  String? get getDeleteLink {
+    return links.where((element) => element.rel == 'delete').firstOrNull?.href;
+  }
 }
 
 String getUrl(String url) {

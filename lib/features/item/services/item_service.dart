@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:get_it/get_it.dart';
 import 'package:pujcovadlo_client/config.dart';
+import 'package:pujcovadlo_client/core/requests/image_request.dart';
 import 'package:pujcovadlo_client/core/responses/response_list.dart';
 import 'package:pujcovadlo_client/core/services/http_service.dart';
 import 'package:pujcovadlo_client/features/item/filters/item_filter.dart';
@@ -55,20 +56,14 @@ class ItemService {
       sellingPrice: itemDetailResponse.sellingPrice,
       categories: itemDetailResponse.categories.map((e) => e.id).toList(),
       tags: itemDetailResponse.tags.map((e) => e.name).toList(),
-/*      images: itemDetailResponse.images.map((e) => ImageRequest(
-        id: e.id,
-        name: e.name,
-        path: e.path,
-        url: e.url,
-      )).toList(),
-      mainImage: itemDetailResponse.mainImage != null ? ImageRequest(
-        id: itemDetailResponse.mainImage!.id,
-        name: itemDetailResponse.mainImage!.name,
-        path: itemDetailResponse.mainImage!.path,
-        url: itemDetailResponse.mainImage!.url,
-      ) : null,
-      tags: itemDetailResponse.tags,
-      categories: itemDetailResponse.categories.map((e) => e.id).toList(),*/
+      // Convert each image response to request
+      images: itemDetailResponse.images
+          .map((e) => ImageRequest.fromResponse(e))
+          .toList(),
+      // Convert main image using the same
+      mainImage: itemDetailResponse.mainImage != null
+          ? ImageRequest.fromResponse(itemDetailResponse.mainImage!)
+          : null,
     );
   }
 

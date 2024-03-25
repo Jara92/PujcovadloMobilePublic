@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:formz/formz.dart';
+import 'package:pujcovadlo_client/core/requests/image_request.dart';
 
 enum ItemImageValidationError {
   required,
@@ -9,17 +8,15 @@ enum ItemImageValidationError {
   const ItemImageValidationError();
 }
 
-class ItemImage extends FormzInput<File?, ItemImageValidationError> {
+class ItemImage extends FormzInput<ImageRequest, ItemImageValidationError> {
   static const int maximumImages = 8;
 
-  final bool isMainImage = false;
+  const ItemImage.pure(super.value) : super.pure();
 
-  const ItemImage.pure([super.value]) : super.pure();
-
-  const ItemImage.dirty([super.value]) : super.dirty();
+  const ItemImage.dirty(super.value) : super.dirty();
 
   @override
-  ItemImageValidationError? validator(File? value) {
+  ItemImageValidationError? validator(ImageRequest value) {
     /*if(value == null || value.path.isEmpty || File(value.path).existsSync() == false){
       return ItemImageValidationError.required;
     }*/

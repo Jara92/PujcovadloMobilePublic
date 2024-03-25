@@ -4,7 +4,9 @@ part of 'step4_bloc.dart';
 class Step4State {
   final List<ItemImage> images;
 
-  bool get maximumImagesExceeded => images.length >= ItemImage.maximumImages;
+  bool get maximumImagesExceeded =>
+      images.where((i) => i.value.isDeleted == false).length >=
+      ItemImage.maximumImages;
 
   /*final ItemImage? mainImage;*/
   final int? mainImageIndex;
@@ -19,11 +21,13 @@ class Step4State {
 
   Step4State copyWith({
     List<ItemImage>? images,
-    int? mainImage,
+    // "Function()?" stuff allows to set null value if we need too
+    int? Function()? mainImageIndex,
   }) {
     return Step4State(
       images: images ?? this.images,
-      mainImageIndex: mainImage ?? mainImageIndex,
+      mainImageIndex:
+          mainImageIndex != null ? mainImageIndex() : this.mainImageIndex,
     );
   }
 }

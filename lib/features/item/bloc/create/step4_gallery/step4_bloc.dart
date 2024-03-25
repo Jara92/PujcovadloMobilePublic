@@ -28,12 +28,19 @@ class Step4Bloc extends Bloc<Step4Event, Step4State> {
     on<PreviousStepEvent>(_onPreviousStep);
   }
 
-  Future<void> _onInitialEvent(Step4InitialEvent event,
-      Emitter<Step4State> emit) async {
-    // TODO
-    List<ItemImage> images = [];
+  Future<void> _onInitialEvent(
+      Step4InitialEvent event, Emitter<Step4State> emit) async {
+    // Convert existing images to ItemImage models
+    final itemImages = _item.images.map((img) => ItemImage.pure(img)).toList();
 
-    emit(state.copyWith(images: images));
+    // Set the main image index
+    final mainImageIndex = _item.mainImage != null
+        ? _item.images.indexWhere((img) => img.id == _item.mainImage!.id)
+        : null;
+
+    // Emit state with existing images
+    emit(state.copyWith(
+        images: itemImages, mainImageIndex: () => mainImageIndex));
   }
 
   void _onAddImage(AddImage event, Emitter<Step4State> emit) {
@@ -45,7 +52,7 @@ class Step4Bloc extends Bloc<Step4Event, Step4State> {
     }
 
     // validate new image
-    var newImage = ItemImage.dirty(event.imageFile);
+    var newImage = ItemImage.dirty(ImageRequest.fromFile(event.imageFile));
     if (!Formz.validate([newImage])) {
       // Do nothing if the image is not valid
       return;
@@ -57,47 +64,55 @@ class Step4Bloc extends Bloc<Step4Event, Step4State> {
 
     // If the main image is not set, set the added image as the main image
     if (state.mainImageIndex == null) {
-      emit(state.copyWith(mainImage: state.images.length - 1));
+      emit(state.copyWith(mainImageIndex: () => state.images.length - 1));
     }
   }
 
   void _onRemoveImage(RemoveImage event, Emitter<Step4State> emit) {
-    // print("removing image at index ${event.index}");
-
     final images = state.images;
 
-    // if the index is valid
-    if (images.length > event.index) {
-      //print("removing image at index ${event.index}");
-      // Remove the image and update the state
-      images.removeAt(event.index);
-      emit(state.copyWith(images: images));
+    // Do nothing if the index is invalid
+    if (images.length <= event.index) return;
 
-      // If the removed image was the main image
-      if (event.index == state.mainImageIndex) {
-        // If there are still images, set the first one as the main image
-        if (images.isNotEmpty) {
-          emit(state.copyWith(mainImage: 0));
-        }
-        // If there are no images, set the main image to null
-        else {
-          emit(state.copyWith(mainImage: null));
-        }
-      }
+    // Remove the image and update the state
+    final imageToRemove = images[event.index];
+
+    // Remove the image from the list if the file is just temporary
+    if (imageToRemove.value.isTemporary) {
+      imageToRemove.value.tmpFile!.delete();
+      images.removeAt(event.index);
+    } else {
+      // Mark the image as deleted
+      images[event.index].value.isDeleted = true;
+    }
+
+    // Update the state
+    emit(state.copyWith(images: images));
+
+    // If the removed image was the main image
+    if (event.index == state.mainImageIndex) {
+      // Find the first image that is not deleted
+      final newMainImage =
+          state.images.where((img) => img.value.isDeleted == false).firstOrNull;
+
+      // Set the new main image index
+      emit(state.copyWith(
+          mainImageIndex: () => newMainImage != null
+              ? state.images.indexWhere((img) => img == newMainImage)
+              : null));
     }
   }
 
   void _onSetMainImage(SetMainImage event, Emitter<Step4State> emit) {
-    emit(state.copyWith(mainImage: event.mainImageIndex));
+    emit(state.copyWith(mainImageIndex: () => event.mainImageIndex));
   }
 
   void _onNextStep(NextStepEvent event, Emitter<Step4State> emit) {
     if (state.isValid) {
       // Set images to the item
       _item.images = state.images
-          .map((img) => ImageRequest(
-                tmpFile: img.value,
-              ))
+          // Get the value of the image
+          .map((img) => img.value)
           .toList();
 
       // Set main image to the item
@@ -107,6 +122,8 @@ class Step4Bloc extends Bloc<Step4Event, Step4State> {
 
       _createItemBloc.add(const MoveToStepEvent(step5_prices));
     }
+
+    // TODO: remove physical files after they are uploaded
   }
 
   void _onPreviousStep(PreviousStepEvent event, Emitter<Step4State> emit) {
