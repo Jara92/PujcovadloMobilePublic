@@ -19,6 +19,7 @@
   "no_search_results": "Žádné výsledky",
   "error_message": "Něco se pokazilo. Zkuste to prosím znovu.",
   "pick_from_gallery": "Vybrat z galerie",
+  "pick_from_gallery_error": "Nepodařilo se přidat fotku.",
   "take_photo": "Vyfotit",
   "add_photo": "Přidat fotku",
   "where_can_you_find_it": "Kde to najdete?",

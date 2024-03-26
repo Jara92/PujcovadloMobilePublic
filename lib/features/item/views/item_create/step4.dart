@@ -22,7 +22,8 @@ class Step4 extends StatefulWidget {
 class _Step4State extends State<Step4> {
   late final ImagePicker _picker;
 
-  Future<void> _addImageFromGallery(Function(File file) callback) async {
+  Future<void> _addImageFromGallery(
+      Function(File file) callback, Function(Exception e) errorCallback) async {
     try {
       // pickup multiple images
       final img = await _picker.pickMultiImage();
@@ -34,13 +35,13 @@ class _Step4State extends State<Step4> {
           callback(File(element.path));
         }
       }
-    } catch (e) {
-      // TODO: show error message
-      print(e);
+    } on Exception catch (e) {
+      errorCallback(e);
     }
   }
 
-  Future<void> _addImageFromCamera(Function(File file) callback) async {
+  Future<void> _addImageFromCamera(
+      Function(File file) callback, Function(Exception e) errorCallback) async {
     try {
       // pickup image from camera
       final img = await _picker.pickImage(source: ImageSource.camera);
@@ -49,13 +50,15 @@ class _Step4State extends State<Step4> {
       if (img != null) {
         callback(File(img.path));
       }
-    } catch (e) {
-      // TODO: show error message
-      print(e);
+    } on Exception catch (e) {
+      errorCallback(e);
     }
   }
 
-  Future _pickupImageDialog(Function(File file) callback) async {
+  Future _pickupImageDialog({
+    required Function(File file) callback,
+    required Function(Exception e) errorCallback,
+  }) async {
     showCupertinoModalPopup(
       context: context,
       builder: (context) => CupertinoActionSheet(
@@ -67,7 +70,7 @@ class _Step4State extends State<Step4> {
               Navigator.of(context).pop();
 
               // get image from gallery
-              _addImageFromGallery(callback);
+              _addImageFromGallery(callback, errorCallback);
             },
           ),
           CupertinoActionSheetAction(
@@ -77,7 +80,7 @@ class _Step4State extends State<Step4> {
               Navigator.of(context).pop();
 
               // get image from camera
-              _addImageFromCamera(callback);
+              _addImageFromCamera(callback, errorCallback);
             },
           ),
         ],
@@ -133,13 +136,7 @@ class _Step4State extends State<Step4> {
                       ),
                       ElevatedButton.icon(
                           icon: const Icon(Icons.add_a_photo),
-                          onPressed: state.canAddMoreImages
-                              ? () async {
-                                  _pickupImageDialog((file) => context
-                                      .read<Step4Bloc>()
-                                      .add(AddImage(file)));
-                                }
-                              : null,
+                          onPressed: _onAddImagePressed(context, state),
                           label: Text(context.loc.add_photo))
                     ],
                   ),
@@ -190,6 +187,23 @@ class _Step4State extends State<Step4> {
         ),
       ),
     );
+  }
+
+  Future<Null> Function()? _onAddImagePressed(
+      BuildContext context, Step4State state) {
+    return state.canAddMoreImages
+        ? () async {
+            _pickupImageDialog(
+                callback: (file) =>
+                    context.read<Step4Bloc>().add(AddImage(file)),
+                errorCallback: (e) =>
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(context.loc.pick_from_gallery_error),
+                      ),
+                    ));
+          }
+        : null;
   }
 
   Widget _buildImageGallery(BuildContext context, Step4State state) {
