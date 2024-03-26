@@ -4,11 +4,14 @@ part of 'step4_bloc.dart';
 class Step4State {
   final List<ItemImage> images;
 
-  bool get maximumImagesExceeded =>
-      images.where((i) => i.value.isDeleted == false).length >=
+  bool get canAddMoreImages =>
+      images.where((i) => i.value.isDeleted == false).length <
       ItemImage.maximumImages;
 
-  /*final ItemImage? mainImage;*/
+  bool get maximumImagesExceeded =>
+      images.where((i) => i.value.isDeleted == false).length >
+      ItemImage.maximumImages;
+
   final int? mainImageIndex;
 
   /* True if maximum is not exceeded */

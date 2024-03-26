@@ -46,11 +46,6 @@ class Step4Bloc extends Bloc<Step4Event, Step4State> {
   void _onAddImage(AddImage event, Emitter<Step4State> emit) {
     final images = state.images;
 
-    // If the maximum number of images is reached, do nothing
-    if (images.length >= ItemImage.maximumImages) {
-      return;
-    }
-
     // validate new image
     var newImage = ItemImage.dirty(ImageRequest.fromFile(event.imageFile));
     if (!Formz.validate([newImage])) {
@@ -122,8 +117,6 @@ class Step4Bloc extends Bloc<Step4Event, Step4State> {
 
       _createItemBloc.add(const MoveToStepEvent(step5_prices));
     }
-
-    // TODO: remove physical files after they are uploaded
   }
 
   void _onPreviousStep(PreviousStepEvent event, Emitter<Step4State> emit) {

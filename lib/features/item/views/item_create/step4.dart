@@ -133,13 +133,13 @@ class _Step4State extends State<Step4> {
                       ),
                       ElevatedButton.icon(
                           icon: const Icon(Icons.add_a_photo),
-                          onPressed: state.maximumImagesExceeded
-                              ? null
-                              : () async {
+                          onPressed: state.canAddMoreImages
+                              ? () async {
                                   _pickupImageDialog((file) => context
                                       .read<Step4Bloc>()
                                       .add(AddImage(file)));
-                                },
+                                }
+                              : null,
                           label: Text(context.loc.add_photo))
                     ],
                   ),
@@ -217,16 +217,16 @@ class _Step4State extends State<Step4> {
                 // Display image from file if it is not null
                 img.tmpFile != null
                     ? Image.file(
-                    img.tmpFile!,
-                    fit: BoxFit.cover,
-                  )
-                : FadeInImage.memoryNetwork(
-                    placeholder: kTransparentImage,
-                    image: img.previewLink ?? '',
-                    fit: BoxFit.cover,
-                    imageErrorBuilder: (context, error, stackTrace) =>
-                        const ItemPlaceholderImage(fit: BoxFit.cover),
-                  ),
+                        img.tmpFile!,
+                        fit: BoxFit.cover,
+                      )
+                    : FadeInImage.memoryNetwork(
+                        placeholder: kTransparentImage,
+                        image: img.previewLink ?? '',
+                        fit: BoxFit.cover,
+                        imageErrorBuilder: (context, error, stackTrace) =>
+                            const ItemPlaceholderImage(fit: BoxFit.cover),
+                      ),
           ),
           Align(
               alignment: Alignment.topRight,

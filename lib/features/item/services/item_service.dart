@@ -163,7 +163,6 @@ class ItemService {
 
     // All images should have their ID set
     if (request.mainImage != null) {
-      print("main image id: ${request.mainImage!.id}");
       request.mainImageId = request.mainImage!.id;
     }
 
