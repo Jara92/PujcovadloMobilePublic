@@ -98,8 +98,8 @@ class Step4Bloc extends Bloc<Step4Event, Step4State> {
       // Set the new main image index
       emit(state.copyWith(
           // Return the new main image index if it is valid
-          mainImageIndex:
-              newMainImageIndex >= 0 ? () => newMainImageIndex : null));
+          mainImageIndex: () =>
+              newMainImageIndex >= 0 ? newMainImageIndex : null));
     }
   }
 
