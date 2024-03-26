@@ -87,6 +87,7 @@ class ItemService {
 
       // Update item request id so we can do update if something fails now
       request.id = itemResponse.id;
+      request.updateLink = itemResponse.updateLink;
 
       // Check if create image link is set
       if (itemResponse.createImageLink == null) {

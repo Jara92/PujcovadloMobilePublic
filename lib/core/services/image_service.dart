@@ -51,13 +51,9 @@ class ImageService {
   void makeImageSaved(ImageRequest request, ImageResponse response) {
     // Update image request id
     request.id = response.id;
+    request.deleteLink = response.getDeleteLink;
 
-    final file = request.tmpFile!;
-
-    // Clear temporary file reference
-    request.tmpFile = null;
-
-    // Clear temporary file
-    file.delete();
+    // Dont delete the file becuase we may use it later
+    // It should be deleted automatically by the system
   }
 }

@@ -158,8 +158,8 @@ class ItemPreviewWidget extends StatelessWidget {
       return const ItemPlaceholderImage();
     }
 
-    // Main image is temporary file
-    if (item.mainImage!.isTemporary) {
+    // Main image has temporary file
+    if (item.mainImage!.tmpFile != null) {
       return Image.file(
         width: 100,
         height: 100,

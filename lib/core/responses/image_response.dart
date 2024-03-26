@@ -1,6 +1,3 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import 'link_response.dart';
 
 class ImageResponse {
@@ -25,7 +22,7 @@ class ImageResponse {
       id: json['Id'].toInt(),
       name: json['Name'].toString(),
       path: json['Path'].toString(),
-      url: getUrl(json['Url'].toString()),
+      url: json['Url'].toString(),
       links: (json['_links'] as List)
           .map((e) => LinkResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -38,13 +35,4 @@ class ImageResponse {
         .firstOrNull
         ?.href;
   }
-}
-
-String getUrl(String url) {
-  if (kDebugMode) {
-    return url.replaceFirst(
-        "http://localhost:9000", dotenv.env['IMAGES_ENDPOINT']!);
-  }
-
-  return url;
 }

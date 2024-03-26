@@ -213,8 +213,10 @@ class _Step4State extends State<Step4> {
 
         return Stack(children: <Widget>[
           Positioned.fill(
-            child: img.isTemporary
-                ? Image.file(
+            child:
+                // Display image from file if it is not null
+                img.tmpFile != null
+                    ? Image.file(
                     img.tmpFile!,
                     fit: BoxFit.cover,
                   )
