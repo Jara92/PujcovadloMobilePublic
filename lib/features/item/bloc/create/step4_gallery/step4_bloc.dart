@@ -91,15 +91,15 @@ class Step4Bloc extends Bloc<Step4Event, Step4State> {
 
     // If the removed image was the main image
     if (event.index == state.mainImageIndex) {
-      // Find the first image that is not deleted
-      final newMainImage =
-          state.images.where((img) => img.value.isDeleted == false).firstOrNull;
+      // Find index of some non-deleted image
+      final newMainImageIndex =
+          images.indexWhere((img) => img.value.isDeleted == false);
 
       // Set the new main image index
       emit(state.copyWith(
-          mainImageIndex: () => newMainImage != null
-              ? state.images.indexWhere((img) => img == newMainImage)
-              : null));
+          // Return the new main image index if it is valid
+          mainImageIndex:
+              newMainImageIndex >= 0 ? () => newMainImageIndex : null));
     }
   }
 

@@ -201,11 +201,11 @@ class _Step4State extends State<Step4> {
       crossAxisSpacing: 10,
       physics: const NeverScrollableScrollPhysics(),
       children: state.images
-          // Filter out deleted images
-          .where((img) => img.value.isDeleted == false)
-          .toList()
           .asMap()
           .entries
+          // Filter out deleted images
+          // It is important to filter out deleted images AFTER the asMap() method so that the indexes is correct
+          .where((entry) => !entry.value.value.isDeleted)
           .map((entry) {
         final index = entry.key;
         // Get ItemRequest using model
