@@ -9,7 +9,7 @@ class ItemMainImage extends StatelessWidget {
   final double height;
 
   const ItemMainImage(
-      {required this.item, this.width = 100, this.height = 100, super.key});
+      {required this.item, this.width = 75, this.height = 75, super.key});
 
   @override
   Widget build(BuildContext context) {
