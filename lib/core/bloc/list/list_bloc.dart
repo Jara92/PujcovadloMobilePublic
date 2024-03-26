@@ -14,17 +14,16 @@ EventTransformer<Event> debounce<Event>(Duration duration) {
 
 abstract class ListBloc<TData, TState extends ListState<TData>>
     extends Bloc<ListEvent<TData>, TState> {
-
   ListBloc(super.initState) {
     on<InitialEvent<TData>>(onInitialEvent);
     on<LoaditemsEvent<TData>>(onLoadItemsEvent);
   }
 
-  Future<void> onInitialEvent(InitialEvent<TData> event,
-      Emitter<TState> emit) async {}
+  Future<void> onInitialEvent(
+      InitialEvent<TData> event, Emitter<TState> emit) async {}
 
-  Future<void> onLoadItemsEvent(LoaditemsEvent<TData> event,
-      Emitter<TState> emit) async {
+  Future<void> onLoadItemsEvent(
+      LoaditemsEvent<TData> event, Emitter<TState> emit) async {
     throw UnimplementedError();
   }
 
@@ -42,8 +41,6 @@ abstract class ListBloc<TData, TState extends ListState<TData>>
             '', // If null set next page link to empty string
       ) as TState);
     } on Exception catch (e) {
-      // print(e);
-
       emit(
         state.copyWith(
           status: ListStateEnum.error, // error state
