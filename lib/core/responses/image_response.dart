@@ -22,10 +22,10 @@ class ImageResponse {
 
   factory ImageResponse.fromJson(Map<String, dynamic> json) {
     return ImageResponse(
-      id: json['Id'] as int,
-      name: json['Name'] as String?,
-      path: json['Path'] as String,
-      url: getUrl(json['Url'] as String),
+      id: json['Id'].toInt(),
+      name: json['Name'].toString(),
+      path: json['Path'].toString(),
+      url: getUrl(json['Url'].toString()),
       links: (json['_links'] as List)
           .map((e) => LinkResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -33,7 +33,10 @@ class ImageResponse {
   }
 
   String? get getDeleteLink {
-    return links.where((element) => element.rel == 'delete').firstOrNull?.href;
+    return links
+        .where((element) => element.rel == LinkRels.delete)
+        .firstOrNull
+        ?.href;
   }
 }
 

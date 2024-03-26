@@ -159,8 +159,7 @@ class _SummaryState extends State<Summary> {
 
               // Open create item page
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      ItemDetailView(itemId: state.response.id)));
+                  builder: (context) => ItemDetailView(itemId: state.itemId)));
             },
             icon: const Icon(Icons.visibility),
             label: Text(context.loc.item_saving_success_show_detail),

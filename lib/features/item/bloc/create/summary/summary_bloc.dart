@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:pujcovadlo_client/features/item/requests/item_request.dart';
-import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
 import 'package:pujcovadlo_client/features/item/services/item_service.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 part 'summary_event.dart';
 part 'summary_state.dart';
@@ -13,7 +13,12 @@ class SummaryBloc extends Bloc<SummaryEvent, SummaryState> {
 
   SummaryBloc(this.item) : super(const InitialState()) {
     on<SummaryInitialEvent>(_onInitialEvent);
-    on<TryAgainEvent>(_onTryAgain);
+    on<TryAgainEvent>(_onTryAgain,
+        transformer:
+            // Prevent multiple requests
+            (events, mapper) => events
+                .debounce(const Duration(milliseconds: 100))
+                .switchMap(mapper));
   }
 
   Future<void> _onInitialEvent(
@@ -29,19 +34,29 @@ class SummaryBloc extends Bloc<SummaryEvent, SummaryState> {
   }
 
   Future<void> _saveItem(SummaryEvent event, Emitter<SummaryState> emit) async {
+    // Prevent multiple requests
+    if (state is IsProcessing) return;
+
     emit(const IsProcessing());
 
     try {
-      final response = await _trySave(item);
+      // We are updating if id is set
+      if (item.id != null) {
+        await _itemService.updateItem(item);
+      }
+      // We are creating new item
+      else {
+        var newItem = await _itemService.createItem(item);
 
-      // TODO: Dont pass full response because when updating we dont have all the data
-      emit(SuccessState(response: response));
+        // Get new item id
+        item.id = newItem.id;
+      }
+
+      // Emit success state and pass item id
+      emit(SuccessState(itemId: item.id!));
     } on Exception catch (e) {
+      print(e);
       emit(ErrorState(error: e));
     }
-  }
-
-  Future<ItemResponse> _trySave(ItemRequest request) async {
-    return _itemService.createItem(request);
   }
 }

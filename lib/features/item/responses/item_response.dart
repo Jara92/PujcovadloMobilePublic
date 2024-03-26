@@ -71,4 +71,25 @@ class ItemResponse {
         .firstOrNull
         ?.href;
   }
+
+  String? get updateLink {
+    return links
+        .where((element) => element.rel == LinkRels.update)
+        .firstOrNull
+        ?.href;
+  }
+
+  String? get deleteLink {
+    return links
+        .where((element) => element.rel == LinkRels.delete)
+        .firstOrNull
+        ?.href;
+  }
+
+  String? get createImageLink {
+    return links
+        .where((element) => element.rel == LinkRels.createImage)
+        .firstOrNull
+        ?.href;
+  }
 }

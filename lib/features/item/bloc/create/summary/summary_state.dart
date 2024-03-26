@@ -25,10 +25,10 @@ class ErrorState extends SummaryState {
 }
 
 class SuccessState extends SummaryState {
-  final ItemResponse response;
+  final int itemId;
 
   const SuccessState({
-    required this.response,
+    required this.itemId,
     super.isProcessing = false,
   });
 }

@@ -65,6 +65,8 @@ class Step3Bloc extends Bloc<Step3Event, Step3State> {
 
   Future<void> _onSearchTagChanged(
       SearchTagChanged event, Emitter<Step3State> emit) async {
+    // todo: sometimes deboucing does not work
+
     // Save new search tag
     final search = ItemTag.dirty(event.tag);
     emit(state.copyWith(currentTag: search));
