@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pujcovadlo_client/core/custom_colors.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/features/item/requests/item_request.dart';
+import 'package:pujcovadlo_client/features/item/widgets/item_placeholder_image.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class ItemPreviewWidget extends StatelessWidget {
   final ItemRequest item;
@@ -19,23 +21,7 @@ class ItemPreviewWidget extends StatelessWidget {
             flex: 3,
             child: Container(
                 padding: const EdgeInsets.only(right: 0),
-                child: (item.mainImage == null ||
-                        item.mainImage?.tmpFile == null)
-                    ? Image.asset("images/item_placeholder.png")
-                    : Image.file(
-                        item.mainImage!.tmpFile!,
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      ) /*FadeInImage.memoryNetwork(
-                  placeholder: kTransparentImage,
-                  // TODO: add url of placeholder image??
-                  image: item.mainImage?.url ?? '',
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
-                )*/
-                ),
+                child: _buildMainImagePreview(context)),
           ),
           Expanded(
             flex: 7,
@@ -158,6 +144,37 @@ class ItemPreviewWidget extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildMainImagePreview(BuildContext context) {
+    // No main image set
+    if (item.mainImage == null) {
+      return const ItemPlaceholderImage(fit: BoxFit.cover);
+    }
+
+    // Main image is temporary file but not set
+    if (item.mainImage!.isTemporary && item.mainImage!.tmpFile == null) {
+      return const ItemPlaceholderImage(fit: BoxFit.cover);
+    }
+
+    // Main image is temporary file
+    if (item.mainImage!.isTemporary) {
+      return Image.file(
+        item.mainImage!.tmpFile!,
+        fit: BoxFit.cover,
+      );
+    }
+
+    // Image is already uploaded on the server
+    return FadeInImage.memoryNetwork(
+      placeholder: kTransparentImage,
+      image: item.mainImage!.previewLink ?? '',
+      width: 100,
+      height: 100,
+      fit: BoxFit.cover,
+      imageErrorBuilder: (context, error, stackTrace) =>
+          const ItemPlaceholderImage(fit: BoxFit.cover),
     );
   }
 }
