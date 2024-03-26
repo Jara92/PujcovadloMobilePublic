@@ -130,10 +130,13 @@ class _Step3State extends State<Step3> {
                             ),
                           )
                         ],
-                        textInputAction: TextInputAction.continueAction,
+                        textInputAction: TextInputAction.done,
                         padding: const MaterialStatePropertyAll<EdgeInsets>(
                             EdgeInsets.symmetric(horizontal: 16.0)),
                         onSubmitted: (String value) {
+                          // Cancel the search
+                          _debouncedSearch.cancel();
+
                           context.read<Step3Bloc>().add(AddTag(value));
                         },
                         onChanged: (String value) {
