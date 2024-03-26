@@ -28,8 +28,9 @@ class ItemDescription
     }
 
     // Check length
-    if (value.length < minLength)
+    if (value.length < minLength) {
       return ItemDescriptionValidationError.tooShort;
+    }
     if (value.length > maxLength) return ItemDescriptionValidationError.tooLong;
 
     // Check regex

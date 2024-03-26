@@ -31,7 +31,7 @@ class Step1Bloc extends Bloc<Step1Event, Step1State> {
 
   void _onItemNameChanged(ItemNameChanged event, Emitter<Step1State> emit) {
     // Create new model and validate it
-    final name = ItemName.dirty(event.name.trim());
+    final name = ItemName.dirty(event.name);
 
     // Emit new state
     emit(state.copyWith(
@@ -42,7 +42,7 @@ class Step1Bloc extends Bloc<Step1Event, Step1State> {
   void _onItemDescriptionChanged(
       ItemDescriptionChanged event, Emitter<Step1State> emit) {
     // Create new model and validate it
-    final description = ItemDescription.dirty(event.description.trim());
+    final description = ItemDescription.dirty(event.description);
 
     // Emit new state
     emit(state.copyWith(
@@ -52,8 +52,8 @@ class Step1Bloc extends Bloc<Step1Event, Step1State> {
 
   void _onNextStep(NextStepEvent event, Emitter<Step1State> emit) {
     if (state.isValid) {
-      _item.name = state.name.value;
-      _item.description = state.description.value;
+      _item.name = state.name.value.trim();
+      _item.description = state.description.value.trim();
 
       _createItemBloc.add(const MoveToStepEvent(step2_categories));
     }

@@ -17,8 +17,8 @@ class ItemName extends FormzInput<String, ItemNameValidationError> {
 
   static final _nameRegex = Regex.textRegex;
 
-  static final _minLength = 5;
-  static final _maxLength = 30;
+  static const _minLength = 5;
+  static const _maxLength = 64;
 
   @override
   ItemNameValidationError? validator(String value) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pujcovadlo_client/core/constants/regex.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/step1_name_description/step1_bloc.dart';
@@ -89,6 +90,7 @@ class _Step1State extends State<Step1> {
                   Row(
                     children: [
                       Expanded(
+                        // todo: cant add spaces
                         child: TextFormField(
                           onChanged: (String value) {
                             BlocProvider.of<Step1Bloc>(context)
@@ -96,7 +98,10 @@ class _Step1State extends State<Step1> {
                           },
                           // initialValue: state.name.value,
                           controller: _controllerName,
-                          maxLength: 30,
+                          maxLength: 64,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(Regex.textRegex),
+                          ],
                           maxLengthEnforcement: MaxLengthEnforcement.enforced,
                           decoration: InputDecoration(
                             labelText: context.loc.item_name_title,
@@ -124,6 +129,10 @@ class _Step1State extends State<Step1> {
                                 .add(ItemDescriptionChanged(value));
                           },
                           maxLength: 500,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                Regex.multilineTextRegex),
+                          ],
                           maxLengthEnforcement: MaxLengthEnforcement.enforced,
                           keyboardType: TextInputType.multiline,
                           minLines: 3,
