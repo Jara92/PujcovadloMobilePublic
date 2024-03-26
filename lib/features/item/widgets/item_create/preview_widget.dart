@@ -150,17 +150,19 @@ class ItemPreviewWidget extends StatelessWidget {
   Widget _buildMainImagePreview(BuildContext context) {
     // No main image set
     if (item.mainImage == null) {
-      return const ItemPlaceholderImage(fit: BoxFit.cover);
+      return const ItemPlaceholderImage();
     }
 
     // Main image is temporary file but not set
     if (item.mainImage!.isTemporary && item.mainImage!.tmpFile == null) {
-      return const ItemPlaceholderImage(fit: BoxFit.cover);
+      return const ItemPlaceholderImage();
     }
 
     // Main image is temporary file
     if (item.mainImage!.isTemporary) {
       return Image.file(
+        width: 100,
+        height: 100,
         item.mainImage!.tmpFile!,
         fit: BoxFit.cover,
       );
@@ -174,7 +176,7 @@ class ItemPreviewWidget extends StatelessWidget {
       height: 100,
       fit: BoxFit.cover,
       imageErrorBuilder: (context, error, stackTrace) =>
-          const ItemPlaceholderImage(fit: BoxFit.cover),
+          const ItemPlaceholderImage(),
     );
   }
 }
