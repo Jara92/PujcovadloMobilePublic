@@ -18,6 +18,7 @@ import 'package:pujcovadlo_client/features/item/services/item_category_service.d
 import 'package:pujcovadlo_client/features/item/services/item_service.dart';
 import 'package:pujcovadlo_client/features/item/services/item_tag_service.dart';
 import 'package:pujcovadlo_client/features/item/views/item_list_view.dart';
+import 'package:pujcovadlo_client/features/profiles/services/profile_service.dart';
 import 'package:pujcovadlo_client/features/profiles/views/my_profile_view.dart';
 
 Future<void> main() async {
@@ -99,6 +100,7 @@ void registerDependencies() {
   locator.registerSingleton<ItemService>(ItemService());
   locator.registerSingleton<ItemCategoryService>(ItemCategoryService());
   locator.registerSingleton<ItemTagService>(ItemTagService());
+  locator.registerSingleton<ProfileService>(ProfileService());
 }
 
 class HomePage extends StatelessWidget {

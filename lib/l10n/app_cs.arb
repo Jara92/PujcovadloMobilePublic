@@ -137,6 +137,9 @@
       }
     }
   },
+  "profile_public_items_count_title": "Vystavených položek",
+  "profile_borrowed_items_count_title": "Vypůjčených položek",
+  "profile_lended_items_count_title": "Dokončených výpůjček",
   "about_item_owner": "O majiteli",
   "contact_owner_short_button": "Kontaktovat",
   "show_user_profile_button": "Zobrazit profil",

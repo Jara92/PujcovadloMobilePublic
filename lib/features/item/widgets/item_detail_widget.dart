@@ -5,6 +5,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_detail_response.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_placeholder_image.dart';
+import 'package:pujcovadlo_client/features/profiles/views/profile_detail_view.dart';
+import 'package:pujcovadlo_client/features/profiles/widgets/profile_image.dart';
 import 'package:pujcovadlo_client/features/profiles/widgets/profile_rating_widget.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -267,10 +269,9 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
             margin: const EdgeInsets.only(bottom: 10),
             child: Row(
               children: [
-                CircleAvatar(
+                ProfileImage(
+                  user: widget.item.owner,
                   radius: 20,
-                  //backgroundImage: NetworkImage(widget.item.owner?.profileImage),
-                  backgroundImage: AssetImage("images/user_placeholder.png"),
                 ),
                 const SizedBox(
                   width: 10,
@@ -304,7 +305,13 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
                   Container(
                     margin: const EdgeInsets.only(right: 2),
                     child: ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ProfileDetailView(
+                            user: widget.item.owner,
+                          ),
+                        ),
+                      ),
                       icon: const Icon(Icons.supervised_user_circle),
                       label: Text(context.loc.show_user_profile_button),
                     ),
