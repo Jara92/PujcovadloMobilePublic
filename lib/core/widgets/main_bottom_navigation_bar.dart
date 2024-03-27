@@ -36,7 +36,8 @@ class MainBottomNavigationBar extends StatelessWidget {
                 label: context.loc.menu_searching,
               ),
               NavigationDestination(
-                icon: const Icon(Icons.message),
+                enabled: false,
+                icon: const Icon(Icons.message, color: Colors.grey),
                 label: context.loc.menu_messages,
               ),
               NavigationDestination(
