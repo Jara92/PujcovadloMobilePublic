@@ -43,4 +43,8 @@ class LoanService {
           'Failed to load items: ${response.statusCode} ${response.body}');
     }
   }
+
+  Future<LoanResponse> getLoanById(int i) {
+    throw UnimplementedError();
+  }
 }

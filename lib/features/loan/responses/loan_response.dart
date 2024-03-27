@@ -14,7 +14,7 @@ class LoanResponse {
 
   int days;
 
-  double pricePerUnit;
+  double pricePerDay;
 
   double expectedPrice;
 
@@ -40,7 +40,7 @@ class LoanResponse {
     required this.from,
     required this.to,
     required this.days,
-    required this.pricePerUnit,
+    required this.pricePerDay,
     required this.expectedPrice,
     this.refundableDeposit,
     this.tenantNote,
@@ -59,7 +59,7 @@ class LoanResponse {
       from: DateTime.parse(json['From'].toString()),
       to: DateTime.parse(json['To'].toString()),
       days: json['Days'] as int,
-      pricePerUnit: json['PricePerUnit'].toDouble(),
+      pricePerDay: json['PricePerDay'].toDouble(),
       expectedPrice: json['ExpectedPrice'].toDouble(),
       refundableDeposit: json['RefundableDeposit']?.toDouble(),
       tenantNote: json['TenantNote']?.toString(),

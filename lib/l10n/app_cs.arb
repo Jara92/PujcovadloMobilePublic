@@ -94,6 +94,7 @@
   "item_main_image": "Hlavní fotka",
   "item_prices_page_title": "Cena položky",
   "item_prices_page_description": "Nastavte cenu za půjčení a případně i za koupi položky. ",
+  "item_price_per_day": "Cena za den",
   "item_price_per_day_title": "Cena za den [Kč]",
   "item_price_per_day_hint_text": "Např. 100",
   "item_price_per_day_helper_text": "Cena za půjčení položky na jeden den.",
@@ -197,7 +198,11 @@
       }
     }
   },
+  "loan_lent_detail_page_title": "Detail výpůjčky",
+  "loan_lent_subject": "Předmět výpůjčky:",
   "loan_expected_price_short": "Cena půjčení",
+  "loan_tenant_note_short": "Poznámka: ",
+  "loan_lent_is_in_status": "Výpůjčka je v stavu: ",
   "date": "{date}",
   "@date": {
     "placeholders": {
@@ -226,5 +231,15 @@
   "loan_status_owner_active_title": "Aktivní",
   "loan_status_owner_prepared_for_return_title": "Připraveno k vrácení",
   "loan_status_owner_return_denied_title": "Vrácení zamítnuto",
-  "loan_status_owner_returned_title": "Vráceno"
+  "loan_status_owner_returned_title": "Vráceno",
+  "loan_status_owner_inquired_description": "Autor poptávky nyní čeká na Vaše potvrzení nebo odmítnutí. Před potvrzením poptávky si ověřte důvěryhodnost uživatele. Kvalitní zpětnou vazbu obsahují uživatelské recenze.",
+  "loan_status_owner_accepted_description": "Poptávku jste potvrdil. Nezapomeňte se domluvit na času a místě předání. Během předání využijte tlačítko “Vypůjčit předmět”, které umožňuje bezpečné vypůjčení.",
+  "loan_status_owner_denied_description": "Vypůjčení položky jste zamítl.",
+  "loan_status_owner_cancelled_description": "Vypůjčení položky bylo zrušeno.",
+  "loan_status_owner_prepared_for_pickup_description": "Vyplnil jste předávací protokol. Nyní se musí druhý uživatel seznámit se stavem a vypůjčení potvrdit.",
+  "loan_status_owner_pickup_denied_description": "Vyplnil jste předávací protokol. Autor rezervace s ním ale nesouhlasí a musíte jej upravit.",
+  "loan_status_owner_active_description": "Položka je vypůjčena. Během posledního dne rezervace by mělo dojít k vrácení a dokončení vypůjčení. V případě potíží využijte naši podporu. Během přebírání položky využijte tlačítko “Převzít položku”.",
+  "loan_status_owner_prepared_for_return_description": "Vyplnil jste přijímací protokol. Nyní musí druhý uživatel potvrdit aktuální stav a převzetí položky potvrdit. V případě neshod kontaktujte podporu.",
+  "loan_status_owner_return_denied_description": "Vyplnil jste přijímací protokol. Autor rezervace s ním ale nesouhlasí a musíte jej upravit. V případě neshod kontaktujte podporu.",
+  "loan_status_owner_returned_description": "Položka byla úspěšně půjčena a vrácena. Nyní můžete ohodnotit průběh výpůjčky a podělit se s ostatními uživateli o Vaši zkušenost."
 }

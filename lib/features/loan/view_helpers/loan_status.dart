@@ -52,4 +52,30 @@ class LoanStatusLocalizationHelper {
         return context.loc.loan_status_tenant_returned_title;
     }
   }
+
+  static String locDescriptionForOwner(
+      BuildContext context, LoanStatus status) {
+    switch (status) {
+      case LoanStatus.inquired:
+        return context.loc.loan_status_owner_inquired_description;
+      case LoanStatus.accepted:
+        return context.loc.loan_status_owner_accepted_description;
+      case LoanStatus.denied:
+        return context.loc.loan_status_owner_denied_description;
+      case LoanStatus.cancelled:
+        return context.loc.loan_status_owner_cancelled_description;
+      case LoanStatus.preparedForPickup:
+        return context.loc.loan_status_owner_prepared_for_pickup_description;
+      case LoanStatus.pickupDenied:
+        return context.loc.loan_status_owner_pickup_denied_description;
+      case LoanStatus.active:
+        return context.loc.loan_status_owner_active_description;
+      case LoanStatus.preparedForReturn:
+        return context.loc.loan_status_owner_prepared_for_return_description;
+      case LoanStatus.returnDenied:
+        return context.loc.loan_status_owner_return_denied_description;
+      case LoanStatus.returned:
+        return context.loc.loan_status_owner_returned_description;
+    }
+  }
 }
