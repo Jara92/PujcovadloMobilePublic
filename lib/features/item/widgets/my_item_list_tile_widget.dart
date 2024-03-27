@@ -19,7 +19,7 @@ class MyItemListTileWidget extends StatelessWidget {
               flex: 3,
               child: Container(
                 padding: const EdgeInsets.only(right: 0),
-                child: ItemMainImage(item: item),
+                child: ItemMainImage(image: item.mainImage),
               )),
           Expanded(
             flex: 7,

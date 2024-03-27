@@ -13,11 +13,12 @@ import 'package:pujcovadlo_client/core/constants/routes.dart';
 import 'package:pujcovadlo_client/core/custom_colors.dart';
 import 'package:pujcovadlo_client/core/services/http_service.dart';
 import 'package:pujcovadlo_client/core/services/image_service.dart';
-import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
 import 'package:pujcovadlo_client/features/item/services/item_category_service.dart';
 import 'package:pujcovadlo_client/features/item/services/item_service.dart';
 import 'package:pujcovadlo_client/features/item/services/item_tag_service.dart';
 import 'package:pujcovadlo_client/features/item/views/item_list_view.dart';
+import 'package:pujcovadlo_client/features/loan/services/loan_service.dart';
+import 'package:pujcovadlo_client/features/loan/views/borrowed_list_view.dart';
 import 'package:pujcovadlo_client/features/profiles/services/profile_service.dart';
 import 'package:pujcovadlo_client/features/profiles/views/my_profile_view.dart';
 
@@ -100,6 +101,7 @@ void registerDependencies() {
   locator.registerSingleton<ItemService>(ItemService());
   locator.registerSingleton<ItemCategoryService>(ItemCategoryService());
   locator.registerSingleton<ItemTagService>(ItemTagService());
+  locator.registerSingleton<LoanService>(LoanService());
   locator.registerSingleton<ProfileService>(ProfileService());
 }
 
@@ -120,12 +122,7 @@ class HomePage extends StatelessWidget {
 
 List<Widget> bottomNavScreen = <Widget>[
   Text('Inquiries'),
-  Scaffold(
-    body: Center(
-      child: Text('Orders'),
-    ),
-    bottomNavigationBar: MainBottomNavigationBar(),
-  ),
+  BorrowedListView(),
   ItemListView(),
   Text('Messages'),
   MyProfileView(),

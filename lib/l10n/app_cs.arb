@@ -146,10 +146,11 @@
   "menu_searching": "Hledat",
   "menu_profile": "Profil",
   "menu_inquiries": "Poptávky",
-  "menu_orders": "Vypůjčené",
+  "menu_orders": "Půjčené",
   "menu_messages": "Zprávy",
   "what_are_you_looking_for": "Co hledáte?",
   "searching_in_my_items": "Hledání v mých položkách",
+  "searching_in_borrowed_items": "Hledání v půjčených položkách",
   "price": "{price}",
   "@price": {
     "placeholders": {
@@ -194,5 +195,25 @@
         "format": "decimalPattern"
       }
     }
-  }
+  },
+  "loan_expected_price_short": "Cena půjčení",
+  "date": "{date}",
+  "@date": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMd"
+      }
+    }
+  },
+  "loan_status_tenant_inquired_title": "Rezervace",
+  "loan_status_tenant_accepted_title": "Potvrzeno",
+  "loan_status_tenant_denied_title": "Odmítnuto",
+  "loan_status_tenant_cancelled_title": "Zrušeno",
+  "loan_status_tenant_prepared_for_pickup_title": "Připraveno k vyzvednutí",
+  "loan_status_tenant_pickup_denied_title": "Vyzvednutí zamítnuto",
+  "loan_status_tenant_active_title": "Aktivní",
+  "loan_status_tenant_prepared_for_return_title": "Připraveno k vrácení",
+  "loan_status_tenant_return_denied_title": "Vrácení zamítnuto",
+  "loan_status_tenant_returned_title": "Dokončeno"
 }
