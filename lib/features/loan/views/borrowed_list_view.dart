@@ -129,24 +129,27 @@ class _BorrowedListViewState extends State<BorrowedListView> {
 
   Widget _buildItemList(BuildContext context, BorrowedListState state) {
     return Expanded(
-      child: PagedListView<String, LoanResponse>(
-        pagingController: _pagingController,
-        builderDelegate: PagedChildBuilderDelegate<LoanResponse>(
-          firstPageErrorIndicatorBuilder: (_) => OperationError(
-            onRetry: _pagingController.refresh,
-          ),
-          noItemsFoundIndicatorBuilder: (_) => NotFoundError(
-            title: context.loc.no_items_found,
-            message: context.loc.no_items_found_message,
-          ),
-          newPageErrorIndicatorBuilder: (_) => LoadingNextPageErrorWidget(
-            onRetry: _pagingController.retryLastFailedRequest,
-          ),
-          itemBuilder: (context, loan, index) => GestureDetector(
-            onTap: () {}, // todo
-            /* onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ItemCreateView(itemId: loan.id))),*/
-            child: LoanListTileWidget(loan: loan, user: loan.owner),
+      child: RefreshIndicator(
+        onRefresh: () => Future.sync(() => _pagingController.refresh()),
+        child: PagedListView<String, LoanResponse>(
+          pagingController: _pagingController,
+          builderDelegate: PagedChildBuilderDelegate<LoanResponse>(
+            firstPageErrorIndicatorBuilder: (_) => OperationError(
+              onRetry: _pagingController.refresh,
+            ),
+            noItemsFoundIndicatorBuilder: (_) => NotFoundError(
+              title: context.loc.no_items_found,
+              message: context.loc.no_items_found_message,
+            ),
+            newPageErrorIndicatorBuilder: (_) => LoadingNextPageErrorWidget(
+              onRetry: _pagingController.retryLastFailedRequest,
+            ),
+            itemBuilder: (context, loan, index) => GestureDetector(
+              onTap: () {}, // todo
+              /* onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ItemCreateView(itemId: loan.id))),*/
+              child: LoanListTileWidget(loan: loan, user: loan.owner),
+            ),
           ),
         ),
       ),
