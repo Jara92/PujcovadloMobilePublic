@@ -7,7 +7,7 @@ class ItemFilter {
   ItemFilter({
     this.search,
     this.ownerId,
-    this.pageSize = 20,
+    this.pageSize = 10,
     this.status,
   });
 
