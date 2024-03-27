@@ -127,6 +127,7 @@
   "manage_my_items_button": "Správa mých položek",
   "inquiries_and_reservations_button": "Poptávky a rezervace",
   "profile_average_rating_with_reviews_count": "{rating} ({reviewsCount} recenzí)",
+  "profile_no_rating_yet": "Uživatele zatím nikdo neohodnotil.",
   "@profile_average_rating_with_reviews_count": {
     "placeholders": {
       "rating": {

@@ -5,9 +5,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_detail_response.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_placeholder_image.dart';
-import 'package:pujcovadlo_client/features/profiles/views/profile_detail_view.dart';
-import 'package:pujcovadlo_client/features/profiles/widgets/profile_image.dart';
 import 'package:pujcovadlo_client/features/profiles/widgets/profile_rating_widget.dart';
+import 'package:pujcovadlo_client/features/profiles/widgets/profile_widget.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -95,8 +94,7 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
                                     const EdgeInsets.symmetric(horizontal: 5),
                                 child: FadeInImage.memoryNetwork(
                                     placeholder: kTransparentImage,
-                                    // TODO: add url of placeholder image??
-                                    image: i.url ?? '',
+                                    image: i.url,
                                     width: 100,
                                     height: 100,
                                     fit: BoxFit.cover,
@@ -265,67 +263,7 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
               ],
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            child: Row(
-              children: [
-                ProfileImage(
-                  user: widget.item.owner,
-                  radius: 20,
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${widget.item.owner.firstName} ${widget.item.owner.lastName}",
-                        style: Theme.of(context).textTheme.titleMedium!,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        softWrap: true,
-                      ),
-                      ProfileRatingWidget(
-                        user: widget.item.owner,
-                        showReviewsCount: true,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 20),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(right: 2),
-                    child: ElevatedButton.icon(
-                      onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ProfileDetailView(
-                            user: widget.item.owner,
-                          ),
-                        ),
-                      ),
-                      icon: const Icon(Icons.supervised_user_circle),
-                      label: Text(context.loc.show_user_profile_button),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 2),
-                    child: OutlinedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.message),
-                      label: Text(context.loc.contact_owner_short_button),
-                    ),
-                  ),
-                ]),
-          ),
+          ProfileWidget(user: widget.item.owner),
           if (widget.item.latitude != null && widget.item.longitude != null)
             _buildMap(widget.item),
         ],

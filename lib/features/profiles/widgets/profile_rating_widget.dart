@@ -22,6 +22,7 @@ class ProfileRatingWidget extends StatelessWidget {
               color: CustomColors.gold,
               size: 20,
             ),
+            const SizedBox(width: 3),
             Text(
               // Show average rating with reviews count if showReviewsCount is true
               showReviewsCount
@@ -36,7 +37,26 @@ class ProfileRatingWidget extends StatelessWidget {
             ),
           ]);
     }
+    // No rating yet
+    else {
+      return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.star_border,
+              color: Colors.grey,
+              size: 20,
+            ),
+            const SizedBox(width: 3),
+            if (showReviewsCount)
+              Text(
+                // Show average rating with reviews count if showReviewsCount is true
+                context.loc.profile_no_rating_yet,
 
-    return const Row();
+                style: Theme.of(context).textTheme.labelSmall!,
+              ),
+          ]);
+    }
   }
 }

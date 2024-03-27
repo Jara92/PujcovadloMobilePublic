@@ -8,6 +8,7 @@ import 'package:pujcovadlo_client/features/loan/responses/loan_response.dart';
 import 'package:pujcovadlo_client/features/loan/view_helpers/loan_status.dart';
 import 'package:pujcovadlo_client/features/loan/widgets/loan_item_preview.dart';
 import 'package:pujcovadlo_client/features/loan/widgets/loan_status_badge.dart';
+import 'package:pujcovadlo_client/features/profiles/widgets/profile_widget.dart';
 
 class LentLoanDetailView extends StatefulWidget {
   final int? loanId;
@@ -117,6 +118,7 @@ class _LentLoanDetailViewState extends State<LentLoanDetailView> {
                             ),
                           ],
                         ),
+                        ProfileWidget(user: state.loan.tenant),
                       ],
                     );
                   }
