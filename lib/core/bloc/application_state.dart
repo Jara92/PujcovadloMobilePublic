@@ -1,7 +1,7 @@
 part of 'application_bloc.dart';
 
 @immutable
-abstract class ApplicationState {
+class ApplicationState {
   final int index;
 
   const ApplicationState({

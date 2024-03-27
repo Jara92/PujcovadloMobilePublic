@@ -10,3 +10,11 @@ class TabChangedApplicationEvent extends ApplicationEvent {
 
   const TabChangedApplicationEvent(this.index);
 }
+
+class ShowBorrowedItemsEvent extends ApplicationEvent {
+  const ShowBorrowedItemsEvent();
+}
+
+class ShowLentItemsEvent extends ApplicationEvent {
+  const ShowLentItemsEvent();
+}

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pujcovadlo_client/core/bloc/application_bloc.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
 import 'package:pujcovadlo_client/features/item/views/item_create_view.dart';
@@ -49,7 +51,9 @@ class MyProfileView extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ElevatedButton.icon(
-                      onPressed: () {}, // TODO
+                      onPressed: () => context
+                          .read<ApplicationBloc>()
+                          .add(const ShowBorrowedItemsEvent()),
                       icon: const Icon(Icons.list),
                       label: Text(context.loc.borrowed_items_button),
                     ),
@@ -98,7 +102,7 @@ class MyProfileView extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MyItemList(),
+                              builder: (context) => const MyItemList(),
                             ));
                       }, // TODO
                       icon: const Icon(Icons.inventory),
@@ -111,7 +115,9 @@ class MyProfileView extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ElevatedButton.icon(
-                      onPressed: () {}, // TODO
+                      onPressed: () => context
+                          .read<ApplicationBloc>()
+                          .add(const ShowLentItemsEvent()),
                       icon: const Icon(Icons.monetization_on),
                       label:
                           Text(context.loc.inquiries_and_reservations_button),
