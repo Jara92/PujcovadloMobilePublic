@@ -19,6 +19,7 @@ import 'package:pujcovadlo_client/features/item/services/item_tag_service.dart';
 import 'package:pujcovadlo_client/features/item/views/item_list_view.dart';
 import 'package:pujcovadlo_client/features/loan/services/loan_service.dart';
 import 'package:pujcovadlo_client/features/loan/views/borrowed_list_view.dart';
+import 'package:pujcovadlo_client/features/loan/views/lent_list_view.dart';
 import 'package:pujcovadlo_client/features/profiles/services/profile_service.dart';
 import 'package:pujcovadlo_client/features/profiles/views/my_profile_view.dart';
 
@@ -121,9 +122,9 @@ class HomePage extends StatelessWidget {
 }
 
 List<Widget> bottomNavScreen = <Widget>[
-  Text('Inquiries'),
-  BorrowedListView(),
-  ItemListView(),
-  Text('Messages'),
-  MyProfileView(),
+  const LentListView(),
+  const BorrowedListView(),
+  const ItemListView(),
+  const Text('Messages'),
+  const MyProfileView(),
 ];

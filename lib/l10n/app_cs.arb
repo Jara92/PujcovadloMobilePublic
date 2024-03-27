@@ -150,7 +150,8 @@
   "menu_messages": "Zprávy",
   "what_are_you_looking_for": "Co hledáte?",
   "searching_in_my_items": "Hledání v mých položkách",
-  "searching_in_borrowed_items": "Hledání v půjčených položkách",
+  "searching_in_borrowed_items": "Hledání ve vypůjčených položkách",
+  "searching_in_lent_items": "Hledání v půjčených položkách",
   "price": "{price}",
   "@price": {
     "placeholders": {
@@ -215,5 +216,15 @@
   "loan_status_tenant_active_title": "Aktivní",
   "loan_status_tenant_prepared_for_return_title": "Připraveno k vrácení",
   "loan_status_tenant_return_denied_title": "Vrácení zamítnuto",
-  "loan_status_tenant_returned_title": "Dokončeno"
+  "loan_status_tenant_returned_title": "Dokončeno",
+  "loan_status_owner_inquired_title": "Poptávka",
+  "loan_status_owner_accepted_title": "Potvrzeno",
+  "loan_status_owner_denied_title": "Odmítnuto",
+  "loan_status_owner_cancelled_title": "Zrušeno",
+  "loan_status_owner_prepared_for_pickup_title": "Připraveno k vyzvednutí",
+  "loan_status_owner_pickup_denied_title": "Vyzvednutí zamítnuto",
+  "loan_status_owner_active_title": "Aktivní",
+  "loan_status_owner_prepared_for_return_title": "Připraveno k vrácení",
+  "loan_status_owner_return_denied_title": "Vrácení zamítnuto",
+  "loan_status_owner_returned_title": "Vráceno"
 }
