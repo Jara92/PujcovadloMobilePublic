@@ -28,7 +28,7 @@ class MainBottomNavigationBar extends StatelessWidget {
                 label: context.loc.menu_inquiries,
               ),
               NavigationDestination(
-                icon: const Icon(Icons.wallet),
+                icon: const Icon(Icons.car_rental),
                 label: context.loc.menu_orders,
               ),
               NavigationDestination(
