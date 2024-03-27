@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
-import 'package:pujcovadlo_client/features/authentication/responses/user_response.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_main_image.dart';
 import 'package:pujcovadlo_client/features/loan/responses/loan_response.dart';
-import 'package:pujcovadlo_client/features/loan/widgets/tenant_loan_status_widget.dart';
+import 'package:pujcovadlo_client/features/loan/view_helpers/loan_status.dart';
+import 'package:pujcovadlo_client/features/loan/widgets/loan_status_badge.dart';
 import 'package:pujcovadlo_client/features/profiles/widgets/profile_rating_widget.dart';
 
-class LoanListTileWidget extends StatelessWidget {
+class BorrowedListTileWidget extends StatelessWidget {
   final LoanResponse loan;
-  final UserResponse user;
 
-  const LoanListTileWidget({required this.loan, required this.user, super.key});
+  const BorrowedListTileWidget({required this.loan, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +33,9 @@ class LoanListTileWidget extends StatelessWidget {
                       )),
                       Align(
                           alignment: Alignment.bottomCenter,
-                          child: TenantLoanStatusWidget(status: loan.status))
+                          child: LoanStatusBadge(
+                              title: LoanStatusLocalizationHelper.locForTenant(
+                                  context, loan.status)))
                     ]),
                   )),
               Expanded(
@@ -66,7 +67,7 @@ class LoanListTileWidget extends StatelessWidget {
                             ),
                           ),
                           ProfileRatingWidget(
-                            user: user,
+                            user: loan.owner,
                           )
                         ],
                       ),
@@ -81,7 +82,7 @@ class LoanListTileWidget extends StatelessWidget {
                             const SizedBox(width: 5),
                             Expanded(
                                 child: Text(
-                              "${user.firstName} ${user.lastName}",
+                              "${loan.owner.firstName} ${loan.owner.lastName}",
                               style: Theme.of(context).textTheme.labelSmall!,
                             )),
                           ]),

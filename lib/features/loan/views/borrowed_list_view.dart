@@ -8,7 +8,7 @@ import 'package:pujcovadlo_client/core/widgets/errors/operation_error.dart';
 import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
 import 'package:pujcovadlo_client/features/loan/bloc/borrowed_list/borrowed_list_bloc.dart';
 import 'package:pujcovadlo_client/features/loan/responses/loan_response.dart';
-import 'package:pujcovadlo_client/features/loan/widgets/loan_list_tile_widget.dart';
+import 'package:pujcovadlo_client/features/loan/widgets/borrowed_list_tile_widget.dart';
 
 class BorrowedListView extends StatefulWidget {
   const BorrowedListView({super.key});
@@ -148,7 +148,7 @@ class _BorrowedListViewState extends State<BorrowedListView> {
               onTap: () {}, // todo
               /* onTap: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ItemCreateView(itemId: loan.id))),*/
-              child: LoanListTileWidget(loan: loan, user: loan.owner),
+              child: BorrowedListTileWidget(loan: loan),
             ),
           ),
         ),
