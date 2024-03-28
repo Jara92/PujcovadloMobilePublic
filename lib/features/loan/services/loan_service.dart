@@ -5,7 +5,9 @@ import 'package:pujcovadlo_client/config.dart';
 import 'package:pujcovadlo_client/core/responses/response_list.dart';
 import 'package:pujcovadlo_client/core/services/http_service.dart';
 import 'package:pujcovadlo_client/core/services/image_service.dart';
+import 'package:pujcovadlo_client/features/loan/enums/loan_status.dart';
 import 'package:pujcovadlo_client/features/loan/filters/loan_filter.dart';
+import 'package:pujcovadlo_client/features/loan/requests/loan_update_request.dart';
 import 'package:pujcovadlo_client/features/loan/responses/loan_response.dart';
 
 class LoanService {
@@ -44,7 +46,31 @@ class LoanService {
     }
   }
 
-  Future<LoanResponse> getLoanById(int i) {
-    throw UnimplementedError();
+  Future<LoanResponse> getLoanById(int id) async {
+    final uri = Uri.parse("${config.apiEndpoint}/loans/$id");
+
+    final response = await http.get(uri: uri);
+
+    if (response.isSuccessCode) {
+      return LoanResponse.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>);
+    } else {
+      throw Exception(
+          'Failed to load loan: ${response.statusCode} ${response.body}');
+    }
+  }
+
+  Future<void> updateLoanStatus(int loanId, LoanStatus status) async {
+    final request = LoanUpdateRequest(id: loanId, status: status);
+
+    final response = await http.put(
+      uri: Uri.parse("${config.apiEndpoint}/loans/$loanId"),
+      body: request.toJson(),
+    );
+
+    if (!response.isSuccessCode) {
+      throw Exception(
+          'Failed to update loan status: ${response.statusCode} ${response.body}');
+    }
   }
 }
