@@ -7,11 +7,26 @@ class OperationError extends StatelessWidget {
   final String? title;
   final String? message;
   final RetryCallback? onRetry;
+  final double? minHeight;
 
-  const OperationError({this.title, this.message, this.onRetry, super.key});
+  const OperationError(
+      {this.title, this.message, this.onRetry, this.minHeight, super.key});
 
   @override
   Widget build(BuildContext context) {
+    if (minHeight != null) {
+      return ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: minHeight!,
+        ),
+        child: _buildError(context),
+      );
+    }
+
+    return _buildError(context);
+  }
+
+  Widget _buildError(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

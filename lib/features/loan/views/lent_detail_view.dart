@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/core/widgets/errors/operation_error.dart';
+import 'package:pujcovadlo_client/core/widgets/loading_indicator.dart';
 import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
 import 'package:pujcovadlo_client/features/loan/bloc/lent_detail/lent_loan_detail_bloc.dart';
 import 'package:pujcovadlo_client/features/loan/enums/loan_status.dart';
@@ -42,14 +43,15 @@ class _LentLoanDetailViewState extends State<LentLoanDetailView> {
           appBar: AppBar(
             title: Text(context.loc.loan_lent_detail_page_title),
           ),
-          body: RefreshIndicator(
-            onRefresh: () =>
-                Future.sync(() => _bloc.add(RefreshLentLoanDetailEvent())),
-            child: Center(
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
+          body: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: LayoutBuilder(builder:
+                (BuildContext context, BoxConstraints viewportConstraints) {
+              return RefreshIndicator(
+                onRefresh: () =>
+                    Future.sync(() => _bloc.add(RefreshLentLoanDetailEvent())),
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
                   child: BlocConsumer<LentLoanDetailBloc, LentLoanDetailState>(
                     listener: (context, state) {
                       // Show loader overlay when the state is busy
@@ -78,17 +80,20 @@ class _LentLoanDetailViewState extends State<LentLoanDetailView> {
                       // something failed
                       if (state.status == LentLoanDetailStateEnum.error) {
                         return OperationError(
+                            minHeight: viewportConstraints.maxHeight,
                             onRetry: () =>
                                 BlocProvider.of<LentLoanDetailBloc>(context)
                                     .add(RefreshLentLoanDetailEvent()));
                       }
 
-                      return const Center(child: CircularProgressIndicator());
+                      return LoadingIndicator(
+                        minHeight: viewportConstraints.maxHeight,
+                      );
                     },
                   ),
                 ),
-              ),
-            ),
+              );
+            }),
           ),
           bottomNavigationBar: const MainBottomNavigationBar(),
         ),
