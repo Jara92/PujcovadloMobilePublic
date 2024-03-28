@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get_it/get_it.dart';
 import 'package:pujcovadlo_client/config.dart';
 import 'package:pujcovadlo_client/core/responses/response_list.dart';
@@ -20,15 +18,14 @@ class ItemTagService {
     // Parse JSON if the server returned a 200 OK response
     if (response.isSuccessCode) {
       var data = ResponseList<ItemTagResponse>.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>,
-          ItemTagResponse.fromJson);
+          response.data, ItemTagResponse.fromJson);
 
       return data;
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception(
-          'Failed to load tags: ${response.statusCode} ${response.body}');
+          'Failed to load tags: ${response.statusCode} ${response.data}');
     }
   }
 }

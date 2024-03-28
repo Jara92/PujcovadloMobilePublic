@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get_it/get_it.dart';
 import 'package:pujcovadlo_client/config.dart';
 import 'package:pujcovadlo_client/core/responses/response_list.dart';
@@ -35,15 +33,14 @@ class LoanService {
     // Parse JSON if the server returned a 200 OK response
     if (response.isSuccessCode) {
       var data = ResponseList<LoanResponse>.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>,
-          LoanResponse.fromJson);
+          response.data, LoanResponse.fromJson);
 
       return data;
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception(
-          'Failed to load items: ${response.statusCode} ${response.body}');
+          'Failed to load items: ${response.statusCode} ${response.data}');
     }
   }
 
@@ -53,11 +50,10 @@ class LoanService {
     final response = await http.get(uri: uri);
 
     if (response.isSuccessCode) {
-      return LoanResponse.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>);
+      return LoanResponse.fromJson(response.data);
     } else {
       throw Exception(
-          'Failed to load loan: ${response.statusCode} ${response.body}');
+          'Failed to load loan: ${response.statusCode} ${response.data}');
     }
   }
 
@@ -74,12 +70,12 @@ class LoanService {
 
     if (response.isSuccessCode) {
       // Parse JSON to response
-      final loanResponse = LoanResponse.fromJson(jsonDecode(response.body));
+      final loanResponse = LoanResponse.fromJson(response.data);
 
       return loanResponse;
     } else {
       throw Exception(
-          'Failed to create loan: ${response.statusCode} ${response.body}');
+          'Failed to create loan: ${response.statusCode} ${response.data}');
     }
   }
 
@@ -93,7 +89,7 @@ class LoanService {
 
     if (!response.isSuccessCode) {
       throw Exception(
-          'Failed to update loan status: ${response.statusCode} ${response.body}');
+          'Failed to update loan status: ${response.statusCode} ${response.data}');
     }
   }
 }

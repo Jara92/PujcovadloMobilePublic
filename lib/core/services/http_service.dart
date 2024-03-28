@@ -1,13 +1,22 @@
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 
 export 'package:pujcovadlo_client/core/extensions/http_response/success_code.dart';
 
 class HttpService {
+  late final Dio _dio;
+
+  HttpService() {
+    _dio = Dio();
+    _dio.transformer = BackgroundTransformer()..jsonDecodeCallback = parseJson;
+    _dio.options.validateStatus = (status) => status! < 500;
+  }
+
   /// Builds headers for HTTP requests.
   Map<String, String> _buildHeaders(
       {bool sendAuthorizationToken = true,
@@ -27,12 +36,12 @@ class HttpService {
     bool sendAuthorizationToken = true,
     Map<String, String> headers = const {},
   }) async {
-    print(uri);
-    return http.get(
-      uri,
-      headers: _buildHeaders(
-          sendAuthorizationToken: sendAuthorizationToken, headers: headers),
-    );
+    print(uri.toString());
+    return _dio.get(uri.toString(),
+        options: Options(
+            headers: _buildHeaders(
+                sendAuthorizationToken: sendAuthorizationToken,
+                headers: headers)));
   }
 
   /// Sends a HTTP POST request.
@@ -42,14 +51,12 @@ class HttpService {
     bool sendAuthorizationToken = true,
     Map<String, String> headers = const {},
   }) async {
-    return http.post(
-      uri,
-      headers: _buildHeaders(
-        sendAuthorizationToken: sendAuthorizationToken,
-        headers: headers,
-      ),
-      body: body,
-    );
+    return _dio.post(uri.toString(),
+        data: body,
+        options: Options(
+            headers: _buildHeaders(
+                sendAuthorizationToken: sendAuthorizationToken,
+                headers: headers)));
   }
 
   /// Sends a HTTP PUT request.
@@ -59,14 +66,12 @@ class HttpService {
     bool sendAuthorizationToken = true,
     Map<String, String> headers = const {},
   }) async {
-    return http.put(
-      uri,
-      headers: _buildHeaders(
-        sendAuthorizationToken: sendAuthorizationToken,
-        headers: headers,
-      ),
-      body: body,
-    );
+    return _dio.put(uri.toString(),
+        data: body,
+        options: Options(
+            headers: _buildHeaders(
+                sendAuthorizationToken: sendAuthorizationToken,
+                headers: headers)));
   }
 
   /// Sends a HTTP DELETE request.
@@ -76,11 +81,11 @@ class HttpService {
     Map<String, String> headers = const {},
   }) async {
     print(uri);
-    return http.delete(
-      uri,
-      headers: _buildHeaders(
-          sendAuthorizationToken: sendAuthorizationToken, headers: headers),
-    );
+    return _dio.delete(uri.toString(),
+        options: Options(
+            headers: _buildHeaders(
+                sendAuthorizationToken: sendAuthorizationToken,
+                headers: headers)));
   }
 
   /// Sends a HTTP POST request with form data.
@@ -90,41 +95,42 @@ class HttpService {
     bool sendAuthorizationToken = true,
     Map<String, String> headers = const {},
   }) async {
-    final request = http.MultipartRequest('POST', uri)
-      ..headers.addAll(_buildHeaders(
-          sendAuthorizationToken: sendAuthorizationToken,
-          contentType: 'multipart/form-data',
-          headers: headers));
+    // Get MIME type of the file
+    final mimeType = lookupMimeType(file.path) ?? 'application/octet-stream';
 
-    // Determine MIME type of the file
-    final mimeType = lookupMimeType(file.path);
+    // Create form data
+    final formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(
+        file.path,
+        filename: file.path.split('/').last,
+        contentType: MediaType.parse(mimeType),
+      )
+    });
 
-    // If MIME type is not found, throw an exception
-    if (mimeType == null || mimeType.isEmpty) {
-      throw Exception('Failed to determine MIME type of the file');
-    }
+    // Return the post request
+    return _dio.post(uri.toString(),
+        data: formData,
+        options: Options(
+            headers: _buildHeaders(
+                sendAuthorizationToken: sendAuthorizationToken,
+                headers: headers)));
+  }
 
-    // Split MIME type into main type and sub type
-    final splitMimeType = mimeType.split('/');
-    if (splitMimeType.length != 2) {
-      throw Exception('Failed to determine MIME type of the file');
-    }
-
-    // Get main type and sub type
-    final mainType = splitMimeType[0];
-    final subType = splitMimeType[1];
-
-    // Add file to the request
-    request.files.add(await http.MultipartFile.fromPath("file", file.path,
-        contentType: MediaType(mainType, subType)));
-
-    final streamResponse = await request.send();
-
-    // Send the request
-    return await http.Response.fromStream(streamResponse);
+  /// Must be top-level function
+  Map<String, dynamic> parseAndDecode(String response) {
+    return jsonDecode(response) as Map<String, dynamic>;
   }
 
   String get _authorizationToken {
     return 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3ByaW1hcnlzaWQiOiIxM2YxMWY5Mi02YzRkLTQ0ZTItYjdhOC0zNjA5ZDgwYTQzOWMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoib3duZXIiLCJqdGkiOiIwOWNiZmU5ZS00MDQ4LTRjMTMtODI4Mi1mMGRkMDk5YzRlNTQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiVXNlciIsIlRlbmFudCIsIk93bmVyIl0sImV4cCI6MTcxMTY2NzExNCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDQ2IiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo1MDQ2In0.OkcS9bdjBUxRB2h3FfTxHfKf-UeQM0pj6ea4kOqsIjg';
   }
+}
+
+/// Must be top-level function
+Map<String, dynamic> _parseAndDecode(String response) {
+  return jsonDecode(response) as Map<String, dynamic>;
+}
+
+Future<Map<String, dynamic>> parseJson(String text) {
+  return compute(_parseAndDecode, text);
 }

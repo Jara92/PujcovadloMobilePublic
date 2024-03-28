@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get_it/get_it.dart';
 import 'package:pujcovadlo_client/config.dart';
 import 'package:pujcovadlo_client/core/services/http_service.dart';
@@ -24,14 +22,14 @@ class ProfileService {
 
     // Parse JSON if the server returned a 200 OK response
     if (response.isSuccessCode) {
-      var data = UserResponse.fromJson(jsonDecode(response.body));
+      var data = UserResponse.fromJson(response.data);
 
       return data;
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception(
-          'Failed to load item: ${response.statusCode} ${response.body}');
+          'Failed to load item: ${response.statusCode} ${response.data}');
     }
   }
 }

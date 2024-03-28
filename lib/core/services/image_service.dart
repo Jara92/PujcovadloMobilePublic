@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get_it/get_it.dart';
 import 'package:pujcovadlo_client/config.dart';
 import 'package:pujcovadlo_client/core/requests/image_request.dart';
@@ -24,8 +22,7 @@ class ImageService {
 
     if (response.isSuccessCode) {
       // Convert to ImageResponse
-      final imageResponse = ImageResponse.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>);
+      final imageResponse = ImageResponse.fromJson(response.data);
 
       // Convert request to already saved image
       makeImageSaved(request, imageResponse);
@@ -33,7 +30,7 @@ class ImageService {
       return imageResponse;
     } else {
       throw Exception(
-          'Failed to create image: ${response.statusCode} ${response.body}');
+          'Failed to create image: ${response.statusCode} ${response.data}');
     }
   }
 
@@ -44,7 +41,7 @@ class ImageService {
 
     if (!response.isSuccessCode) {
       throw Exception(
-          'Failed to delete image: ${response.statusCode} ${response.body}');
+          'Failed to delete image: ${response.statusCode} ${response.data}');
     }
   }
 

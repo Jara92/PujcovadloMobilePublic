@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get_it/get_it.dart';
 import 'package:pujcovadlo_client/config.dart';
 import 'package:pujcovadlo_client/core/requests/image_request.dart';
@@ -36,15 +34,14 @@ class ItemService {
     // Parse JSON if the server returned a 200 OK response
     if (response.isSuccessCode) {
       var data = ResponseList<ItemResponse>.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>,
-          ItemResponse.fromJson);
+          response.data, ItemResponse.fromJson);
 
       return data;
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception(
-          'Failed to load items: ${response.statusCode} ${response.body}');
+          'Failed to load items: ${response.statusCode} ${response.data}');
     }
   }
 
@@ -61,14 +58,14 @@ class ItemService {
 
     // Parse JSON if the server returned a 200 OK response
     if (response.isSuccessCode) {
-      var data = ItemDetailResponse.fromJson(jsonDecode(response.body));
+      var data = ItemDetailResponse.fromJson(response.data);
 
       return data;
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception(
-          'Failed to load item: ${response.statusCode} ${response.body}');
+          'Failed to load item: ${response.statusCode} ${response.data}');
     }
   }
 
@@ -82,8 +79,7 @@ class ItemService {
 
     if (response.isSuccessCode) {
       // Parse JSON to response
-      final itemResponse =
-          ItemDetailResponse.fromJson(jsonDecode(response.body));
+      final itemResponse = ItemDetailResponse.fromJson(response.data);
 
       // Update item request id so we can do update if something fails now
       request.id = itemResponse.id;
@@ -123,7 +119,7 @@ class ItemService {
         // throw an exception if the server did not return a 200 OK response
         if (!updateResponse.isSuccessCode) {
           throw Exception(
-              'Failed to update item: ${updateResponse.statusCode} ${updateResponse.body}');
+              'Failed to update item: ${updateResponse.statusCode} ${updateResponse.data}');
         }
       }
 
@@ -131,7 +127,7 @@ class ItemService {
       return itemResponse;
     } else {
       throw Exception(
-          'Failed to create item: ${response.statusCode} ${response.body}');
+          'Failed to create item: ${response.statusCode} ${response.data}');
     }
   }
 
@@ -177,7 +173,7 @@ class ItemService {
     // throw an exception if the server did not return a 200 OK response
     if (!response.isSuccessCode) {
       throw Exception(
-          'Failed to update item: ${response.statusCode} ${response.body}');
+          'Failed to update item: ${response.statusCode} ${response.data}');
     }
   }
 
