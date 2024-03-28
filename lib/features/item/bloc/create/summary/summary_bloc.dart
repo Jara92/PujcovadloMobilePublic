@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 import 'package:pujcovadlo_client/features/item/requests/item_request.dart';
 import 'package:pujcovadlo_client/features/item/services/item_service.dart';
@@ -8,7 +9,7 @@ part 'summary_event.dart';
 part 'summary_state.dart';
 
 class SummaryBloc extends Bloc<SummaryEvent, SummaryState> {
-  final ItemService _itemService = ItemService();
+  final ItemService _itemService = GetIt.instance.get<ItemService>();
   late final ItemRequest item;
 
   SummaryBloc(this.item) : super(const InitialState()) {

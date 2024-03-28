@@ -7,6 +7,7 @@ import 'package:pujcovadlo_client/core/services/http_service.dart';
 import 'package:pujcovadlo_client/core/services/image_service.dart';
 import 'package:pujcovadlo_client/features/loan/enums/loan_status.dart';
 import 'package:pujcovadlo_client/features/loan/filters/loan_filter.dart';
+import 'package:pujcovadlo_client/features/loan/requests/loan_request.dart';
 import 'package:pujcovadlo_client/features/loan/requests/loan_update_request.dart';
 import 'package:pujcovadlo_client/features/loan/responses/loan_response.dart';
 
@@ -57,6 +58,28 @@ class LoanService {
     } else {
       throw Exception(
           'Failed to load loan: ${response.statusCode} ${response.body}');
+    }
+  }
+
+  Future<LoanResponse> createLoan(LoanRequest request) async {
+    //await Future.delayed(Duration(seconds: 1));
+    //throw Exception('Failed to create loan: 500 Internal Server Error');
+
+    Uri uri = Uri.parse("${config.apiEndpoint}/loans");
+
+    var response = await http.post(
+      uri: uri,
+      body: request.toJson(),
+    );
+
+    if (response.isSuccessCode) {
+      // Parse JSON to response
+      final loanResponse = LoanResponse.fromJson(jsonDecode(response.body));
+
+      return loanResponse;
+    } else {
+      throw Exception(
+          'Failed to create loan: ${response.statusCode} ${response.body}');
     }
   }
 

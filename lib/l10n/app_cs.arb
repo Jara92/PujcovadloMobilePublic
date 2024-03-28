@@ -201,6 +201,45 @@
       }
     }
   },
+  "loan_create_page_title": "Nová rezervace",
+  "loan_create_loan_title": "Vypůjčit si:",
+  "loan_reservation_date_title": "Termín rezervace",
+  "loan_reservation_date": "Termín rezervace",
+  "loan_reservation_date_button": "Vybrat termín",
+  "loan_reservation_date_placeholder": "Prosím vyberte termín vypůjčení.",
+  "loan_reservation_date_preview": "{start} - {end} ({days, plural, =0{0 dní} =1{1 den} =2{2 dny} other{{days} dní}})",
+  "@loan_reservation_date_preview": {
+    "description": "Preview of the selected reservation date including start date, end date and number of days",
+    "placeholders": {
+      "start": {
+        "type": "DateTime",
+        "format": "yMd"
+      },
+      "end": {
+        "type": "DateTime",
+        "format": "yMd"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "loan_expected_price_title": "Očekávaná cena",
+  "loan_price_per_day": "Cena za den",
+  "loan_refundable_deposit": "Vratná kauce",
+  "loan_total_expected_price": "Celková očekávaná cena",
+  "loan_tenant_note_title": "Poznámka pro majitele",
+  "loan_tenant_note_hint_text": "Např. kdy a kde byste chtěl/a položku vyzvednout, dotazy na stav položky, příslušenství, možnosti vyzkoušení...",
+  "loan_tenant_note_helper_text": "",
+  "loan_saving_processing": "Probíhá odesílání...",
+  "loan_saving_processing_message": "Prosím, vyčkejte, dokud se rezervace odesílá.",
+  "loan_saving_failed": "Odeslání selhalo",
+  "loan_saving_failed_message": "Rezervaci se nepodařilo odeslat. Zkuste to prosím znovu. Pokud problém přetrvává, kontaktujte nás.",
+  "loan_sent_button": "Odeslat",
+  "loan_saved_success": "Rezervace odeslána!",
+  "loan_saved_success_message": "Majitel se Vám co nejdříve ozve ohledně potvrzení rezervace a informacích o možnostech převzetí. Pokud chcete navrhnout čas převzetí, kontaktujte majitele.",
+  "loan_saved_show_new_reservation_button": "Zobrazit rezervaci",
+  "loan_saved_back_to_searching_button": "Zpět na hledání",
   "loan_lent_detail_page_title": "Detail výpůjčky",
   "loan_lent_subject": "Předmět výpůjčky:",
   "loan_expected_price_short": "Cena půjčení",

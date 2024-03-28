@@ -5,6 +5,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_detail_response.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_placeholder_image.dart';
+import 'package:pujcovadlo_client/features/loan/views/create_loan_view.dart';
 import 'package:pujcovadlo_client/features/profiles/widgets/profile_rating_widget.dart';
 import 'package:pujcovadlo_client/features/profiles/widgets/profile_widget.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -201,8 +202,11 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
               children: [
                 Expanded(
                   child: ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: Icon(Icons.edit_calendar),
+                    onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => CreateLoanView(
+                                item: widget.item, itemId: widget.item.id))),
+                    icon: const Icon(Icons.edit_calendar),
                     label: Text(context.loc.item_rent_for_button(
                         context.loc.price(widget.item.pricePerDay))),
                   ),
