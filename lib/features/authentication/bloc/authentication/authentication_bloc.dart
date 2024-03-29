@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
-import 'package:pujcovadlo_client/features/authentication/responses/user_response.dart';
 import 'package:pujcovadlo_client/features/authentication/services/authentication_service.dart';
+import 'package:pujcovadlo_client/features/profiles/responses/user_response.dart';
 import 'package:pujcovadlo_client/features/profiles/services/profile_service.dart';
 
 part 'authentication_event.dart';

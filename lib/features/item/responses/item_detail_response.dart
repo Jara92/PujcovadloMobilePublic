@@ -2,11 +2,11 @@ import 'dart:core';
 
 import 'package:pujcovadlo_client/core/responses/image_response.dart';
 import 'package:pujcovadlo_client/core/responses/link_response.dart';
-import 'package:pujcovadlo_client/features/authentication/responses/user_response.dart';
 import 'package:pujcovadlo_client/features/item/enums/item_status.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_category_response.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_tag_response.dart';
+import 'package:pujcovadlo_client/features/profiles/responses/user_response.dart';
 
 class ItemDetailResponse extends ItemResponse {
   String description;

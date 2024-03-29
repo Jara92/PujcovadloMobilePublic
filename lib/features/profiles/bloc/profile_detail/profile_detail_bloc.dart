@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:pujcovadlo_client/features/authentication/responses/user_response.dart';
+import 'package:pujcovadlo_client/features/profiles/responses/user_response.dart';
 import 'package:pujcovadlo_client/features/profiles/services/profile_service.dart';
 
 part 'profile_detail_event.dart';

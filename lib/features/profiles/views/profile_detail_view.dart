@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pujcovadlo_client/core/widgets/errors/not_found_error.dart';
 import 'package:pujcovadlo_client/core/widgets/errors/operation_error.dart';
-import 'package:pujcovadlo_client/features/authentication/responses/user_response.dart';
 import 'package:pujcovadlo_client/features/profiles/bloc/profile_detail/profile_detail_bloc.dart';
+import 'package:pujcovadlo_client/features/profiles/responses/user_response.dart';
 import 'package:pujcovadlo_client/features/profiles/widgets/profile_detail_widget.dart';
 
 class ProfileDetailView extends StatelessWidget {

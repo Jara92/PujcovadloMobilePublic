@@ -2,7 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:pujcovadlo_client/config.dart';
 import 'package:pujcovadlo_client/core/services/http_service.dart';
 import 'package:pujcovadlo_client/core/services/image_service.dart';
-import 'package:pujcovadlo_client/features/authentication/responses/user_response.dart';
+import 'package:pujcovadlo_client/features/profiles/responses/user_response.dart';
 
 class ProfileService {
   final Config config = GetIt.instance.get<Config>();

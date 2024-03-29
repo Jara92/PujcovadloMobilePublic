@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pujcovadlo_client/features/authentication/responses/user_response.dart';
+import 'package:pujcovadlo_client/features/profiles/responses/user_response.dart';
 
 class ProfileImage extends StatelessWidget {
   final UserResponse user;

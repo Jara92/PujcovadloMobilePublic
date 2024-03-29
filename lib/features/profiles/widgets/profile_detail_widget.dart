@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
-import 'package:pujcovadlo_client/features/authentication/responses/user_response.dart';
 import 'package:pujcovadlo_client/features/profiles/responses/profile_response.dart';
+import 'package:pujcovadlo_client/features/profiles/responses/user_response.dart';
 import 'package:pujcovadlo_client/features/profiles/widgets/profile_image.dart';
 import 'package:pujcovadlo_client/features/profiles/widgets/profile_rating_widget.dart';
 
