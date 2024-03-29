@@ -6,6 +6,8 @@ import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
 import 'package:pujcovadlo_client/features/authentication/bloc/authentication/authentication_bloc.dart';
 import 'package:pujcovadlo_client/features/item/views/item_create_view.dart';
 import 'package:pujcovadlo_client/features/item/views/my_item_list.dart';
+import 'package:pujcovadlo_client/features/profiles/views/profile_detail_view.dart';
+import 'package:pujcovadlo_client/features/profiles/widgets/profile_widget.dart';
 
 class MyProfileView extends StatelessWidget {
   const MyProfileView({super.key});
@@ -22,24 +24,19 @@ class MyProfileView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //SimpleProfileWidget(user: user),
-              Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: Text(context.loc.my_profile,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        )),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () {}, // TODO
-                      icon: const Icon(Icons.list_alt),
-                      label: Text(context.loc.show_my_profile_button),
-                    ),
-                  ),
-                ],
+              BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                builder: (context, state) {
+                  // Display user profile if authenticated
+                  if (state is Authenticated) {
+                    return ProfileWidget(
+                      user: (state).currentUser,
+                      showButtons: false,
+                    );
+                  }
+
+                  // Otherwise nothing (should not happen)
+                  return const SizedBox.shrink();
+                },
               ),
               Container(
                 margin: const EdgeInsets.only(bottom: 10, top: 20),
@@ -129,6 +126,32 @@ class MyProfileView extends StatelessWidget {
               const SizedBox(height: 20),
               const Divider(),
               const SizedBox(height: 20),
+              BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                builder: (context, state) {
+                  // Display user profile if authenticated
+                  if (state is Authenticated) {
+                    return Row(children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ProfileDetailView(
+                                // pass only id so we get the latest data
+                                userId: state.currentUser.id,
+                              ),
+                            ),
+                          ), // TODO
+                          icon: const Icon(Icons.supervised_user_circle),
+                          label: Text(context.loc.show_my_profile_button),
+                        ),
+                      ),
+                    ]);
+                  }
+
+                  // Otherwise nothing (should not happen)
+                  return const SizedBox.shrink();
+                },
+              ),
               Row(
                 children: [
                   Expanded(

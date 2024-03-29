@@ -7,8 +7,9 @@ import 'package:pujcovadlo_client/features/profiles/widgets/profile_rating_widge
 
 class ProfileWidget extends StatelessWidget {
   final UserResponse user;
+  final bool showButtons;
 
-  const ProfileWidget({required this.user, super.key});
+  const ProfileWidget({required this.user, this.showButtons = true, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,8 @@ class ProfileWidget extends StatelessWidget {
             ],
           ),
         ),
-        Container(
+        if (showButtons)
+          Container(
           margin: const EdgeInsets.only(bottom: 20),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
