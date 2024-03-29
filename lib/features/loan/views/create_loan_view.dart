@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pujcovadlo_client/core/constants/regex.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/core/widgets/errors/operation_error.dart';
@@ -131,76 +130,66 @@ class _CreateLoanViewState extends State<CreateLoanView> with RestorationMixin {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => _bloc,
-      child: LoaderOverlay(
-        child: Scaffold(
-            appBar: AppBar(
-              title: Text(context.loc.loan_create_page_title),
-            ),
-            body: Padding(
-              padding: const EdgeInsets.all(10),
-              child: RefreshIndicator(
-                onRefresh: () async {}, // todo - send form again
-                /*          onRefresh: () => Future.sync(
-                  () => _bloc.add(RefreshBorrowedLoanDetailEvent())),*/
-                child: LayoutBuilder(
-                  builder: (BuildContext context,
-                      BoxConstraints viewportConstraints) {
-                    return SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child:
-                          BlocConsumer<CreateLoanFormBloc, CreateLoanFormState>(
-                        listener: (context, state) {},
-                        builder: (context, state) {
-                          // Loan detail is loaded
-                          if (state.status == CreateLoanFormStateEnum.loaded) {
-                            return _buildForm(context, state);
-                          }
-
-                          // something failed
-                          if (state.status == CreateLoanFormStateEnum.error) {
-                            return OperationError(
-                              minHeight: viewportConstraints.maxHeight,
-                              /*onRetry: () =>
-                                  BlocProvider.of<CreateLoanFormBloc>(context)
-                                      .add(RefreshBorrowedLoanDetailEvent())*/
-                            );
-                          }
-
-                          return LoadingIndicator(
-                            minHeight: viewportConstraints.maxHeight,
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-            bottomNavigationBar: BottomAppBar(
-              child: Row(
-                children: [
-                  const Spacer(),
-                  BlocBuilder<CreateLoanFormBloc, CreateLoanFormState>(
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text(context.loc.loan_create_page_title),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(10),
+            child: LayoutBuilder(
+              builder:
+                  (BuildContext context, BoxConstraints viewportConstraints) {
+                return SingleChildScrollView(
+                  child: BlocConsumer<CreateLoanFormBloc, CreateLoanFormState>(
+                    listener: (context, state) {},
                     builder: (context, state) {
-                      return ElevatedButton.icon(
-                        icon: const Icon(Icons.send),
-                        label: Text(context.loc.loan_sent_button),
-                        // Allow to go to the next step only if the form is valid
-                        onPressed: state.isValid
-                            ? () =>
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => CreateLoanSubmitView(
-                                    loan: _bloc.request,
-                                  ),
-                                ))
-                            : null,
+                      // Loan detail is loaded
+                      if (state.status == CreateLoanFormStateEnum.loaded) {
+                        return _buildForm(context, state);
+                      }
+
+                      // something failed
+                      if (state.status == CreateLoanFormStateEnum.error) {
+                        return OperationError(
+                          minHeight: viewportConstraints.maxHeight,
+                          /*onRetry: () =>
+                              BlocProvider.of<CreateLoanFormBloc>(context)
+                                  .add(RefreshBorrowedLoanDetailEvent())*/
+                        );
+                      }
+
+                      return LoadingIndicator(
+                        minHeight: viewportConstraints.maxHeight,
                       );
                     },
                   ),
-                ],
-              ),
-            )),
-      ),
+                );
+              },
+            ),
+          ),
+          bottomNavigationBar: BottomAppBar(
+            child: Row(
+              children: [
+                const Spacer(),
+                BlocBuilder<CreateLoanFormBloc, CreateLoanFormState>(
+                  builder: (context, state) {
+                    return ElevatedButton.icon(
+                      icon: const Icon(Icons.send),
+                      label: Text(context.loc.loan_sent_button),
+                      // Allow to go to the next step only if the form is valid
+                      onPressed: state.isValid
+                          ? () => Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => CreateLoanSubmitView(
+                                  loan: _bloc.request,
+                                ),
+                              ))
+                          : null,
+                    );
+                  },
+                ),
+              ],
+            ),
+          )),
     );
   }
 
