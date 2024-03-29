@@ -24,7 +24,7 @@ class GradientBackground extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
-              height: context.heightFraction(sizeFraction: 0.05),
+              height: context.heightFraction(sizeFraction: 0.1),
             ),
             ...children,
           ],

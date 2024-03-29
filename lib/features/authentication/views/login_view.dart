@@ -96,9 +96,16 @@ class _LoginViewState extends State<LoginView> {
                           const SizedBox(height: 10),
                           const _LoginSubmit(),
                           const SizedBox(height: 10),
-                          TextButton(
-                            onPressed: () {},
-                            child: Text(context.loc.forgotten_password_button),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextButton(
+                                  onPressed: () {}, // TODO
+                                  child: Text(
+                                      context.loc.forgotten_password_button),
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 20),
                           Row(
