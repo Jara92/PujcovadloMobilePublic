@@ -13,8 +13,8 @@ class ProfileService {
     return _getItemByUri(Uri.parse(uri));
   }
 
-  Future<UserResponse> getUserById(int id) async {
-    return _getItemByUri(Uri.parse("${config.apiEndpoint}/items/$id"));
+  Future<UserResponse> getUserById(String id) async {
+    return _getItemByUri(Uri.parse("${config.apiEndpoint}/users/$id"));
   }
 
   Future<UserResponse> _getItemByUri(Uri uri) async {
@@ -29,7 +29,7 @@ class ProfileService {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception(
-          'Failed to load item: ${response.statusCode} ${response.data}');
+          'Failed to load user: ${response.statusCode} ${response.data}');
     }
   }
 }

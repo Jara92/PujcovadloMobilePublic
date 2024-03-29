@@ -10,7 +10,7 @@ part 'profile_detail_state.dart';
 class ProfileDetailBloc extends Bloc<ProfileDetailEvent, ProfileDetailState> {
   final ProfileService _profileService = GetIt.instance.get<ProfileService>();
 
-  final int? userId;
+  final String? userId;
   UserResponse? user;
 
   ProfileDetailBloc({this.userId, this.user})

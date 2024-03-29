@@ -8,9 +8,9 @@ import 'package:pujcovadlo_client/features/profiles/widgets/profile_detail_widge
 
 class ProfileDetailView extends StatelessWidget {
   final UserResponse? user;
-  final int? profileId;
+  final String? userId;
 
-  const ProfileDetailView({super.key, this.profileId, this.user});
+  const ProfileDetailView({super.key, this.userId, this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +20,8 @@ class ProfileDetailView extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
           child: BlocProvider(
-            create: (context) =>
-                ProfileDetailBloc(userId: profileId, user: user)
-                  ..add(LoadProfileDetail()),
+            create: (context) => ProfileDetailBloc(userId: userId, user: user)
+              ..add(LoadProfileDetail()),
             child: BlocBuilder<ProfileDetailBloc, ProfileDetailState>(
               builder: (context, state) {
                 // Display item not found message

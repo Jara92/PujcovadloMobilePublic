@@ -5,6 +5,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
+import 'package:pujcovadlo_client/core/interceptors/authorized_interceptor.dart';
+import 'package:pujcovadlo_client/core/interceptors/unauthorized_interceptor.dart';
 
 export 'package:pujcovadlo_client/core/extensions/http_response/success_code.dart';
 
@@ -13,18 +15,31 @@ class HttpService {
 
   HttpService() {
     _dio = Dio();
+
+    _dio.interceptors.add(LogInterceptor(
+      request: false,
+      requestHeader: false,
+      responseHeader: false,
+      responseBody: false,
+    ));
+
+    // Adds authorization header to every request
+    _dio.interceptors.add(AuthorizedInterceptor());
+
+    // Handles 401 Unauthorized responses
+    _dio.interceptors.add(UnAuthorizedInterceptor());
+
+    // Automatically parse JSON response
     _dio.transformer = BackgroundTransformer()..jsonDecodeCallback = parseJson;
+
+    // Turn off status validation - we want to handle it ourselves
     _dio.options.validateStatus = (status) => status! < 500;
   }
 
   /// Builds headers for HTTP requests.
-  Map<String, String> _buildHeaders(
-      {bool sendAuthorizationToken = true,
-      String contentType = 'application/json',
+  Map<String, String> _buildHeaders({String contentType = 'application/json',
       Map<String, String> headers = const {}}) {
     return {
-      if (sendAuthorizationToken)
-        HttpHeaders.authorizationHeader: _authorizationToken,
       HttpHeaders.contentTypeHeader: contentType,
       ...headers,
     };
@@ -38,10 +53,7 @@ class HttpService {
   }) async {
     print(uri.toString());
     return _dio.get(uri.toString(),
-        options: Options(
-            headers: _buildHeaders(
-                sendAuthorizationToken: sendAuthorizationToken,
-                headers: headers)));
+        options: Options(headers: _buildHeaders(headers: headers)));
   }
 
   /// Sends a HTTP POST request.
@@ -52,11 +64,7 @@ class HttpService {
     Map<String, String> headers = const {},
   }) async {
     return _dio.post(uri.toString(),
-        data: body,
-        options: Options(
-            headers: _buildHeaders(
-                sendAuthorizationToken: sendAuthorizationToken,
-                headers: headers)));
+        data: body, options: Options(headers: _buildHeaders(headers: headers)));
   }
 
   /// Sends a HTTP PUT request.
@@ -67,11 +75,7 @@ class HttpService {
     Map<String, String> headers = const {},
   }) async {
     return _dio.put(uri.toString(),
-        data: body,
-        options: Options(
-            headers: _buildHeaders(
-                sendAuthorizationToken: sendAuthorizationToken,
-                headers: headers)));
+        data: body, options: Options(headers: _buildHeaders(headers: headers)));
   }
 
   /// Sends a HTTP DELETE request.
@@ -82,10 +86,7 @@ class HttpService {
   }) async {
     print(uri);
     return _dio.delete(uri.toString(),
-        options: Options(
-            headers: _buildHeaders(
-                sendAuthorizationToken: sendAuthorizationToken,
-                headers: headers)));
+        options: Options(headers: _buildHeaders(headers: headers)));
   }
 
   /// Sends a HTTP POST request with form data.
@@ -110,10 +111,7 @@ class HttpService {
     // Return the post request
     return _dio.post(uri.toString(),
         data: formData,
-        options: Options(
-            headers: _buildHeaders(
-                sendAuthorizationToken: sendAuthorizationToken,
-                headers: headers)));
+        options: Options(headers: _buildHeaders(headers: headers)));
   }
 
   /// Must be top-level function

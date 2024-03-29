@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pujcovadlo_client/core/bloc/application_bloc.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/core/widgets/main_bottom_navigation_bar.dart';
+import 'package:pujcovadlo_client/features/authentication/bloc/authentication/authentication_bloc.dart';
 import 'package:pujcovadlo_client/features/item/views/item_create_view.dart';
 import 'package:pujcovadlo_client/features/item/views/my_item_list.dart';
 
@@ -121,6 +122,22 @@ class MyProfileView extends StatelessWidget {
                       icon: const Icon(Icons.monetization_on),
                       label:
                           Text(context.loc.inquiries_and_reservations_button),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              const Divider(),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () => context
+                          .read<AuthenticationBloc>()
+                          .add(const AuthenticationLogoutRequested()),
+                      icon: const Icon(Icons.logout),
+                      label: Text(context.loc.logout_button),
                     ),
                   ),
                 ],
