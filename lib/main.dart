@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:pujcovadlo_client/config.dart';
 import 'package:pujcovadlo_client/core/bloc/application_bloc.dart';
 import 'package:pujcovadlo_client/core/constants/routes.dart';
@@ -37,74 +38,98 @@ Future<void> main() async {
   // Fix the orientation to portrait
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  runApp(BlocProvider(
-    create: (context) => AuthenticationBloc(),
-    // todo: move this provider to the part where the user is authenticated.
-    child: BlocProvider(
-        create: (context) => ApplicationBloc(),
-        child: MaterialApp(
-          supportedLocales: AppLocalizations.supportedLocales,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          title: "Půjčovadlo",
-          theme: ThemeData(
-            useMaterial3: true,
-            appBarTheme: const AppBarTheme(
-              //backgroundColor: Colors.red,
-              titleTextStyle: TextStyle(
-                color: Colors.black,
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => AuthenticationBloc(),
+      // todo: move this provider to the part where the user is authenticated.
+      child: BlocProvider(
+          create: (context) => ApplicationBloc(),
+          child: KeyboardDismisser(
+            child: MaterialApp(
+              supportedLocales: AppLocalizations.supportedLocales,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              title: "Půjčovadlo",
+              theme: ThemeData(
+                useMaterial3: true,
+                appBarTheme: const AppBarTheme(
+                  //backgroundColor: Colors.red,
+                  titleTextStyle: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+                navigationBarTheme: NavigationBarThemeData(
+                    indicatorColor: CustomColors.lightPrimary,
+                    iconTheme: MaterialStateProperty.resolveWith((states) {
+                      return const IconThemeData(
+                        //color: Colors.black87,
+                        color: CustomColors.primary,
+                        size: 24,
+                      );
+                    }),
+                    labelTextStyle: MaterialStateProperty.resolveWith(
+                      (states) {
+                        return const TextStyle(
+                          color: Colors.black87,
+                          //fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        );
+                      },
+                    )),
+                colorScheme: ColorScheme.fromSeed(
+                  seedColor: CustomColors.primary,
+                  secondary: Colors.black,
+                ),
+                // Define the default `TextTheme`. Use this to specify the default
+                // text styling for headlines, titles, bodies of text, and more.
+                textTheme: const TextTheme(
+                  titleSmall: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
               ),
-            ),
-            navigationBarTheme: NavigationBarThemeData(
-                indicatorColor: CustomColors.lightPrimary,
-                iconTheme: MaterialStateProperty.resolveWith((states) {
-                  return const IconThemeData(
-                    //color: Colors.black87,
-                    color: CustomColors.primary,
-                    size: 24,
+              home: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+                // Listen only for changes in the status
+                listenWhen: (previous, current) =>
+                    previous.status != current.status,
+                listener: (context, state) {
+                  // Make sure we are navigating to root page after authentication
+                  if (state.status == AuthenticationStateEnum.authenticated) {
+                    Navigator.of(context)
+                        .popUntil(ModalRoute.withName(homeRoute));
+                  }
+                },
+                builder: (context, state) {
+                  // Display login page if the user is not authenticated
+                  if (state.status == AuthenticationStateEnum.unauthenticated) {
+                    return const LoginView();
+                  }
+
+                  // Display home page if the user is authenticated
+                  if (state.status == AuthenticationStateEnum.authenticated) {
+                    return const HomePage();
+                  }
+
+                  // Display loading indicator while the authentication status is being checked
+                  return const Scaffold(
+                    body: LoadingIndicator(),
                   );
-                }),
-                labelTextStyle: MaterialStateProperty.resolveWith(
-                  (states) {
-                    return const TextStyle(
-                      color: Colors.black87,
-                      //fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                    );
-                  },
-                )),
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: CustomColors.primary,
-              secondary: Colors.black,
-            ),
-            // Define the default `TextTheme`. Use this to specify the default
-            // text styling for headlines, titles, bodies of text, and more.
-            textTheme: const TextTheme(
-              titleSmall: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.normal,
+                },
               ),
+              routes: {
+                itemsListRoute: (context) => ItemListView(),
+              },
             ),
-          ),
-          home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            builder: (context, state) {
-              if (state.status == AuthenticationStateEnum.unauthenticated) {
-                return const LoginView();
-              }
-
-              if (state.status == AuthenticationStateEnum.authenticated) {
-                return const HomePage();
-              }
-
-              return const Scaffold(
-                body: LoadingIndicator(),
-              );
-            },
-          ),
-          routes: {
-            itemsListRoute: (context) => ItemListView(),
-          },
-        )),
-  ));
+          )),
+    );
+  }
 }
 
 // load the .env file contents into dotenv.
