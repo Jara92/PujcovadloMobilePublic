@@ -39,154 +39,147 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return LoaderOverlay(
-      child: Scaffold(
-        body: BlocProvider(
-          create: (context) => LoginBloc(),
-          child: BlocListener<LoginBloc, LoginState>(
-            // listen only to status changes
-            listenWhen: (previous, current) =>
-                previous.status != current.status,
-            listener: (context, state) {
-              // Display overlay when the state is in progress
-              if (state.status == FormzSubmissionStatus.inProgress) {
-                context.loaderOverlay.show();
-              }
-              // Hide overlay when the state is not in progress
-              else {
-                context.loaderOverlay.hide();
-              }
-            },
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  GradientBackground(
-                      color: Theme.of(context).colorScheme.primary,
-                      children: [
-                        Text(
-                          context.loc.sign_to_your_account,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 32,
-                                  color: Colors.white),
-                        ),
-                        SizedBox(height: 6),
-                        Text(context.loc.sign_to_your_account_message,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                    color: Colors.white)),
-                      ]),
-                  const SizedBox(height: 10),
-                  Form(
-                    key: _formKey,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          _UsernameField(controller: emailController),
-                          const SizedBox(height: 15),
-                          _PasswordField(controller: passwordController),
-                          const SizedBox(height: 15),
-                          const _SubmitError(),
-                          const SizedBox(height: 15),
-                          const _LoginSubmit(),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: TextButton(
-                                  onPressed: () {}, // TODO
-                                  child: Text(
-                                      context.loc.forgotten_password_button),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          Row(
-                            children: [
-                              Expanded(
-                                  child: Divider(color: Colors.grey.shade200)),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: Text(
-                                  context.loc.login_using_other,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(
-                                        color: Colors.black,
-                                      ),
-                                ),
-                              ),
-                              Expanded(
-                                  child: Divider(color: Colors.grey.shade200)),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: OutlinedButton.icon(
-                                  onPressed: () {},
-                                  icon:
-                                      const Icon(Icons.g_mobiledata, size: 14),
-                                  label: const Text(
-                                    "Google",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 20),
-                              Expanded(
-                                child: OutlinedButton.icon(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.facebook, size: 14),
-                                  label: const Text(
-                                    "Facebook",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+    return Scaffold(
+      body: BlocProvider(
+        create: (context) => LoginBloc(),
+        child: BlocListener<LoginBloc, LoginState>(
+          // listen only to status changes
+          listenWhen: (previous, current) => previous.status != current.status,
+          listener: (context, state) {
+            // Display overlay when the state is in progress
+            if (state.status == FormzSubmissionStatus.inProgress) {
+              context.loaderOverlay.show();
+            }
+            // Hide overlay when the state is not in progress
+            else {
+              context.loaderOverlay.hide();
+            }
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                GradientBackground(
+                    color: Theme.of(context).colorScheme.primary,
                     children: [
                       Text(
-                        context.loc.dont_have_an_account,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium!
-                            .copyWith(color: Colors.black),
+                        context.loc.sign_to_your_account,
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 32,
+                            color: Colors.white),
                       ),
-                      const SizedBox(width: 4),
-                      TextButton(
-                        onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const RegisterView(),
-                          ),
+                      SizedBox(height: 6),
+                      Text(context.loc.sign_to_your_account_message,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.white)),
+                    ]),
+                const SizedBox(height: 10),
+                Form(
+                  key: _formKey,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        _UsernameField(controller: emailController),
+                        const SizedBox(height: 15),
+                        _PasswordField(controller: passwordController),
+                        const SizedBox(height: 15),
+                        const _SubmitError(),
+                        const SizedBox(height: 15),
+                        const _LoginSubmit(),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextButton(
+                                onPressed: () {}, // TODO
+                                child:
+                                    Text(context.loc.forgotten_password_button),
+                              ),
+                            ),
+                          ],
                         ),
-                        child: Text(context.loc.register_button),
-                      ),
-                    ],
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Divider(color: Colors.grey.shade200)),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: Text(
+                                context.loc.login_using_other,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(
+                                      color: Colors.black,
+                                    ),
+                              ),
+                            ),
+                            Expanded(
+                                child: Divider(color: Colors.grey.shade200)),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: () {},
+                                icon: const Icon(Icons.g_mobiledata, size: 14),
+                                label: const Text(
+                                  "Google",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 20),
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: () {},
+                                icon: const Icon(Icons.facebook, size: 14),
+                                label: const Text(
+                                  "Facebook",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      context.loc.dont_have_an_account,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: Colors.black),
+                    ),
+                    const SizedBox(width: 4),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterView(),
+                        ),
+                      ),
+                      child: Text(context.loc.register_button),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),

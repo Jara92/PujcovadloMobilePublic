@@ -59,127 +59,124 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    return LoaderOverlay(
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          iconTheme: const IconThemeData(color: Colors.white),
-          titleTextStyle:
-              Theme.of(context).appBarTheme.titleTextStyle!.copyWith(
-                    color: Colors.white,
-                  ),
-          title: Text(context.loc.create_you_account_page_title),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-        ),
-        body: BlocProvider(
-          create: (context) => RegisterBloc(),
-          child: BlocListener<RegisterBloc, RegisterState>(
-            // Listen only to status changes
-            //listenWhen: (previous, current) => previous.status != current.status,
-            listener: (context, state) {
-              // Display overlay when the state is in progress
-              if (state.status == FormzSubmissionStatus.inProgress) {
-                context.loaderOverlay.show();
-              }
-              // Hide overlay when the state is not in progress
-              else {
-                context.loaderOverlay.hide();
-              }
-            },
-            child: SafeArea(
-              top: false,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    GradientBackground(
-                        color: Theme.of(context).colorScheme.primary,
-                        children: [
-                          Text(
-                            context.loc.create_your_account_title,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 32,
-                                    color: Colors.white),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(context.loc.create_you_account_message,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall!
-                                  .copyWith(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.white)),
-                        ]),
-                    const SizedBox(height: 10),
-                    Form(
-                      key: _formKey,
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Flexible(
-                                    flex: 5,
-                                    child: _FirstNameField(
-                                      controller: _firstNameController,
-                                    )),
-                                const SizedBox(
-                                  height: 15,
-                                  width: 15,
-                                ),
-                                Flexible(
-                                    flex: 5,
-                                    child: _LastNameField(
-                                      controller: _lastNameController,
-                                    )),
-                              ],
-                            ),
-                            const SizedBox(height: 15),
-                            _UsernameField(controller: _usernameController),
-                            const SizedBox(height: 15),
-                            _EmailField(controller: _emailController),
-                            const SizedBox(height: 15),
-                            _PhoneField(controller: _phoneController),
-                            const SizedBox(height: 15),
-                            _PasswordField(controller: _passwordController),
-                            const SizedBox(height: 15),
-                            _PasswordConfirmationField(
-                                controller: _passwordConfirmationController),
-                            const SizedBox(height: 15),
-                            const _SubmitError(),
-                            const SizedBox(height: 10),
-                            const _RegisterSubmit(),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        titleTextStyle: Theme.of(context).appBarTheme.titleTextStyle!.copyWith(
+              color: Colors.white,
+            ),
+        title: Text(context.loc.create_you_account_page_title),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
+      body: BlocProvider(
+        create: (context) => RegisterBloc(),
+        child: BlocListener<RegisterBloc, RegisterState>(
+          // Listen only to status changes
+          //listenWhen: (previous, current) => previous.status != current.status,
+          listener: (context, state) {
+            // Display overlay when the state is in progress
+            if (state.status == FormzSubmissionStatus.inProgress) {
+              context.loaderOverlay.show();
+            }
+            // Hide overlay when the state is not in progress
+            else {
+              context.loaderOverlay.hide();
+            }
+          },
+          child: SafeArea(
+            top: false,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  GradientBackground(
+                      color: Theme.of(context).colorScheme.primary,
                       children: [
                         Text(
-                          context.loc.already_have_account_question,
+                          context.loc.create_your_account_title,
                           style: Theme.of(context)
                               .textTheme
-                              .bodyMedium!
-                              .copyWith(color: Colors.black),
+                              .titleLarge!
+                              .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 32,
+                                  color: Colors.white),
                         ),
-                        const SizedBox(width: 4),
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: Text(context.loc.login_button),
-                        ),
-                      ],
+                        const SizedBox(height: 6),
+                        Text(context.loc.create_you_account_message,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white)),
+                      ]),
+                  const SizedBox(height: 10),
+                  Form(
+                    key: _formKey,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Flexible(
+                                  flex: 5,
+                                  child: _FirstNameField(
+                                    controller: _firstNameController,
+                                  )),
+                              const SizedBox(
+                                height: 15,
+                                width: 15,
+                              ),
+                              Flexible(
+                                  flex: 5,
+                                  child: _LastNameField(
+                                    controller: _lastNameController,
+                                  )),
+                            ],
+                          ),
+                          const SizedBox(height: 15),
+                          _UsernameField(controller: _usernameController),
+                          const SizedBox(height: 15),
+                          _EmailField(controller: _emailController),
+                          const SizedBox(height: 15),
+                          _PhoneField(controller: _phoneController),
+                          const SizedBox(height: 15),
+                          _PasswordField(controller: _passwordController),
+                          const SizedBox(height: 15),
+                          _PasswordConfirmationField(
+                              controller: _passwordConfirmationController),
+                          const SizedBox(height: 15),
+                          const _SubmitError(),
+                          const SizedBox(height: 10),
+                          const _RegisterSubmit(),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        context.loc.already_have_account_question,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(color: Colors.black),
+                      ),
+                      const SizedBox(width: 4),
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text(context.loc.login_button),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),

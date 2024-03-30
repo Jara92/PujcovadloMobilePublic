@@ -38,65 +38,63 @@ class _LentLoanDetailViewState extends State<LentLoanDetailView> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => _bloc,
-      child: LoaderOverlay(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(context.loc.loan_lent_detail_page_title),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: LayoutBuilder(builder:
-                (BuildContext context, BoxConstraints viewportConstraints) {
-              return RefreshIndicator(
-                onRefresh: () =>
-                    Future.sync(() => _bloc.add(RefreshLentLoanDetailEvent())),
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: BlocConsumer<LentLoanDetailBloc, LentLoanDetailState>(
-                    listener: (context, state) {
-                      // Show loader overlay when the state is busy
-                      if (state.isBusy) {
-                        context.loaderOverlay.show();
-                      } else {
-                        context.loaderOverlay.hide();
-                      }
-
-                      if (state.actionError != null) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(context.loc.loan_action_error),
-                        ));
-
-                        // Clear the error
-                        BlocProvider.of<LentLoanDetailBloc>(context)
-                            .add(ClearActionErrorEvent());
-                      }
-                    },
-                    builder: (context, state) {
-                      // Loan detail is loaded
-                      if (state.status == LentLoanDetailStateEnum.loaded) {
-                        return _buildLoanDetail(context, state);
-                      }
-
-                      // something failed
-                      if (state.status == LentLoanDetailStateEnum.error) {
-                        return OperationError(
-                            minHeight: viewportConstraints.maxHeight,
-                            onRetry: () =>
-                                BlocProvider.of<LentLoanDetailBloc>(context)
-                                    .add(RefreshLentLoanDetailEvent()));
-                      }
-
-                      return LoadingIndicator(
-                        minHeight: viewportConstraints.maxHeight,
-                      );
-                    },
-                  ),
-                ),
-              );
-            }),
-          ),
-          bottomNavigationBar: const MainBottomNavigationBar(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(context.loc.loan_lent_detail_page_title),
         ),
+        body: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: LayoutBuilder(builder:
+              (BuildContext context, BoxConstraints viewportConstraints) {
+            return RefreshIndicator(
+              onRefresh: () =>
+                  Future.sync(() => _bloc.add(RefreshLentLoanDetailEvent())),
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: BlocConsumer<LentLoanDetailBloc, LentLoanDetailState>(
+                  listener: (context, state) {
+                    // Show loader overlay when the state is busy
+                    if (state.isBusy) {
+                      context.loaderOverlay.show();
+                    } else {
+                      context.loaderOverlay.hide();
+                    }
+
+                    if (state.actionError != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(context.loc.loan_action_error),
+                      ));
+
+                      // Clear the error
+                      BlocProvider.of<LentLoanDetailBloc>(context)
+                          .add(ClearActionErrorEvent());
+                    }
+                  },
+                  builder: (context, state) {
+                    // Loan detail is loaded
+                    if (state.status == LentLoanDetailStateEnum.loaded) {
+                      return _buildLoanDetail(context, state);
+                    }
+
+                    // something failed
+                    if (state.status == LentLoanDetailStateEnum.error) {
+                      return OperationError(
+                          minHeight: viewportConstraints.maxHeight,
+                          onRetry: () =>
+                              BlocProvider.of<LentLoanDetailBloc>(context)
+                                  .add(RefreshLentLoanDetailEvent()));
+                    }
+
+                    return LoadingIndicator(
+                      minHeight: viewportConstraints.maxHeight,
+                    );
+                  },
+                ),
+              ),
+            );
+          }),
+        ),
+        bottomNavigationBar: const MainBottomNavigationBar(),
       ),
     );
   }

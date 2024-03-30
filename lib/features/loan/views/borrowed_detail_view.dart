@@ -38,70 +38,66 @@ class _BorrowedLoanDetailViewState extends State<BorrowedLoanDetailView> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => _bloc,
-      child: LoaderOverlay(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(context.loc.loan_lent_detail_page_title),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(10),
-            child: RefreshIndicator(
-              onRefresh: () => Future.sync(
-                  () => _bloc.add(RefreshBorrowedLoanDetailEvent())),
-              child: LayoutBuilder(
-                builder:
-                    (BuildContext context, BoxConstraints viewportConstraints) {
-                  return SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: BlocConsumer<BorrowedLoanDetailBloc,
-                        BorrowedLoanDetailState>(
-                      listener: (context, state) {
-                        // Show loader overlay when the state is busy
-                        if (state.isBusy) {
-                          context.loaderOverlay.show();
-                        } else {
-                          context.loaderOverlay.hide();
-                        }
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(context.loc.loan_lent_detail_page_title),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(10),
+          child: RefreshIndicator(
+            onRefresh: () =>
+                Future.sync(() => _bloc.add(RefreshBorrowedLoanDetailEvent())),
+            child: LayoutBuilder(
+              builder:
+                  (BuildContext context, BoxConstraints viewportConstraints) {
+                return SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: BlocConsumer<BorrowedLoanDetailBloc,
+                      BorrowedLoanDetailState>(
+                    listener: (context, state) {
+                      // Show loader overlay when the state is busy
+                      if (state.isBusy) {
+                        context.loaderOverlay.show();
+                      } else {
+                        context.loaderOverlay.hide();
+                      }
 
-                        if (state.actionError != null) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(context.loc.loan_action_error),
-                          ));
+                      if (state.actionError != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(context.loc.loan_action_error),
+                        ));
 
-                          // Clear the error
-                          BlocProvider.of<BorrowedLoanDetailBloc>(context)
-                              .add(ClearActionErrorEvent());
-                        }
-                      },
-                      builder: (context, state) {
-                        // Loan detail is loaded
-                        if (state.status ==
-                            BorrowedLoanDetailStateEnum.loaded) {
-                          return _buildLoanDetail(context, state);
-                        }
+                        // Clear the error
+                        BlocProvider.of<BorrowedLoanDetailBloc>(context)
+                            .add(ClearActionErrorEvent());
+                      }
+                    },
+                    builder: (context, state) {
+                      // Loan detail is loaded
+                      if (state.status == BorrowedLoanDetailStateEnum.loaded) {
+                        return _buildLoanDetail(context, state);
+                      }
 
-                        // something failed
-                        if (state.status == BorrowedLoanDetailStateEnum.error) {
-                          return OperationError(
-                              minHeight: viewportConstraints.maxHeight,
-                              onRetry: () =>
-                                  BlocProvider.of<BorrowedLoanDetailBloc>(
-                                          context)
-                                      .add(RefreshBorrowedLoanDetailEvent()));
-                        }
+                      // something failed
+                      if (state.status == BorrowedLoanDetailStateEnum.error) {
+                        return OperationError(
+                            minHeight: viewportConstraints.maxHeight,
+                            onRetry: () =>
+                                BlocProvider.of<BorrowedLoanDetailBloc>(context)
+                                    .add(RefreshBorrowedLoanDetailEvent()));
+                      }
 
-                        return LoadingIndicator(
-                          minHeight: viewportConstraints.maxHeight,
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
+                      return LoadingIndicator(
+                        minHeight: viewportConstraints.maxHeight,
+                      );
+                    },
+                  ),
+                );
+              },
             ),
           ),
-          bottomNavigationBar: const MainBottomNavigationBar(),
         ),
+        bottomNavigationBar: const MainBottomNavigationBar(),
       ),
     );
   }
