@@ -134,14 +134,6 @@ class MyApp extends StatelessWidget {
 
 // load the .env file contents into dotenv.
 Future loadConfiguration() {
-  if (kDebugMode) {
-    if (Platform.isIOS) {
-      return dotenv.load(fileName: ".env.ios");
-    } else if (Platform.isAndroid) {
-      return dotenv.load(fileName: ".env.android");
-    }
-  }
-
   return dotenv.load(fileName: ".env");
 }
 
