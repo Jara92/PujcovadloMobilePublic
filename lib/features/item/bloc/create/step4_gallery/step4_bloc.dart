@@ -120,6 +120,6 @@ class Step4Bloc extends Bloc<Step4Event, Step4State> {
   }
 
   void _onPreviousStep(PreviousStepEvent event, Emitter<Step4State> emit) {
-    _createItemBloc.add(const MoveToStepEvent(step3_tags));
+    _createItemBloc.add(const MoveToStepEvent(location));
   }
 }

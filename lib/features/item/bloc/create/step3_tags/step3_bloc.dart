@@ -148,7 +148,7 @@ class Step3Bloc extends Bloc<Step3Event, Step3State> {
     if (state.isValid) {
       _item.tags = state.selectedTags.value;
 
-      _createItemBloc.add(const MoveToStepEvent(step4_gallery));
+      _createItemBloc.add(const MoveToStepEvent(location));
     }
   }
 
