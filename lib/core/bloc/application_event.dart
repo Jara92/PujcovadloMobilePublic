@@ -18,3 +18,7 @@ class ShowBorrowedItemsEvent extends ApplicationEvent {
 class ShowLentItemsEvent extends ApplicationEvent {
   const ShowLentItemsEvent();
 }
+
+class ReinitializeEvent extends ApplicationEvent {
+  const ReinitializeEvent();
+}

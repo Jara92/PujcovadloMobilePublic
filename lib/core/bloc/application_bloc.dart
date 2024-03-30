@@ -17,5 +17,9 @@ class ApplicationBloc extends Bloc<ApplicationEvent, ApplicationState> {
     on<ShowLentItemsEvent>((event, emit) {
       emit(const ApplicationState(index: 0));
     });
+
+    on<ReinitializeEvent>((event, emit) {
+      emit(const ApplicationStateInitial());
+    });
   }
 }
