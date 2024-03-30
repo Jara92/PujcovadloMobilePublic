@@ -93,11 +93,11 @@ class _LoginViewState extends State<LoginView> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           _UsernameField(controller: emailController),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 15),
                           _PasswordField(controller: passwordController),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 15),
                           const _SubmitError(),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 15),
                           const _LoginSubmit(),
                           const SizedBox(height: 10),
                           Row(
@@ -214,7 +214,7 @@ class _UsernameField extends StatelessWidget {
           decoration: InputDecoration(
             labelText: context.loc.login_email_or_username_title,
             hintText: context.loc.login_email_or_username_hint,
-            errorText: "",
+            errorText: null,
             border: const OutlineInputBorder(),
             //border: InputBorder.none
           ),

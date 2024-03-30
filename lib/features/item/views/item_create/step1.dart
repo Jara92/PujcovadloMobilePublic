@@ -103,6 +103,8 @@ class _Step1State extends State<Step1> {
                             FilteringTextInputFormatter.allow(Regex.textRegex),
                           ],
                           maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                          keyboardType: TextInputType.text,
+                          enableSuggestions: true,
                           decoration: InputDecoration(
                             labelText: context.loc.item_name_title,
                             hintText: context.loc.item_name_hint_text,
@@ -110,7 +112,7 @@ class _Step1State extends State<Step1> {
                             // error because we dont know that the state is Step1_NameAndDescription
                             errorText:
                                 _localizeItemNameError(context, state.name),
-                            border: OutlineInputBorder(),
+                            border: const OutlineInputBorder(),
                             //border: InputBorder.none
                           ),
                         ),
@@ -138,7 +140,7 @@ class _Step1State extends State<Step1> {
                           minLines: 3,
                           // Set this
                           maxLines: 7,
-                          //
+                          enableSuggestions: true,
                           decoration: InputDecoration(
                             labelText: context.loc.item_description_title,
                             hintText: context.loc.item_description_hint_text,

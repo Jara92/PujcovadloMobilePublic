@@ -336,10 +336,10 @@ class _CreateLoanViewState extends State<CreateLoanView> with RestorationMixin {
                   FilteringTextInputFormatter.allow(Regex.multilineTextRegex),
                 ],
                 maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                keyboardType: TextInputType.multiline,
                 minLines: 4,
-                // Set this
                 maxLines: 8,
+                keyboardType: TextInputType.multiline,
+                enableSuggestions: true,
                 decoration: InputDecoration(
                   labelText: context.loc.loan_tenant_note_title,
                   hintText: context.loc.loan_tenant_note_hint_text,
@@ -347,8 +347,7 @@ class _CreateLoanViewState extends State<CreateLoanView> with RestorationMixin {
                   helperMaxLines: 3,
                   errorText:
                       _localizeTenantLoanError(context, state.tenantNote),
-                  border: OutlineInputBorder(),
-                  //border: InputBorder.none
+                  border: const OutlineInputBorder(),
                 ),
               ),
             ),
