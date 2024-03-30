@@ -1,4 +1,6 @@
 class Regex {
+  static final tagRegex = RegExp(r'^[a-zA-Z áčďéěíňóřšťúůýžÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]*$');
+
   static final alphabetRegex =
       RegExp(r'^[a-zA-ZáčďéěíňóřšťúůýžÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]*$');
 
