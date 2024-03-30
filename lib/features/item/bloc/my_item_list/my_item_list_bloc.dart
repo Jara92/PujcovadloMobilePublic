@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pujcovadlo_client/core/bloc/list/list_bloc.dart';
+import 'package:pujcovadlo_client/features/authentication/services/authentication_service.dart';
 import 'package:pujcovadlo_client/features/item/filters/item_filter.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
 import 'package:pujcovadlo_client/features/item/services/item_service.dart';
@@ -15,6 +16,8 @@ part 'my_item_list_state.dart';
 
 class MyItemListBloc extends ListBloc<ItemResponse, MyItemListState> {
   final ItemService itemService = GetIt.instance.get<ItemService>();
+  final AuthenticationService authService =
+      GetIt.instance.get<AuthenticationService>();
   late final ItemFilter myItemsFilter;
 
   MyItemListBloc() : super(const InitialState()) {
@@ -27,15 +30,14 @@ class MyItemListBloc extends ListBloc<ItemResponse, MyItemListState> {
   @override
   Future<void> onInitialEvent(
       InitialEvent<ItemResponse> event, Emitter<MyItemListState> emit) async {
-    // todo: get real user id
-    myItemsFilter = ItemFilter(ownerId: "13f11f92-6c4d-44e2-b7a8-3609d80a439c");
+    myItemsFilter = ItemFilter(ownerId: authService.currentUserId!);
 
     super.onInitialEvent(event, emit);
   }
 
   @override
-  Future<void> onLoadItemsEvent(LoaditemsEvent<ItemResponse> event,
-      Emitter<MyItemListState> emit) async {
+  Future<void> onLoadItemsEvent(
+      LoaditemsEvent<ItemResponse> event, Emitter<MyItemListState> emit) async {
     // Load first page
     if (state.status == ListStateEnum.initial ||
         // First request failed and there is no next page link
