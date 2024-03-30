@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:pujcovadlo_client/core/requests/image_request.dart';
 
-class ItemRequest{
+class ItemRequest {
   int? id;
   String? name;
   String? description;
@@ -10,6 +10,9 @@ class ItemRequest{
   double? pricePerDay;
   double? refundableDeposit;
   double? sellingPrice;
+
+  double? latitude;
+  double? longitude;
 
   List<ImageRequest> images;
   ImageRequest? mainImage;
@@ -27,6 +30,8 @@ class ItemRequest{
     this.pricePerDay,
     this.refundableDeposit,
     this.sellingPrice,
+    this.latitude,
+    this.longitude,
     this.images = const [],
     this.mainImage,
     this.mainImageId,
@@ -44,6 +49,8 @@ class ItemRequest{
       "PricePerDay": pricePerDay,
       "RefundableDeposit": refundableDeposit,
       "SellingPrice": sellingPrice,
+      "Latitude": latitude,
+      "Longitude": longitude,
       "MainImageId": mainImageId,
       "Tags": tags,
       "Categories": categories,

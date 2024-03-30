@@ -1,33 +1,29 @@
 part of 'location_bloc.dart';
 
-enum LocationStateEnum { initial, loading, error, loaded }
-
 @immutable
 class LocationState {
-  final LocationStateEnum status;
-  final List<ItemCategoryResponse> categories;
-  final ItemCategories selectedCategories;
+  final double? latitude;
+  final double? longitude;
   final Exception? error;
 
-  bool get isValid => selectedCategories.isValid;
+  bool get locationInitialized => latitude != null && longitude != null;
+
+  bool get isValid => latitude != null && longitude != null;
 
   const LocationState({
-    required this.status,
-    required this.categories,
-    required this.selectedCategories,
+    required this.latitude,
+    required this.longitude,
     this.error,
   });
 
   LocationState copyWith({
-    LocationStateEnum? status,
-    List<ItemCategoryResponse>? categories,
-    ItemCategories? selectedCategories,
+    double? latitude,
+    double? longitude,
     Exception? error,
   }) {
     return LocationState(
-      status: status ?? this.status,
-      categories: categories ?? this.categories,
-      selectedCategories: selectedCategories ?? this.selectedCategories,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
       error: error,
     );
   }
@@ -36,8 +32,7 @@ class LocationState {
 class InitialState extends LocationState {
   const InitialState()
       : super(
-          status: LocationStateEnum.initial,
-          categories: const [],
-          selectedCategories: const ItemCategories.pure(),
+          latitude: null,
+          longitude: null,
         );
 }

@@ -1,62 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:map_location_picker/map_location_picker.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/create_item_bloc.dart';
 import 'package:pujcovadlo_client/features/item/bloc/create/location/location_bloc.dart';
-import 'package:pujcovadlo_client/features/item/models/models.dart';
-import 'package:pujcovadlo_client/features/item/widgets/item_create/form_container.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_create/item_form_heading.dart';
 
-class Location extends StatefulWidget {
-  const Location({super.key});
+class LocationView extends StatefulWidget {
+  const LocationView({super.key});
 
   @override
-  State<Location> createState() => _LocationState();
+  State<LocationView> createState() => _LocationViewState();
 }
 
-class _LocationState extends State<Location> {
-  final _controllerName = TextEditingController();
-  final _controllerDescription = TextEditingController();
-
-  String? _localizeItemNameError(BuildContext context, ItemName name) {
-    if (name.isPure || name.isValid) {
-      return null;
-    }
-
-    switch (name.error) {
-      case ItemNameValidationError.required:
-        return context.loc.verror_this_field_is_required;
-      case ItemNameValidationError.invalid:
-        return context.loc.verror_input_invalid;
-      case ItemNameValidationError.tooShort:
-        return context.loc.verror_input_too_short;
-      case ItemNameValidationError.tooLong:
-        return context.loc.verror_input_too_long;
-      case null:
-        return null;
-    }
-  }
-
-  String? _localizeItemDescriptionError(
-      BuildContext context, ItemDescription description) {
-    if (description.isPure || description.isValid) {
-      return null;
-    }
-
-    switch (description.error) {
-      case ItemDescriptionValidationError.required:
-        return context.loc.verror_this_field_is_required;
-      case ItemDescriptionValidationError.invalid:
-        return context.loc.verror_input_invalid;
-      case ItemDescriptionValidationError.tooShort:
-        return context.loc.verror_input_too_short;
-      case ItemDescriptionValidationError.tooLong:
-        return context.loc.verror_input_too_long;
-      case null:
-        return null;
-    }
-  }
-
+class _LocationViewState extends State<LocationView> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -74,15 +31,70 @@ class _LocationState extends State<Location> {
         body: BlocConsumer<LocationBloc, LocationState>(
           listener: (BuildContext context, LocationState state) {},
           builder: (BuildContext context, LocationState state) {
-            return FormContainer(
-              child: Column(
-                children: [
-                  ItemFormHeading(
-                    title: context.loc.item_name_and_description_title,
-                    description:
-                        context.loc.item_name_and_description_description,
-                  )
-                ],
+            return PopScope(
+              canPop: false,
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    children: [
+                      ItemFormHeading(
+                        title: context.loc.item_location_title,
+                        description: context.loc.item_location_description,
+                      ),
+                      Expanded(
+                        child: state.latitude != null && state.longitude != null
+                            ? MapLocationPicker(
+                                // origin: Location(lat: 50.105064188830674, lng: 14.389454462946908),
+                                //location: Location(lat:14.389454462946908 , lng: 50.105064188830674),
+                                //origin: Location(lat:14.389454462946908 , lng: 50.105064188830674),
+                                currentLatLng: state.latitude != null &&
+                                        state.longitude != null
+                                    ? LatLng(state.latitude!, state.longitude!)
+                                    : null,
+                                //dialogTitle: "Vyberte místo",
+                                searchHintText: "Vyhledat místo",
+                                //liteModeEnabled: true,
+                                hideMoreOptions: true,
+                                hideBackButton: true,
+                                hideBottomCard: true,
+                                hasLocationPermission: true,
+                                language: "cs",
+                                //  showMoreOptions: false,
+                                //resultType: [],
+                                components: [
+                                  Component(Component.country, "cz")
+                                ],
+                                apiKey:
+                                    "AIzaSyCOfLFiwnh1jEWgjB0udOrg97Fg7nqumgc",
+                                onDecodeAddress: (GeocodingResult? location) {
+                                  context.read<LocationBloc>().add(
+                                        LocationChangedEvent(
+                                          latitude:
+                                              location?.geometry.location.lat,
+                                          longitude:
+                                              location?.geometry.location.lng,
+                                        ),
+                                      );
+                                },
+                              )
+                            : CircularProgressIndicator(),
+                      ),
+                      /*Container(
+                        height: 300,
+                        child: GoogleMap(
+                          mapType: MapType.hybrid,
+                          initialCameraPosition: _kGooglePlex,
+                          myLocationButtonEnabled: true,
+                          myLocationEnabled: true,
+                          onMapCreated: (GoogleMapController controller) {
+                            _controller.complete(controller);
+                          },
+                        ),
+                      ),*/
+                    ],
+                  ),
+                ),
               ),
             );
           },

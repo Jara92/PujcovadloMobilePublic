@@ -9,25 +9,18 @@ class LocationInitialEvent extends LocationEvent {
   const LocationInitialEvent();
 }
 
-class SearchTextUpdated extends LocationEvent {
-  final String searchText;
-
-  const SearchTextUpdated(this.searchText) : super();
-}
-
-class CategoryOptionSelected extends LocationEvent {
-  final int categoryId;
-  final bool isChecked;
-
-  const CategoryOptionSelected(this.categoryId, this.isChecked) : super();
-}
-
-class ReloadCategoriesEvent extends LocationEvent {
-  const ReloadCategoriesEvent();
-}
-
 class NextStepEvent extends LocationEvent {
   const NextStepEvent();
+}
+
+class LocationChangedEvent extends LocationEvent {
+  final double? latitude;
+  final double? longitude;
+
+  const LocationChangedEvent({
+    required this.latitude,
+    required this.longitude,
+  });
 }
 
 class PreviousStepEvent extends LocationEvent {

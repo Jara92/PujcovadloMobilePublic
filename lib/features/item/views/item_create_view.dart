@@ -55,6 +55,7 @@ class ItemCreateView extends StatelessWidget {
         const Step1(),
         const Step2(),
         const Step3(),
+        const LocationView(),
         const Step4(),
         const Step5(),
         const Step6()

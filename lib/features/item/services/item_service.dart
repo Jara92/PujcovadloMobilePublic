@@ -190,6 +190,8 @@ class ItemService {
       pricePerDay: itemDetailResponse.pricePerDay,
       refundableDeposit: itemDetailResponse.refundableDeposit,
       sellingPrice: itemDetailResponse.sellingPrice,
+      latitude: itemDetailResponse.latitude,
+      longitude: itemDetailResponse.longitude,
       categories: itemDetailResponse.categories.map((e) => e.id).toList(),
       tags: itemDetailResponse.tags.map((e) => e.name).toList(),
       // Convert each image response to request
