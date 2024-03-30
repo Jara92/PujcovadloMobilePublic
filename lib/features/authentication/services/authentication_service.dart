@@ -3,10 +3,14 @@ import 'dart:io';
 
 import 'package:get_it/get_it.dart';
 import 'package:pujcovadlo_client/config.dart';
+import 'package:pujcovadlo_client/core/responses/error_response.dart';
 import 'package:pujcovadlo_client/core/services/http_service.dart';
 import 'package:pujcovadlo_client/core/services/secured_storage.dart';
+import 'package:pujcovadlo_client/features/authentication/exceptions/email_exists.dart';
 import 'package:pujcovadlo_client/features/authentication/exceptions/invalid_credentials.dart';
+import 'package:pujcovadlo_client/features/authentication/exceptions/username_exists.dart';
 import 'package:pujcovadlo_client/features/authentication/requests/login_request.dart';
+import 'package:pujcovadlo_client/features/authentication/requests/register_request.dart';
 import 'package:pujcovadlo_client/features/authentication/responses/login_response.dart';
 
 enum AuthenticationStateEnum { unknown, authenticated, unauthenticated }
@@ -64,7 +68,7 @@ class AuthenticationService {
       _accessTokenExpiration != null &&
       _accessTokenExpiration!.isAfter(DateTime.now());
 
-  Future<bool> login(
+  Future<void> login(
       {required String username, required String password}) async {
     final request = LoginRequest(username: username, password: password);
 
@@ -75,31 +79,35 @@ class AuthenticationService {
       body: request.toJson(),
     );
 
+    // Do the login if the response is successful
     if (response.isSuccessCode) {
-      // Convert to response
       final auth = LoginResponse.fromJson(response.data);
-
-      // Set access token and store it
-      _accessToken = auth.accessToken;
-      await _securedStorage.saveAccessToken(_accessToken!);
-
-      // Set access token expiration and store it
-      _accessTokenExpiration = auth.accessTokenExpiration;
-      await _securedStorage.saveAccessTokenExpiration(_accessTokenExpiration!);
-
-      // Set user id and store it
-      _userId = auth.userId;
-      await _securedStorage.saveUserId(_userId!);
-
-      // Update status
-      _controller.add(AuthenticationStateEnum.authenticated);
-      return true;
-    } else if (response.statusCode == HttpStatus.unauthorized) {
+      await _loginFromResponse(auth);
+    }
+    // Throw an exception if the credentials are invalid
+    else if (response.statusCode == HttpStatus.unauthorized) {
+      _controller.add(AuthenticationStateEnum.unauthenticated);
       throw const InvalidCredentialsException();
     } else {
       _controller.add(AuthenticationStateEnum.unauthenticated);
-      return false;
     }
+  }
+
+  Future<void> _loginFromResponse(LoginResponse auth) async {
+    // Set access token and store it
+    _accessToken = auth.accessToken;
+    await _securedStorage.saveAccessToken(_accessToken!);
+
+    // Set access token expiration and store it
+    _accessTokenExpiration = auth.accessTokenExpiration;
+    await _securedStorage.saveAccessTokenExpiration(_accessTokenExpiration!);
+
+    // Set user id and store it
+    _userId = auth.userId;
+    await _securedStorage.saveUserId(_userId!);
+
+    // Update status
+    _controller.add(AuthenticationStateEnum.authenticated);
   }
 
   Future<void> logout() async {
@@ -115,5 +123,27 @@ class AuthenticationService {
 
     // Update status
     _controller.add(AuthenticationStateEnum.unauthenticated);
+  }
+
+  Future<void> register(RegisterRequest request) async {
+    var response = await _http.post(
+      uri: Uri.parse("${config.apiEndpoint}/register"),
+      body: request.toJson(),
+    );
+
+    // Do the login if the response is successful
+    if (response.isSuccessCode) {
+      await _loginFromResponse(LoginResponse.fromJson(response.data));
+    } else if (response.statusCode == HttpStatus.conflict) {
+      final errorResponse = ErrorResponse.fromJson(response.data);
+
+      if (errorResponse.errors.containsKey("Username")) {
+        throw const UsernameAlreadyExists();
+      } else if (errorResponse.errors.containsKey("Email")) {
+        throw const EmailAlreadyExists();
+      }
+    } else {
+      throw Exception("Failed to register");
+    }
   }
 }

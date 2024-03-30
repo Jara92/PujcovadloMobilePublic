@@ -6,7 +6,7 @@ import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 import 'package:pujcovadlo_client/features/authentication/models/login/password.dart';
-import 'package:pujcovadlo_client/features/authentication/models/username.dart';
+import 'package:pujcovadlo_client/features/authentication/models/login/username.dart';
 import 'package:pujcovadlo_client/features/authentication/services/authentication_service.dart';
 
 part 'login_event.dart';
@@ -26,7 +26,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginUsernameChanged event,
     Emitter<LoginState> emit,
   ) {
-    final username = Username.dirty(event.username);
+    final username = LoginUsername.dirty(event.username);
     emit(
       state.copyWith(
         username: username,

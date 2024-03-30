@@ -17,7 +17,7 @@ class ItemTag extends FormzInput<String, ItemTagValidationError> {
   static const _minTagLength = 4;
   static const _maxTagLength = 40;
 
-  static final _tagNameRegex = Regex.simpleTextRegex;
+  static final _tagNameRegex = Regex.alphabetRegex;
 
   @override
   ItemTagValidationError? validator(String value) {

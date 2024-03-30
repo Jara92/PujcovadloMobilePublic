@@ -3,7 +3,7 @@ part of 'login_bloc.dart';
 @immutable
 class LoginState {
   final FormzSubmissionStatus status;
-  final Username username;
+  final LoginUsername username;
   final LoginPassword password;
   final Object? error;
 
@@ -18,14 +18,14 @@ class LoginState {
   factory LoginState.initial() {
     return const LoginState(
       status: FormzSubmissionStatus.initial,
-      username: Username.pure(),
+      username: LoginUsername.pure(),
       password: LoginPassword.pure(),
     );
   }
 
   LoginState copyWith({
     FormzSubmissionStatus? status,
-    Username? username,
+    LoginUsername? username,
     LoginPassword? password,
     Object? Function()? error,
   }) {

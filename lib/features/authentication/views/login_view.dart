@@ -5,6 +5,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/features/authentication/bloc/login/login_bloc.dart';
 import 'package:pujcovadlo_client/features/authentication/exceptions/invalid_credentials.dart';
+import 'package:pujcovadlo_client/features/authentication/views/register_view.dart';
 import 'package:pujcovadlo_client/features/authentication/widgets/gradient_background.dart';
 
 class LoginView extends StatefulWidget {
@@ -43,6 +44,9 @@ class _LoginViewState extends State<LoginView> {
         body: BlocProvider(
           create: (context) => LoginBloc(),
           child: BlocListener<LoginBloc, LoginState>(
+            // listen only to status changes
+            listenWhen: (previous, current) =>
+                previous.status != current.status,
             listener: (context, state) {
               // Display overlay when the state is in progress
               if (state.status == FormzSubmissionStatus.inProgress) {
@@ -172,7 +176,11 @@ class _LoginViewState extends State<LoginView> {
                       ),
                       const SizedBox(width: 4),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const RegisterView(),
+                          ),
+                        ),
                         child: Text(context.loc.register_button),
                       ),
                     ],
@@ -235,7 +243,7 @@ class _PasswordField extends StatelessWidget {
           obscureText: true,
           decoration: InputDecoration(
             labelText: context.loc.login_password_title,
-            errorText: "",
+            errorText: null,
             border: const OutlineInputBorder(),
             //border: InputBorder.none
           ),
