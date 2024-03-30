@@ -77,10 +77,8 @@ class CreateLoanFormBloc
       end: event.endDate,
     ));
 
-    final newDays =
-
-        // Update bloc state
-        emit(state.copyWith(
+    // Update bloc state
+    emit(state.copyWith(
       dates: newDates,
     ));
   }
