@@ -209,7 +209,7 @@ class _BorrowedLoanDetailViewState extends State<BorrowedLoanDetailView> {
           ],
         ),
         const SizedBox(height: 5),
-        ProfileWidget(user: loan.tenant),
+        ProfileWidget(user: loan.owner),
       ],
     );
   }
