@@ -249,9 +249,11 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
               margin: const EdgeInsets.only(bottom: 20),
               child: Row(
                 children: [
-                  Text(
-                    widget.item.description,
-                    textAlign: TextAlign.left,
+                  Expanded(
+                    child: Text(
+                      widget.item.description,
+                      textAlign: TextAlign.left,
+                    ),
                   ),
                 ],
               )),
