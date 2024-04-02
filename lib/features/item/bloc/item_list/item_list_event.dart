@@ -5,3 +5,7 @@ class SearchTextUpdated extends ListEvent<ItemResponse> {
 
   const SearchTextUpdated({required this.searchText});
 }
+
+class UpdateLocationEvent extends ListEvent<ItemResponse> {
+  const UpdateLocationEvent();
+}

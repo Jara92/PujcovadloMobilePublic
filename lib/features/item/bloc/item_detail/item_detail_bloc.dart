@@ -34,6 +34,7 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
 
       // Emit loaded state if item was found
       if (item != null) {
+        item.distance = event.item?.distance;
         emit(ItemDetailLoaded(item: item));
       }
       // Emit not found state if item was not found

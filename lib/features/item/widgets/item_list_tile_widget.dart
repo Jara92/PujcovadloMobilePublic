@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_response.dart';
+import 'package:pujcovadlo_client/features/item/view_helpers/item_helper.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_main_image.dart';
 import 'package:pujcovadlo_client/features/profiles/widgets/profile_rating_widget.dart';
 
@@ -56,14 +57,17 @@ class ItemListTileWidget extends StatelessWidget {
                   ),
                   Column(
                     children: [
-                      Row(children: [
-                        const Icon(
-                          Icons.location_on,
-                          size: 14,
-                        ),
-                        Text("1.2 km",
-                            style: Theme.of(context).textTheme.labelSmall!),
-                      ]),
+                      if (item.distance != null)
+                        Row(children: [
+                          const Icon(
+                            Icons.location_on,
+                            size: 14,
+                          ),
+                          Text(
+                              ItemLocalizationHelper.itemDistance(
+                                  context.loc, item.distance)!,
+                              style: Theme.of(context).textTheme.labelSmall!),
+                        ]),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

@@ -52,69 +52,72 @@ class _ItemListViewState extends State<ItemListView> {
     return BlocProvider<ItemListBloc>(
       create: (context) => _bloc,
       child: Scaffold(
-        body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: SafeArea(
-              child: BlocConsumer<ItemListBloc, ItemListState>(
-                listener: (context, state) {
-                  // New items loaded?
-                  if (state.status == ListStateEnum.loaded) {
-                    // Append items to the list as the last page of the list
-                    if (state.isLastPage) {
-                      _pagingController.appendLastPage(state.items);
+          body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: SafeArea(
+                child: BlocConsumer<ItemListBloc, ItemListState>(
+                  listener: (context, state) {
+                    // New items loaded?
+                    if (state.status == ListStateEnum.loaded) {
+                      // Append items to the list as the last page of the list
+                      if (state.isLastPage) {
+                        _pagingController.appendLastPage(state.items);
+                      }
+                      // Append items to the list as a new page
+                      else {
+                        _pagingController.appendPage(
+                            state.items, state.nextPageLink);
+                      }
                     }
-                    // Append items to the list as a new page
-                    else {
-                      _pagingController.appendPage(
-                          state.items, state.nextPageLink);
+
+                    // Error occurred?
+                    if (state.status == ListStateEnum.error) {
+                      _pagingController.error = state.error;
                     }
-                  }
 
-                  // Error occurred?
-                  if (state.status == ListStateEnum.error) {
-                    _pagingController.error = state.error;
-                  }
-
-                  // Initial state? Should refresh the list
-                  if (state.status == ListStateEnum.initial) {
-                    _pagingController.refresh();
-                  }
-                },
-                builder: (context, state) {
-                  return Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                        child: SearchBar(
-                          leading: const Icon(Icons.search),
-                          trailing: <Widget>[
-                            Tooltip(
-                              message: context.loc.advanced_search,
-                              child: IconButton(
-                                isSelected: false,
-                                onPressed: () {},
-                                icon: const Icon(Icons.manage_search),
-                                selectedIcon: const Icon(Icons.manage_search),
-                              ),
-                            )
-                          ],
-                          padding: const MaterialStatePropertyAll<EdgeInsets>(
-                              EdgeInsets.symmetric(horizontal: 16.0)),
-                          onChanged: (value) =>
-                              BlocProvider.of<ItemListBloc>(context)
-                                  .add(SearchTextUpdated(searchText: value)),
-                          hintText: context.loc.what_are_you_looking_for,
+                    // Initial state? Should refresh the list
+                    if (state.status == ListStateEnum.initial) {
+                      _pagingController.refresh();
+                    }
+                  },
+                  builder: (context, state) {
+                    return Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                          child: SearchBar(
+                            leading: const Icon(Icons.search),
+                            trailing: <Widget>[
+                              Tooltip(
+                                message: context.loc.advanced_search,
+                                child: IconButton(
+                                  isSelected: false,
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.manage_search),
+                                  selectedIcon: const Icon(Icons.manage_search),
+                                ),
+                              )
+                            ],
+                            padding: const MaterialStatePropertyAll<EdgeInsets>(
+                                EdgeInsets.symmetric(horizontal: 16.0)),
+                            onChanged: (value) =>
+                                BlocProvider.of<ItemListBloc>(context)
+                                    .add(SearchTextUpdated(searchText: value)),
+                            hintText: context.loc.what_are_you_looking_for,
+                          ),
                         ),
-                      ),
-                      _buildItemList(context, state),
-                    ],
-                  );
-                },
-              ),
-            )),
-        bottomNavigationBar: const MainBottomNavigationBar(),
-      ),
+                        _buildItemList(context, state),
+                      ],
+                    );
+                  },
+                ),
+              )),
+          bottomNavigationBar: const MainBottomNavigationBar(),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => _bloc.add(const UpdateLocationEvent()),
+            child: const Icon(Icons.location_searching),
+          )),
     );
   }
 

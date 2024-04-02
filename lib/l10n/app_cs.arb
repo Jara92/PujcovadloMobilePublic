@@ -209,6 +209,27 @@
       }
     }
   },
+  "item_distance_meters": "{distance} m",
+  "@item_distance_meters": {
+    "placeholders": {
+      "distance": {
+        "type": "int"
+      }
+    }
+  },
+  "item_distance_kilometers": "{distance} km",
+  "@item_distance_kilometers": {
+    "placeholders": {
+      "distance": {
+        "type": "double",
+        "format": "decimalPatternDigits",
+        "optionalParameters": {
+          "decimalDigits": 1
+        }
+      }
+    }
+  },
+  "from_you": "od Vás",
   "per_day": "za den",
   "item_name": "Název položky",
   "item_description": "Popis položky",

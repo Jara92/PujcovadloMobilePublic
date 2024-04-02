@@ -22,6 +22,8 @@ class ItemResponse {
 
   double? longitude;
 
+  double? distance;
+
   UserResponse owner;
 
   ImageResponse? mainImage;
@@ -38,6 +40,7 @@ class ItemResponse {
     this.sellingPrice,
     this.latitude,
     this.longitude,
+    this.distance,
     required this.owner,
     this.mainImage,
     //this.images,
@@ -56,6 +59,7 @@ class ItemResponse {
       owner: UserResponse.fromJson(json['Owner'] as Map<String, dynamic>),
       latitude: json['Latitude']?.toDouble(),
       longitude: json['Longitude']?.toDouble(),
+      distance: json['Distance']?.toDouble(),
       mainImage: json['MainImage'] != null
           ? ImageResponse.fromJson(json['MainImage'] as Map<String, dynamic>)
           : null,

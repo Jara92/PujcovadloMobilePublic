@@ -4,6 +4,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:pujcovadlo_client/core/extensions/buildcontext/loc.dart';
 import 'package:pujcovadlo_client/features/item/responses/item_detail_response.dart';
+import 'package:pujcovadlo_client/features/item/view_helpers/item_helper.dart';
 import 'package:pujcovadlo_client/features/item/widgets/item_placeholder_image.dart';
 import 'package:pujcovadlo_client/features/loan/views/create_loan_view.dart';
 import 'package:pujcovadlo_client/features/profiles/widgets/profile_rating_widget.dart';
@@ -54,7 +55,8 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
                 user: widget.item.owner,
                 showReviewsCount: true,
               ),
-              Row(
+              if (widget.item.distance != null)
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -63,8 +65,8 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
                       size: 20,
                     ),
                     Text(
-                      "2,2 km od Vás",
-                      style: Theme.of(context).textTheme.labelSmall!,
+                        "${ItemLocalizationHelper.itemDistance(context.loc, widget.item.distance)!} ${context.loc.from_you}",
+                        style: Theme.of(context).textTheme.labelSmall!,
                     ),
                   ])
             ],
