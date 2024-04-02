@@ -82,6 +82,7 @@
   "item_name_helper_text": "Název položky by měl být stručný a výstižný. ",
   "item_location_title": "Umístění",
   "item_location_description": "Vyberte místo, kde se položka nachází. Díky tomu můžeme nabídnout Vaši položku uživatelům ve Vašem okolí. Přesnou polohu uvidí jen uživatelé, kterým jste potrvdil vypůjčení.",
+  "item_location_search_for_location": "Vyhledat místo",
   "item_categories_page_title": "Kategorie",
   "item_categories_page_description": "Vyberte alespoň jednu kategorii, do které patří Vaše položka. Správným výběrem kategorií zvýšíte šanci, že Vaši položku najdou ostatní uživatelé.",
   "item_searching_in_categories": "Hledání v kategoriích",

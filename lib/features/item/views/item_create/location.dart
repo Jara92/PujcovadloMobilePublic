@@ -45,23 +45,17 @@ class _LocationViewState extends State<LocationView> {
                       Expanded(
                         child: state.latitude != null && state.longitude != null
                             ? MapLocationPicker(
-                                // origin: Location(lat: 50.105064188830674, lng: 14.389454462946908),
-                                //location: Location(lat:14.389454462946908 , lng: 50.105064188830674),
-                                //origin: Location(lat:14.389454462946908 , lng: 50.105064188830674),
                                 currentLatLng: state.latitude != null &&
                                         state.longitude != null
                                     ? LatLng(state.latitude!, state.longitude!)
                                     : null,
-                                //dialogTitle: "Vyberte místo",
-                                searchHintText: "Vyhledat místo",
-                                //liteModeEnabled: true,
+                                searchHintText: context
+                                    .loc.item_location_search_for_location,
                                 hideMoreOptions: true,
                                 hideBackButton: true,
                                 hideBottomCard: true,
                                 hasLocationPermission: true,
                                 language: "cs",
-                                //  showMoreOptions: false,
-                                //resultType: [],
                                 components: [
                                   Component(Component.country, "cz")
                                 ],
@@ -78,20 +72,10 @@ class _LocationViewState extends State<LocationView> {
                                       );
                                 },
                               )
-                            : CircularProgressIndicator(),
+                            : const Center(
+                                child: CircularProgressIndicator(),
+                              ),
                       ),
-                      /*Container(
-                        height: 300,
-                        child: GoogleMap(
-                          mapType: MapType.hybrid,
-                          initialCameraPosition: _kGooglePlex,
-                          myLocationButtonEnabled: true,
-                          myLocationEnabled: true,
-                          onMapCreated: (GoogleMapController controller) {
-                            _controller.complete(controller);
-                          },
-                        ),
-                      ),*/
                     ],
                   ),
                 ),
