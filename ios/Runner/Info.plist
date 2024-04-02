@@ -64,5 +64,12 @@
     <string>This app needs access to location when open.</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>This app needs access to location when open and in the background.</string>
+    <!-- Allow links -->
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>sms</string>
+      <string>tel</string>
+      <string>mailto</string>
+    </array>
 </dict>
 </plist>

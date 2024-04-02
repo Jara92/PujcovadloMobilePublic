@@ -1,0 +1,1 @@
+class CannotOpenEmailClientException implements Exception {}

@@ -1,0 +1,1 @@
+class CannotOpenSmsClientException implements Exception {}
