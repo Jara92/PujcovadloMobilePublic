@@ -12,6 +12,7 @@ import 'package:pujcovadlo_client/features/loan/view_helpers/loan_status.dart';
 import 'package:pujcovadlo_client/features/loan/widgets/loan_item_preview.dart';
 import 'package:pujcovadlo_client/features/loan/widgets/loan_status_badge.dart';
 import 'package:pujcovadlo_client/features/profiles/widgets/profile_widget.dart';
+import 'package:pujcovadlo_client/features/review/views/create_review_view.dart';
 
 class LentLoanDetailView extends StatefulWidget {
   final int? loanId;
@@ -262,7 +263,7 @@ class _LentLoanDetailViewState extends State<LentLoanDetailView> {
         break;
 
       case LoanStatus.denied:
-        buttons.add(_buildCreateReviewButton(context));
+        buttons.add(_buildCreateReviewButton(context, loan));
         break;
 
       case LoanStatus.accepted:
@@ -298,7 +299,7 @@ class _LentLoanDetailViewState extends State<LentLoanDetailView> {
 
       case LoanStatus.returned:
         // Create review button
-        buttons.add(_buildCreateReviewButton(context));
+        buttons.add(_buildCreateReviewButton(context, loan));
         break;
 
       // todo: add remaining cases
@@ -319,12 +320,17 @@ class _LentLoanDetailViewState extends State<LentLoanDetailView> {
     );
   }
 
-  Widget _buildCreateReviewButton(BuildContext context) {
+  Widget _buildCreateReviewButton(BuildContext context, LoanResponse loan) {
+    if (!_bloc.canReview(loan)) {
+      return const SizedBox.shrink();
+    }
+
     return ElevatedButton.icon(
         icon: const Icon(Icons.star),
-        onPressed: () {
-          // todo
-        },
+        onPressed: () => Navigator.of(context)
+            .push(MaterialPageRoute(
+                builder: (context) => CreateReviewView(loan: loan)))
+            .then((value) => _bloc.add(const RebuildLoanDetailEvent())),
         label: Text(context.loc.loan_create_review_button));
   }
 }

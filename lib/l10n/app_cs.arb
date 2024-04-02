@@ -17,6 +17,7 @@
   "delete": "Smazat",
   "yes": "Ano",
   "no": "No",
+  "retry": "Zkusit znovu",
   "sign_to_your_account": "Přihlaste se",
   "sign_to_your_account_message": "Přihlaste se ke svému účtu.",
   "login_email_or_username_title": "E-mail nebo uživatelské jméno",
@@ -352,5 +353,15 @@
   "loan_status_owner_active_description": "Položka je vypůjčena. Během posledního dne rezervace by mělo dojít k vrácení a dokončení vypůjčení. V případě potíží využijte naši podporu. Během přebírání položky využijte tlačítko “Převzít položku”.",
   "loan_status_owner_prepared_for_return_description": "Vyplnil jste přijímací protokol. Nyní musí druhý uživatel potvrdit aktuální stav a převzetí položky potvrdit. V případě neshod kontaktujte podporu.",
   "loan_status_owner_return_denied_description": "Vyplnil jste přijímací protokol. Autor rezervace s ním ale nesouhlasí a musíte jej upravit. V případě neshod kontaktujte podporu.",
-  "loan_status_owner_returned_description": "Položka byla úspěšně půjčena a vrácena. Nyní můžete ohodnotit průběh výpůjčky a podělit se s ostatními uživateli o Vaši zkušenost."
+  "loan_status_owner_returned_description": "Položka byla úspěšně půjčena a vrácena. Nyní můžete ohodnotit průběh výpůjčky a podělit se s ostatními uživateli o Vaši zkušenost.",
+  "review_create_page_title": "Hodnocení vypůjčení",
+  "review_rating_title": "Celkové hodnocení",
+  "review_create_subject": "Hodnotíte:",
+  "review_comment_title": "Komentář",
+  "review_comment_hint": "Např. jak jste byli spokojeni s vypůčením, jaká byla komunikace, stav položky...",
+  "review_comment_helper": "Komentář by měl být konstruktivní a obsahovat informace, které by mohly zajímat ostatní uživatele.",
+  "review_saved_error": "Uložení se nezdařilo. Zkuste to znovu.",
+  "review_saved_success": "Hodnocení uloženo!",
+  "review_saved_success_message": "Děkujeme za Vaše hodnocení. Pomáháte tím ostatním uživatelům Půjčovadla.",
+  "review_saved_back_button": "Zpět"
 }

@@ -12,6 +12,7 @@ import 'package:pujcovadlo_client/features/loan/view_helpers/loan_status.dart';
 import 'package:pujcovadlo_client/features/loan/widgets/loan_item_preview.dart';
 import 'package:pujcovadlo_client/features/loan/widgets/loan_status_badge.dart';
 import 'package:pujcovadlo_client/features/profiles/widgets/profile_widget.dart';
+import 'package:pujcovadlo_client/features/review/views/create_review_view.dart';
 
 class BorrowedLoanDetailView extends StatefulWidget {
   final int? loanId;
@@ -34,6 +35,7 @@ class _BorrowedLoanDetailViewState extends State<BorrowedLoanDetailView> {
       ..add(InitialEvent());
   }
 
+  @override
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -224,7 +226,7 @@ class _BorrowedLoanDetailViewState extends State<BorrowedLoanDetailView> {
         break;
 
       case LoanStatus.denied:
-        buttons.add(_buildCreateReviewButton(context));
+        buttons.add(_buildCreateReviewButton(context, loan));
         break;
 
       case LoanStatus.accepted:
@@ -245,7 +247,7 @@ class _BorrowedLoanDetailViewState extends State<BorrowedLoanDetailView> {
 
       case LoanStatus.returned:
         // Create review button
-        buttons.add(_buildCreateReviewButton(context));
+        buttons.add(_buildCreateReviewButton(context, loan));
         break;
 
       // todo: add remaining cases
@@ -266,12 +268,17 @@ class _BorrowedLoanDetailViewState extends State<BorrowedLoanDetailView> {
     );
   }
 
-  Widget _buildCreateReviewButton(BuildContext context) {
+  Widget _buildCreateReviewButton(BuildContext context, LoanResponse loan) {
+    if (!_bloc.canReview(loan)) {
+      return const SizedBox.shrink();
+    }
+
     return ElevatedButton.icon(
         icon: const Icon(Icons.star),
-        onPressed: () {
-          // todo
-        },
+        onPressed: () => Navigator.of(context)
+            .push(MaterialPageRoute(
+                builder: (context) => CreateReviewView(loan: loan)))
+            .then((value) => _bloc.add(const RebuildLoanDetailEvent())),
         label: Text(context.loc.loan_create_review_button));
   }
 }

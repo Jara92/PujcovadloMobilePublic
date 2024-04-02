@@ -14,6 +14,7 @@ import 'package:pujcovadlo_client/features/item/services/item_service.dart';
 import 'package:pujcovadlo_client/features/item/services/item_tag_service.dart';
 import 'package:pujcovadlo_client/features/loan/services/loan_service.dart';
 import 'package:pujcovadlo_client/features/profiles/services/profile_service.dart';
+import 'package:pujcovadlo_client/features/review/services/review_service.dart';
 
 Future<void> main() async {
   await loadConfiguration();
@@ -43,5 +44,6 @@ void registerDependencies() {
   locator.registerSingleton<ItemCategoryService>(ItemCategoryService());
   locator.registerSingleton<ItemTagService>(ItemTagService());
   locator.registerSingleton<LoanService>(LoanService());
+  locator.registerSingleton<ReviewService>(ReviewService());
   locator.registerSingleton<ProfileService>(ProfileService());
 }

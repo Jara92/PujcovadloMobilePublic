@@ -5,10 +5,9 @@ import 'package:pujcovadlo_client/features/loan/responses/loan_response.dart';
 
 class LoanItemPreview extends StatelessWidget {
   final LoanResponse loan;
-  final Widget statusBadge;
+  final Widget? statusBadge;
 
-  const LoanItemPreview(
-      {required this.loan, required this.statusBadge, super.key});
+  const LoanItemPreview({required this.loan, this.statusBadge, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +27,8 @@ class LoanItemPreview extends StatelessWidget {
                       child: ItemMainImage(
                     image: loan.itemImage,
                   )),
-                  Align(alignment: Alignment.bottomCenter, child: statusBadge)
+                  if (statusBadge != null)
+                    Align(alignment: Alignment.bottomCenter, child: statusBadge)
                 ]),
               )),
           Expanded(

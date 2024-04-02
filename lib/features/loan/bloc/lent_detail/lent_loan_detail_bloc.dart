@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pujcovadlo_client/features/authentication/services/authentication_service.dart';
 import 'package:pujcovadlo_client/features/loan/enums/loan_status.dart';
 import 'package:pujcovadlo_client/features/loan/responses/loan_response.dart';
 import 'package:pujcovadlo_client/features/loan/services/loan_service.dart';
@@ -13,6 +14,8 @@ part 'lent_loan_detail_state.dart';
 class LentLoanDetailBloc
     extends Bloc<LentLoanDetailEvent, LentLoanDetailState> {
   final LoanService _loanService = GetIt.instance.get<LoanService>();
+  final AuthenticationService _authenticationService =
+      GetIt.instance.get<AuthenticationService>();
 
   int? loanId;
   LoanResponse? loan;
@@ -22,6 +25,7 @@ class LentLoanDetailBloc
         super(const LentLoanDetailInitial()) {
     on<InitialEvent>(_onInitialEvent);
     on<RefreshLentLoanDetailEvent>(_onRefreshLoanDetail);
+    on<RebuildLoanDetailEvent>(_onRebuildLoanDetailEvent);
     on<UpdateLoanStatusEvent>(_updateStatus);
 
     on<ClearActionErrorEvent>(_onClearActionError);
@@ -94,5 +98,20 @@ class LentLoanDetailBloc
       Emitter<LentLoanDetailState> emit) async {
     // Refresh the page by loading the loan again
     return _loadLoanDetail(emit);
+  }
+
+  bool canReview(LoanResponse loan) {
+    final currentUserId = _authenticationService.currentUserId!;
+
+    // Return true if there is no review from the current user
+    return loan.reviews
+        .where((element) => element.authorId == currentUserId)
+        .isEmpty;
+  }
+
+  void _onRebuildLoanDetailEvent(
+      RebuildLoanDetailEvent event, Emitter<LentLoanDetailState> emit) async {
+    // Emit loaded state
+    emit(state.copyWith());
   }
 }

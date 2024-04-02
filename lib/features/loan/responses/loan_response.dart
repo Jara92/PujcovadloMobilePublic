@@ -2,6 +2,7 @@ import 'package:pujcovadlo_client/core/responses/image_response.dart';
 import 'package:pujcovadlo_client/core/responses/link_response.dart';
 import 'package:pujcovadlo_client/features/loan/enums/loan_status.dart';
 import 'package:pujcovadlo_client/features/profiles/responses/user_response.dart';
+import 'package:pujcovadlo_client/features/review/responses/review_response.dart';
 
 class LoanResponse {
   int id;
@@ -30,7 +31,7 @@ class LoanResponse {
 
   ImageResponse? itemImage;
 
-  //List<ReviewResponse> reviews;
+  List<ReviewResponse> reviews;
 
   List<LinkResponse> links;
 
@@ -48,7 +49,7 @@ class LoanResponse {
     required this.owner,
     required this.itemName,
     this.itemImage,
-    //this.reviews,
+    required this.reviews,
     this.links = const [],
   });
 
@@ -69,9 +70,9 @@ class LoanResponse {
       itemImage: json['ItemImage'] != null
           ? ImageResponse.fromJson(json['ItemImage'] as Map<String, dynamic>)
           : null,
-      //reviews: (json['Reviews'] as List<dynamic>)
-      //    .map((e) => ReviewResponse.fromJson(e as Map<String, dynamic>))
-      //    .toList(),
+      reviews: (json['Reviews'] as List<dynamic>)
+          .map((e) => ReviewResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
       links: (json['_links'] as List<dynamic>)
           .map((e) => LinkResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
