@@ -83,14 +83,18 @@ class AuthenticationService {
     if (response.isSuccessCode) {
       final auth = LoginResponse.fromJson(response.data);
       await _loginFromResponse(auth);
+      return;
     }
+
+    // Authentication failed
+    _controller.add(AuthenticationStateEnum.unauthenticated);
+
     // Throw an exception if the credentials are invalid
-    else if (response.statusCode == HttpStatus.unauthorized) {
-      _controller.add(AuthenticationStateEnum.unauthenticated);
+    if (response.statusCode == HttpStatus.unauthorized) {
       throw const InvalidCredentialsException();
-    } else {
-      _controller.add(AuthenticationStateEnum.unauthenticated);
     }
+
+    throw Exception("Something went wrong");
   }
 
   Future<void> _loginFromResponse(LoginResponse auth) async {
