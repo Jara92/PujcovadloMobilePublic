@@ -34,8 +34,8 @@ class LentListBloc extends ListBloc<LoanResponse, LentListState> {
   }
 
   @override
-  Future<void> onLoadItemsEvent(
-      LoaditemsEvent<LoanResponse> event, Emitter<LentListState> emit) async {
+  Future<void> onLoadItemsEvent(LoadMoreItemsEvent<LoanResponse> event,
+      Emitter<LentListState> emit) async {
     // If initial status or no next page link, load items from the beginning
     if (state.status == ListStateEnum.initial || event.nextPageLink.isEmpty) {
       return loadItems(

@@ -12,7 +12,7 @@ class ProfileImage extends StatelessWidget {
     return CircleAvatar(
       radius: radius,
       //backgroundImage: NetworkImage(widget.item.owner?.profileImage),
-      backgroundImage: AssetImage("images/user_placeholder.png"),
+      backgroundImage: const AssetImage("images/user_placeholder.png"),
     );
   }
 }

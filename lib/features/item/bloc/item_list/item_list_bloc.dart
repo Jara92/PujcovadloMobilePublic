@@ -35,8 +35,8 @@ class ItemListBloc extends ListBloc<ItemResponse, ItemListState> {
   }
 
   @override
-  Future<void> onLoadItemsEvent(
-      LoaditemsEvent<ItemResponse> event, Emitter<ItemListState> emit) async {
+  Future<void> onLoadItemsEvent(LoadMoreItemsEvent<ItemResponse> event,
+      Emitter<ItemListState> emit) async {
     // Load first page
     if (state.status == ListStateEnum.initial ||
         // First request failed and there is no next page link

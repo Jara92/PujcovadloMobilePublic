@@ -34,7 +34,7 @@ class BorrowedListBloc extends ListBloc<LoanResponse, BorrowedListState> {
   }
 
   @override
-  Future<void> onLoadItemsEvent(LoaditemsEvent<LoanResponse> event,
+  Future<void> onLoadItemsEvent(LoadMoreItemsEvent<LoanResponse> event,
       Emitter<BorrowedListState> emit) async {
     // If initial status or no next page link, load items from the beginning
     if (state.status == ListStateEnum.initial || event.nextPageLink.isEmpty) {

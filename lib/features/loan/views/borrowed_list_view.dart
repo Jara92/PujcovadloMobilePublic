@@ -35,7 +35,7 @@ class _BorrowedListViewState extends State<BorrowedListView> {
     _pagingController = PagingController(firstPageKey: "");
 
     _pagingController.addPageRequestListener(
-        (pageKey) => _bloc.add(LoaditemsEvent(pageKey)));
+        (pageKey) => _bloc.add(LoadMoreItemsEvent(pageKey)));
   }
 
   @override

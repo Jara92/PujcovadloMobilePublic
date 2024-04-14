@@ -16,18 +16,18 @@ abstract class ListBloc<TData, TState extends ListState<TData>>
     extends Bloc<ListEvent<TData>, TState> {
   ListBloc(super.initState) {
     on<InitialEvent<TData>>(onInitialEvent);
-    on<LoaditemsEvent<TData>>(onLoadItemsEvent);
+    on<LoadMoreItemsEvent<TData>>(onLoadItemsEvent);
   }
 
   Future<void> onInitialEvent(
       InitialEvent<TData> event, Emitter<TState> emit) async {}
 
-  Future<void> onLoadItemsEvent(
-      LoaditemsEvent<TData> event, Emitter<TState> emit) async {
+  Future<void> onLoadItemsEvent(LoadMoreItemsEvent<TData> event,
+      Emitter<TState> emit) async {
     throw UnimplementedError();
   }
 
-  Future<void> loadItems(LoaditemsEvent<TData> event, Emitter<TState> emit,
+  Future<void> loadItems(LoadMoreItemsEvent<TData> event, Emitter<TState> emit,
       Future<ResponseList<TData>> Function() fetcher) async {
     try {
       // Load more items

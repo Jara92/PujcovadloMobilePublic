@@ -19,7 +19,7 @@ class ItemMainImage extends StatelessWidget {
 
     return FadeInImage.memoryNetwork(
       placeholder: kTransparentImage,
-      image: image?.url ?? '',
+      image: image!.url,
       width: width,
       height: height,
       fit: BoxFit.cover,
